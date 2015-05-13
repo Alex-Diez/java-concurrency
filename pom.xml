@@ -28,6 +28,7 @@
 
     <modules>
         <module>sudoku</module>
+        <module>fairytale-philosophers</module>
     </modules>
 
     <build>
