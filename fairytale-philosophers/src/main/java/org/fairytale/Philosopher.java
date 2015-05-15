@@ -28,21 +28,21 @@ public class Philosopher
         try {
             countDown.await();
             while (true) {
-                boolean isLeftChopStickTaken = leftChopStick.tryLock(100, TimeUnit.MILLISECONDS);
+                boolean isLeftChopStickTaken = leftChopStick.tryLock(3, TimeUnit.SECONDS);
                 try {
                     if (isLeftChopStickTaken) {
-                        System.out.printf("Philosopher N %d takes left chop stick\n", number);
+                        System.out.printf("Philosopher N %d takes %s which is left for him", number, leftChopStick);
                         System.out.println();
-                        boolean isRightChopStickTaken = rightChopStick.tryLock(100, TimeUnit.MILLISECONDS);
+                        boolean isRightChopStickTaken = rightChopStick.tryLock(3, TimeUnit.SECONDS);
                         if (isRightChopStickTaken) {
-                            System.out.printf("Philosopher N %d takes right chop stick\n", number);
+                            System.out.printf("Philosopher N %d takes %s which is right for him", number, rightChopStick);
                             System.out.println();
                             long currentTimeStamp = System.currentTimeMillis();
                             long timeToEat = (currentTimeStamp - eatingLastTime) / 1000 * FEED_SECOND_RATE;
-                            System.out.printf("Philosopher N %d takes starts eating\n", number);
+                            System.out.printf("Philosopher N %d starts eating", number);
                             System.out.println();
                             Thread.sleep(timeToEat);
-                            System.out.printf("Philosopher N %d takes stops eating", number);
+                            System.out.printf("Philosopher N %d stops eating", number);
                             System.out.println();
                             eatingLastTime = System.currentTimeMillis();
                         }
