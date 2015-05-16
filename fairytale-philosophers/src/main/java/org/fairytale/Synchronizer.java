@@ -1,10 +1,15 @@
 package org.fairytale;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.LongAdder;
 
 public class Synchronizer
 		implements Runnable {
+
+	private static final Logger LOG = LoggerFactory.getLogger(Synchronizer.class);
 
 	private final ConcurrentMap<Integer, LongAdder> statistics;
 
@@ -15,9 +20,11 @@ public class Synchronizer
 	@Override
 	public void run() {
 		try {
-			while(true) {
-				Thread.sleep(100_000);
-				System.out.println("Statistics is - \n" + statistics);
+			int i = 0;
+			while(i < 6) {
+				Thread.sleep(10_000);
+				LOG.info("Statistics is - {}", statistics);
+				i++;
 			}
 		}
 		catch(InterruptedException e) {
