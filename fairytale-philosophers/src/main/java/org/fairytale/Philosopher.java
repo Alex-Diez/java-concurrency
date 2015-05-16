@@ -1,20 +1,24 @@
 package org.fairytale;
 
 import java.util.Random;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 
 public class Philosopher
 		implements Runnable {
 
+	private final ConcurrentMap<Integer, LongAdder> statistics;
 	private final Lock leftChopStick;
 	private final Lock rightChopStick;
 	private final int number;
 
-	public Philosopher(int number, Lock leftChopStick, Lock rightChopStick) {
-		this.number = number;
+	public Philosopher(ConcurrentMap<Integer, LongAdder> statistics, Lock leftChopStick, Lock rightChopStick, int number) {
+		this.statistics = statistics;
 		this.leftChopStick = leftChopStick;
 		this.rightChopStick = rightChopStick;
+		this.number = number;
 	}
 
 	@Override
@@ -51,6 +55,7 @@ public class Philosopher
 		try {
 			System.out.printf("Philosopher N %d starts eating\n", number);
 			Thread.sleep(1000);
+			statistics.computeIfAbsent(this.number, k -> new LongAdder()).increment();
 			System.out.printf("Philosopher N %d stops eating\n", number);
 		}
 		finally {
