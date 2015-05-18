@@ -19,7 +19,7 @@ public class GameField {
 
 	private GameField(Element[][] elements) {
 		this.elements = elements;
-		SubSquare[][] subSquares = new SubSquare[NUMBER_OF_SUB_SQUARES][NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN];
+		SubSquare[][] subSquares = new SubSquare[NUMBER_OF_SUB_SQUARES][NUMBER_OF_SUB_SQUARES];
 		for (int i = 0; i < NUMBER_OF_SUB_SQUARES; i++) {
 			for (int j = 0; j < NUMBER_OF_SUB_SQUARES; j++) {
 				SubSquare subSquare = buildSubSquareAt(elements, i, j);
@@ -67,12 +67,24 @@ public class GameField {
 
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
-		sb.append(" -  -  -  -  -  -  -  -  - ");
+		sb.append("  === === ===  === === ===  === === === \n");
 		for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
+			sb.append("||");
 			for (int j = 0; j < NUMBER_OF_ELEMENTS; j++) {
 				sb.append(elements[i][j]);
+				if((j+1)%3 == 0) {
+					sb.append("||");
+				}
+				else {
+					sb.append("|");
+				}
 			}
-			sb.append(" -  -  -  -  -  -  -  -  - ");
+			if ((i + 1) % 3 == 0) {
+				sb.append("\n  === === ===  === === ===  === === === \n");
+			}
+			else {
+				sb.append("\n  --- --- ---  --- --- ---  --- --- --- \n");
+			}
 		}
 		return sb.toString();
 	}
@@ -212,7 +224,7 @@ public class GameField {
 		public Builder(Element[][] elements) {
 			this.elements = new Element[elements.length][elements[0].length];
 			for (int i = 0; i < elements.length; i++) {
-				System.arraycopy(elements[i], 0, this.elements[i], 0, elements.length );
+				System.arraycopy(elements[i], 0, this.elements[i], 0, elements.length);
 			}
 		}
 
