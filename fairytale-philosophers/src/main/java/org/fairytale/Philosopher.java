@@ -6,7 +6,6 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.LongAdder;
-import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 public class Philosopher
