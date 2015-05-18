@@ -91,15 +91,15 @@ public class GameField {
 
 	private SubSquare buildSubSquareAt(
 			Element[][] elements,
-			int rowIndex,
-			int columnIndex) {
+			int columnIndex,
+			int rowIndex) {
 		Element[][] subSquare
-				= new Element[NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW][NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN];
-		for (int i = 0; i < NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW; i++) {
-			for (int j = 0; j < NUMBER_OF_ELEMENTS_IN_COLUMN; j++) {
-				int rowPosition = rowIndex * NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW + i;
-				int columnPosition = columnIndex * NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN + j;
-				subSquare[i][j] = elements[rowPosition][columnPosition];
+				= new Element[NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN][NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW];
+		for (int i = 0; i < NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN; i++) {
+			for (int j = 0; j < NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW; j++) {
+				int columnPosition = columnIndex * NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN + i;
+				int rowPosition = rowIndex * NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW + j;
+				subSquare[i][j] = elements[columnPosition][rowPosition];
 			}
 		}
 		return new SubSquare.Builder(subSquare, rowIndex, columnIndex).build();
@@ -185,21 +185,23 @@ public class GameField {
 			public Builder(Element[][] elements, int rowIndex, int columnIndex) {
 				if (elements.length == GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW
 						&& checkSubArrayLength(elements)) {
-					this.elements = new Element[GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW]
-							[GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN];
+					this.elements = new Element[GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN]
+							[GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW];
 					for (int i = 0; i < elements.length; i++) {
 						System.arraycopy(elements[i], 0, this.elements[i], 0, elements[i].length);
 					}
 					this.rowIndex = rowIndex;
 					this.columnIndex = columnIndex;
 				}
-				throw new IllegalArgumentException(
-						String.format(
-								"Sub square can contains only %s elements in rows and %s elements in columns",
-								GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW,
-								GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN
-						)
-				);
+				else {
+					throw new IllegalArgumentException(
+							String.format(
+									"Sub square can contains only %s elements in rows and %s elements in columns",
+									GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW,
+									GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_COLUMN
+							)
+					);
+				}
 			}
 
 			public SubSquare build() {
@@ -208,7 +210,7 @@ public class GameField {
 
 			private boolean checkSubArrayLength(Element[][] elements) {
 				for (Element[] els : elements) {
-					if (els.length == GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW) {
+					if (els.length != GameField.NUMBER_OF_ELEMENTS_IN_SUB_SQUARE_ROW) {
 						return false;
 					}
 				}
