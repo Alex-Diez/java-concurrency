@@ -112,7 +112,7 @@ public class GameField {
 
 		private boolean checkSubArrayLength(Element[][] elements) {
 			for(Element[] els : elements) {
-				if(els.length != GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW) {
+				if(els.length != GameField.NUMBER_OF_ELEMENTS_IN_ROW) {
 					return false;
 				}
 			}

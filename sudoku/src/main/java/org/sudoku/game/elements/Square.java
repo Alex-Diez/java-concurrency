@@ -10,17 +10,10 @@ public class Square {
 	private final int columnIndex;
 	private final Map<Element, Integer> elements = new LinkedHashMap<>(GameField.NUMBER_OF_ELEMENTS, 1.0f);
 
-	private Square(Element[][] elements, int rowIndex, int columnIndex) {
+	private Square(Map<Element, Integer> elements, int rowIndex, int columnIndex) {
 		this.rowIndex = rowIndex;
 		this.columnIndex = columnIndex;
-		for(int i = 0; i < elements.length; i++) {
-			for(int j = 0; j < elements[i].length; j++) {
-				Element e = elements[i][j];
-				if(e != Element.EMPTY_ELEMENT) {
-					this.elements.put(e, GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW * i + j);
-				}
-			}
-		}
+		this.elements.putAll(elements);
 	}
 
 	public Element get(int i, int j) {
@@ -77,20 +70,23 @@ public class Square {
 
 	static class Builder {
 
-		private final Element[][] elements;
+		private final Map<Element, Integer> elements = new LinkedHashMap<>(GameField.NUMBER_OF_ELEMENTS, 1.0f);
 		private final int rowIndex;
 		private final int columnIndex;
 
 		public Builder(Element[][] elements, int rowIndex, int columnIndex) {
 			if(elements.length == GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW
 					&& checkSubArrayLength(elements)) {
-				this.elements = new Element[GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN]
-						[GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW];
-				for(int i = 0; i < elements.length; i++) {
-					System.arraycopy(elements[i], 0, this.elements[i], 0, elements[i].length);
-				}
 				this.rowIndex = rowIndex;
 				this.columnIndex = columnIndex;
+				for(int i = 0; i < elements.length; i++) {
+					for(int j = 0; j < elements[i].length; j++) {
+						Element e = elements[i][j];
+						if(Element.EMPTY_ELEMENT.compareTo(e) != 0) {
+							this.elements.put(e, GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW * i + j);
+						}
+					}
+				}
 			}
 			else {
 				throw new IllegalArgumentException(

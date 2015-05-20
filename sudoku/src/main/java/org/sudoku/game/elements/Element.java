@@ -1,7 +1,8 @@
 package org.sudoku.game.elements;
 
 public class Element
-		implements Cloneable {
+		implements Comparable<Element>,
+				   Cloneable {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
 	static final Element[] POSSIBLE_ELEMENTS = new Element[]{
@@ -20,6 +21,29 @@ public class Element
 
 	public Element(int value) {
 		this.value = value;
+	}
+
+	@Override
+	public int hashCode() {
+		return 31 * (17 + Integer.hashCode(value));
+	}
+
+	@Override
+	public boolean equals(Object object) {
+		if(object == this) {
+			return true;
+		}
+		if(object != null
+				&& object.getClass().equals(getClass())) {
+			Element element = (Element)object;
+			return element.value == value;
+		}
+		return false;
+	}
+
+	@Override
+	public int compareTo(Element o) {
+		return value - o.value;
 	}
 
 	@Override
