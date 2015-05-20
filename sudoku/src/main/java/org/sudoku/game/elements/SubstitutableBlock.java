@@ -31,18 +31,18 @@ public class SubstitutableBlock {
 		COLUMN_CLOSED_POSITIONS.put(2, Arrays.asList(6, 7, 8));
 	}
 
-	private final Set<GameField.SubSquare> horizontal;
-	private final Set<GameField.SubSquare> vertical;
-	private final GameField.SubSquare center;
+	private final Set<Square> horizontal;
+	private final Set<Square> vertical;
+	private final Square center;
 
 	private final ReadWriteLock readWriteLock;
 
 	public SubstitutableBlock(
-			GameField.SubSquare up,
-			GameField.SubSquare down,
-			GameField.SubSquare center,
-			GameField.SubSquare left,
-			GameField.SubSquare right) {
+			Square up,
+			Square down,
+			Square center,
+			Square left,
+			Square right) {
 		this.horizontal = new HashSet<>(2, 1.0f);
 		this.horizontal.add(left);
 		this.horizontal.add(right);
@@ -90,9 +90,9 @@ public class SubstitutableBlock {
 	private static Collection<Integer> searchClosedPositions(
 			Element element,
 			Map<Integer, Collection<Integer>> closedPositions,
-			Collection<GameField.SubSquare> subSquares) {
+			Collection<Square> squares) {
 		Collection<Integer> positions = new ArrayList<>();
-		subSquares.forEach(
+		squares.forEach(
 				(subSquare) -> {
 					if (subSquare.hasElement(element)) {
 						Integer position = subSquare.getElementPosition(element);
@@ -112,13 +112,13 @@ public class SubstitutableBlock {
 			boolean canBeSearchable = !center.hasElement(element);
 			if (canBeSearchable) {
 				int counter = 0;
-				Iterator<GameField.SubSquare> iterator = new CompositeIterator<>(
+				Iterator<Square> iterator = new CompositeIterator<>(
 						horizontal.iterator(),
 						vertical.iterator()
 				);
 				while (iterator.hasNext()) {
-					GameField.SubSquare subSquare = iterator.next();
-					counter += (subSquare.hasElement(element) ? 1 : 0);
+					Square square = iterator.next();
+					counter += (square.hasElement(element) ? 1 : 0);
 				}
 				if (counter > 2) {
 					return element;
