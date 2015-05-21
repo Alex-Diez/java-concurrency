@@ -128,19 +128,20 @@ public class MainTest {
 		};
 		GameField gameField = new GameField.Builder(elements).build();
 		System.out.println("Game field = \n" + gameField);
-		ExecutorService executorService = Executors.newFixedThreadPool(2);
+		ExecutorService executorService = Executors.newFixedThreadPool(1);
 		int number = 0;
 		while (!gameField.isFilled()) {
-			number = number % 8;
-			int i = number % GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
-			int j = number - i * GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
+			number = number % 9;
+			int i = number / GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
+			int j = number % GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
 			SubstitutableBlock block = gameField.get(i, j);
 			Callable<Element> searchPossibleSubstitution = new SearchPossibleSubstitution(block);
 			Future<Element> possibleSubstitutionFuture = executorService.submit(searchPossibleSubstitution);
 			Element possibleSubstitution = possibleSubstitutionFuture.get();
 			if (Element.EMPTY_ELEMENT.compareTo(possibleSubstitution) != 0) {
 				Runnable substitutionResolver = new ResolveSubstitution(block, possibleSubstitution);
-				executorService.submit(substitutionResolver);
+				Future<?> task = executorService.submit(substitutionResolver);
+				task.get();
 			}
 			System.out.println("Game field = \n" + gameField);
 			number++;
