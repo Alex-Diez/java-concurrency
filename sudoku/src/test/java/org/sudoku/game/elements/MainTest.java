@@ -1,6 +1,7 @@
 package org.sudoku.game.elements;
 
 import org.junit.Test;
+
 import org.sudoku.game.strategies.ResolveSubstitution;
 import org.sudoku.game.strategies.SearchPossibleSubstitution;
 
@@ -25,7 +26,7 @@ public class MainTest {
 	@Test
 	public void mainTest()
 			throws Exception {
-		Element[][] elements = new Element[][]{
+		Element[][] elements = new Element[][] {
 				{
 						EIGHT.clone(),
 						FOUR.clone(),
@@ -130,7 +131,7 @@ public class MainTest {
 		System.out.println("Game field = \n" + gameField);
 		ExecutorService executorService = Executors.newFixedThreadPool(1);
 		int number = 0;
-		while (!gameField.isFilled()) {
+		while(!gameField.isFilled()) {
 			number = number % 9;
 			int i = number / GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
 			int j = number % GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
@@ -138,7 +139,7 @@ public class MainTest {
 			Callable<Element> searchPossibleSubstitution = new SearchPossibleSubstitution(block);
 			Future<Element> possibleSubstitutionFuture = executorService.submit(searchPossibleSubstitution);
 			Element possibleSubstitution = possibleSubstitutionFuture.get();
-			if (Element.EMPTY_ELEMENT.compareTo(possibleSubstitution) != 0) {
+			if(Element.EMPTY_ELEMENT.compareTo(possibleSubstitution) != 0) {
 				Runnable substitutionResolver = new ResolveSubstitution(block, possibleSubstitution);
 				Future<?> task = executorService.submit(substitutionResolver);
 				task.get();

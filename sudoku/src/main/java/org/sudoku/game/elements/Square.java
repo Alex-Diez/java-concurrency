@@ -8,9 +8,11 @@ public class Square {
 
 	private final int rowIndex;
 	private final int columnIndex;
+	private final Element[][] matrix;
 	private final Map<Element, Integer> elements = new LinkedHashMap<>(GameField.NUMBER_OF_ELEMENTS, 1.0f);
 
-	private Square(Map<Element, Integer> elements, int rowIndex, int columnIndex) {
+	private Square(Element[][] matrix, Map<Element, Integer> elements, int rowIndex, int columnIndex) {
+		this.matrix = matrix;
 		this.rowIndex = rowIndex;
 		this.columnIndex = columnIndex;
 		this.elements.putAll(elements);
@@ -28,6 +30,9 @@ public class Square {
 
 	public void putElement(Element element, Integer position) {
 		elements.put(element, position);
+		int i = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_COLUMN + position % GameField.NUMBER_OF_ELEMENTS_IN_COLUMN;
+		int j = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_ROW + position / GameField.NUMBER_OF_ELEMENTS_IN_ROW;
+		matrix[i][j] = element;
 	}
 
 	public Integer getElementPosition(Element element) {
@@ -46,6 +51,7 @@ public class Square {
 		return elements.values();
 	}
 
+	@Override
 	public int hashCode() {
 		int result = 17;
 		result = 31 * result + (elements.hashCode());
@@ -54,6 +60,7 @@ public class Square {
 		return result;
 	}
 
+	@Override
 	public boolean equals(Object object) {
 		if(this == object) {
 			return true;
@@ -68,22 +75,56 @@ public class Square {
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		final int minI = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+		final int maxI = (columnIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+		final int minJ = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
+		final int maxJ = (columnIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
+		sb.append("  === === === \n");
+		for(int i = minI; i < maxI; i++) {
+			sb.append("||");
+			for(int j = minJ; j < maxJ; j++) {
+				sb.append(matrix[i][j]);
+				if((j + 1) % 3 == 0) {
+					sb.append("||");
+				}
+				else {
+					sb.append("|");
+				}
+			}
+			if((i + 1) % 3 == 0) {
+				sb.append("\n  === === === \n");
+			}
+			else {
+				sb.append("\n  --- --- --- \n");
+			}
+		}
+		return sb.toString();
+	}
+
 	static class Builder {
 
 		private final Map<Element, Integer> elements = new LinkedHashMap<>(GameField.NUMBER_OF_ELEMENTS, 1.0f);
+		private final Element[][] matrix;
 		private final int rowIndex;
 		private final int columnIndex;
 
-		public Builder(Element[][] elements, int rowIndex, int columnIndex) {
-			if(elements.length == GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW
+		public Builder(Element[][] elements, int columnIndex, int rowIndex) {
+			if(elements.length == GameField.NUMBER_OF_ELEMENTS
 					&& checkSubArrayLength(elements)) {
+				this.matrix = elements;
 				this.rowIndex = rowIndex;
 				this.columnIndex = columnIndex;
-				for(int i = 0; i < elements.length; i++) {
-					for(int j = 0; j < elements[i].length; j++) {
-						Element e = elements[i][j];
+				for(int i = 0; i < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN; i++) {
+					for(int j = 0; j < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW; j++) {
+						int cI = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + i;
+						int rI = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW + j;
+						Element e = elements[cI][rI];
 						if(Element.EMPTY_ELEMENT.compareTo(e) != 0) {
-							this.elements.put(e, GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW * i + j);
+							int elementPosition = GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW * i + j;
+							this.elements.put(e, elementPosition);
 						}
 					}
 				}
@@ -100,12 +141,12 @@ public class Square {
 		}
 
 		public Square build() {
-			return new Square(elements, rowIndex, columnIndex);
+			return new Square(matrix, elements, rowIndex, columnIndex);
 		}
 
 		private boolean checkSubArrayLength(Element[][] elements) {
 			for(Element[] els : elements) {
-				if(els.length != GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW) {
+				if(els.length != GameField.NUMBER_OF_ELEMENTS) {
 					return false;
 				}
 			}

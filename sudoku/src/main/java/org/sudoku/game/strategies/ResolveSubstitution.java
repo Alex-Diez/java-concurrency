@@ -12,7 +12,7 @@ import java.util.Set;
 public class ResolveSubstitution
 		implements Runnable {
 
-	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9));
+	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
 	private final SubstitutableBlock block;
 	private final Element elementToSubstitute;
@@ -24,19 +24,25 @@ public class ResolveSubstitution
 
 	@Override
 	public void run() {
-		block.lockForReading();
-		Collection<Integer> filledPositions = new ArrayList<>(block.filledPositions());
-		filledPositions.addAll(block.closedPositionsByColumns(elementToSubstitute));
-		filledPositions.addAll(block.closedPositionsByRows(elementToSubstitute));
 		Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);
-		substitutionPosition.removeAll(filledPositions);
-		assert substitutionPosition.size() == 1;
-		block.lockForWriting();
+		block.lockForReading();
 		try {
-			block.putIn(elementToSubstitute, substitutionPosition.iterator().next());
+			Collection<Integer> filledPositions = new ArrayList<>(block.filledPositions());
+			filledPositions.addAll(block.closedPositionsByColumns(elementToSubstitute));
+			filledPositions.addAll(block.closedPositionsByRows(elementToSubstitute));
+			substitutionPosition.removeAll(filledPositions);
 		}
 		finally {
-			block.unlockForWriting();
+			block.unlockForReading();
+		}
+		if (substitutionPosition.size() == 1) {
+			block.lockForWriting();
+			try {
+				block.putIn(elementToSubstitute, substitutionPosition.iterator().next());
+			}
+			finally {
+				block.unlockForWriting();
+			}
 		}
 	}
 }

@@ -17,18 +17,18 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class SubstitutableBlock {
 
-	private static final Map<Integer, Collection<Integer>> ROW_CLOSED_POSITIONS;
 	private static final Map<Integer, Collection<Integer>> COLUMN_CLOSED_POSITIONS;
+	private static final Map<Integer, Collection<Integer>> ROW_CLOSED_POSITIONS;
 
 	static {
-		ROW_CLOSED_POSITIONS = new HashMap<>();
-		ROW_CLOSED_POSITIONS.put(0, Arrays.asList(0, 3, 6));
-		ROW_CLOSED_POSITIONS.put(1, Arrays.asList(1, 4, 7));
-		ROW_CLOSED_POSITIONS.put(2, Arrays.asList(2, 5, 8));
 		COLUMN_CLOSED_POSITIONS = new HashMap<>();
-		COLUMN_CLOSED_POSITIONS.put(0, Arrays.asList(0, 1, 2));
-		COLUMN_CLOSED_POSITIONS.put(1, Arrays.asList(3, 4, 5));
-		COLUMN_CLOSED_POSITIONS.put(2, Arrays.asList(6, 7, 8));
+		COLUMN_CLOSED_POSITIONS.put(0, Arrays.asList(0, 3, 6));
+		COLUMN_CLOSED_POSITIONS.put(1, Arrays.asList(1, 4, 7));
+		COLUMN_CLOSED_POSITIONS.put(2, Arrays.asList(2, 5, 8));
+		ROW_CLOSED_POSITIONS = new HashMap<>();
+		ROW_CLOSED_POSITIONS.put(0, Arrays.asList(0, 1, 2));
+		ROW_CLOSED_POSITIONS.put(1, Arrays.asList(3, 4, 5));
+		ROW_CLOSED_POSITIONS.put(2, Arrays.asList(6, 7, 8));
 	}
 
 	private final Set<Square> horizontal;
@@ -76,31 +76,35 @@ public class SubstitutableBlock {
 	}
 
 	public Collection<Integer> closedPositionsByRows(Element element) {
-		return searchClosedPositions(element, ROW_CLOSED_POSITIONS, horizontal);
-	}
-
-	public Collection<Integer> closedPositionsByColumns(Element element) {
-		return searchClosedPositions(element, COLUMN_CLOSED_POSITIONS, vertical);
-	}
-
-	public void putIn(Element element, Integer position) {
-		center.putElement(element, position);
-	}
-
-	private static Collection<Integer> searchClosedPositions(
-			Element element,
-			Map<Integer, Collection<Integer>> closedPositions,
-			Collection<Square> squares) {
 		Collection<Integer> positions = new ArrayList<>();
-		squares.forEach(
+		horizontal.forEach(
 				(subSquare) -> {
 					if (subSquare.hasElement(element)) {
 						Integer position = subSquare.getElementPosition(element);
-						positions.addAll(closedPositions.get(position));
+						Integer rowColPosition = position / GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+						positions.addAll(ROW_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
 		);
 		return positions;
+	}
+
+	public Collection<Integer> closedPositionsByColumns(Element element) {
+		Collection<Integer> positions = new ArrayList<>();
+		vertical.forEach(
+				(subSquare) -> {
+					if (subSquare.hasElement(element)) {
+						Integer position = subSquare.getElementPosition(element);
+						Integer rowColPosition = position % GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
+					}
+				}
+		);
+		return positions;
+	}
+
+	public void putIn(Element element, Integer position) {
+		center.putElement(element, position);
 	}
 
 	public void lockForReading() {

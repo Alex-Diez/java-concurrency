@@ -67,12 +67,12 @@ public class GameField {
 					&& checkSubArrayLength(elements)) {
 				this.elements = new Element[NUMBER_OF_ELEMENTS_IN_ROW][NUMBER_OF_ELEMENTS_IN_COLUMN];
 				for(int i = 0; i < elements.length; i++) {
-					System.arraycopy(elements[i], 0, this.elements[i], 0, elements.length);
+					System.arraycopy(elements[i], 0, this.elements[i], 0, elements[i].length);
 				}
 				Square[][] squares = new Square[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES];
 				for(int i = 0; i < NUMBER_OF_SQUARES; i++) {
 					for(int j = 0; j < NUMBER_OF_SQUARES; j++) {
-						Square square = buildSubSquareAt(elements, i, j);
+						Square square = new Square.Builder(this.elements, i, j).build();
 						squares[i][j] = square;
 					}
 				}
@@ -117,22 +117,6 @@ public class GameField {
 				}
 			}
 			return true;
-		}
-
-		private Square buildSubSquareAt(
-				Element[][] elements,
-				int columnIndex,
-				int rowIndex) {
-			Element[][] subSquare
-					= new Element[NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN][NUMBER_OF_ELEMENTS_IN_SQUARE_ROW];
-			for (int i = 0; i < NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN; i++) {
-				for (int j = 0; j < NUMBER_OF_ELEMENTS_IN_SQUARE_ROW; j++) {
-					int columnPosition = columnIndex * NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + i;
-					int rowPosition = rowIndex * NUMBER_OF_ELEMENTS_IN_SQUARE_ROW + j;
-					subSquare[i][j] = elements[columnPosition][rowPosition];
-				}
-			}
-			return new Square.Builder(subSquare, rowIndex, columnIndex).build();
 		}
 
 		public GameField build() {
