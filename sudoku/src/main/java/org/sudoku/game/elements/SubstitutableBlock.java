@@ -132,6 +132,11 @@ public class SubstitutableBlock {
 		return Element.EMPTY_ELEMENT;
 	}
 
+	@Override
+	public String toString() {
+		return center.toString();
+	}
+
 	public boolean tryLockForReading() {
 		return readWriteLock.readLock().tryLock();
 	}

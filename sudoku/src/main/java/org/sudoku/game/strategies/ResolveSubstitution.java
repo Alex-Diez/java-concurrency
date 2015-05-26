@@ -9,8 +9,13 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class ResolveSubstitution
 		implements Runnable {
+
+	private static final Logger LOG = LoggerFactory.getLogger(ResolveSubstitution.class);
 
 	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
@@ -24,6 +29,7 @@ public class ResolveSubstitution
 
 	@Override
 	public void run() {
+		LOG.info("Block before resolution\n{}", block);
 		Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);
 		block.lockForReading();
 		try {
@@ -44,5 +50,6 @@ public class ResolveSubstitution
 				block.unlockForWriting();
 			}
 		}
+		LOG.info("Block after resolution\n{}", block);
 	}
 }
