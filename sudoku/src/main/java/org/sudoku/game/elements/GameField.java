@@ -6,9 +6,9 @@ public class GameField {
 	static final int NUMBER_OF_ELEMENTS_IN_ROW = NUMBER_OF_ELEMENTS;
 	static final int NUMBER_OF_ELEMENTS_IN_COLUMN = NUMBER_OF_ELEMENTS;
 	static final int NUMBER_OF_SQUARES = 3;
-	static final int NUMBER_OF_SUBSTITUTABLE_BLOCKS = NUMBER_OF_SQUARES;
 	static final int NUMBER_OF_ELEMENTS_IN_SQUARE_ROW = NUMBER_OF_ELEMENTS_IN_ROW / NUMBER_OF_SQUARES;
 	static final int NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN = NUMBER_OF_ELEMENTS_IN_COLUMN / NUMBER_OF_SQUARES;
+	public static final int NUMBER_OF_SUBSTITUTABLE_BLOCKS = NUMBER_OF_SQUARES;
 
 	private final SubstitutableBlock[][] substitutableBlocks;
 	private final Element[][] elements;

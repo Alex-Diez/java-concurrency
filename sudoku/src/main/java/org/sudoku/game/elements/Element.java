@@ -5,7 +5,7 @@ public class Element
 				   Cloneable {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
-	static final Element[] POSSIBLE_ELEMENTS = new Element[]{
+	static final Element[] POSSIBLE_ELEMENTS = new Element[] {
 			new Element(1),
 			new Element(2),
 			new Element(3),
@@ -19,7 +19,7 @@ public class Element
 
 	final int value;
 
-	public Element(int value) {
+	private Element(int value) {
 		this.value = value;
 	}
 
@@ -35,7 +35,7 @@ public class Element
 		}
 		if(object != null
 				&& object.getClass().equals(getClass())) {
-			Element element = (Element)object;
+			Element element = (Element) object;
 			return element.value == value;
 		}
 		return false;
@@ -47,11 +47,31 @@ public class Element
 	}
 
 	@Override
-	public Element clone() throws CloneNotSupportedException {
+	public Element clone()
+			throws CloneNotSupportedException {
 		return (Element) super.clone();
 	}
 
 	public String toString() {
 		return String.format(" %d ", value);
+	}
+
+	public static class Builder {
+
+		private final int value;
+
+		public Builder(int value) {
+			if(value > 0
+					&& value < 10) {
+				this.value = value;
+			}
+			else {
+				throw new IllegalArgumentException("Value can't be less then 1 and more 9");
+			}
+		}
+
+		public Element build() {
+			return new Element(value);
+		}
 	}
 }
