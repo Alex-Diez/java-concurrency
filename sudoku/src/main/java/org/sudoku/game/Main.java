@@ -23,14 +23,14 @@ public class Main {
 		LOG.info("Game field at start \n{}", gameField);
 		ExecutorService executorService = Executors.newFixedThreadPool(1);
 		int iteration = 1;
-		while(!gameField.isFilled()) {
+		while (!gameField.isFilled()) {
 			int number = (iteration - 1) % 9;
 			int i = number / GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
 			int j = number % GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
 			SubstitutableBlock block = gameField.get(i, j);
 			Callable<Element> searchPossibleSubstitution = new SearchPossibleSubstitution(block);
 			Element possibleSubstitution = executorService.submit(searchPossibleSubstitution).get();
-			if(Element.EMPTY_ELEMENT.compareTo(possibleSubstitution) != 0) {
+			if (Element.EMPTY_ELEMENT.equals(possibleSubstitution)) {
 				Runnable substitutionResolver = new ResolveSubstitution(block, possibleSubstitution);
 				executorService.submit(substitutionResolver).get();
 			}
@@ -42,7 +42,7 @@ public class Main {
 	static final Element[][] ELEMENTS;
 
 	static {
-		ELEMENTS = new Element[][] {
+		ELEMENTS = new Element[][]{
 				{
 						new Element.Builder(8).build(),
 						new Element.Builder(4).build(),

@@ -40,7 +40,7 @@ public class GameField {
 			sb.append("||");
 			for (int j = 0; j < NUMBER_OF_ELEMENTS; j++) {
 				sb.append(elements[i][j]);
-				if((j+1)%3 == 0) {
+				if ((j + 1) % 3 == 0) {
 					sb.append("||");
 				}
 				else {
@@ -63,22 +63,23 @@ public class GameField {
 		private final SubstitutableBlock[][] substitutableBlocks;
 
 		public Builder(Element[][] elements) {
-			if(elements.length == GameField.NUMBER_OF_ELEMENTS_IN_ROW
+			if (elements.length == GameField.NUMBER_OF_ELEMENTS_IN_ROW
 					&& checkSubArrayLength(elements)) {
 				this.elements = new Element[NUMBER_OF_ELEMENTS_IN_ROW][NUMBER_OF_ELEMENTS_IN_COLUMN];
-				for(int i = 0; i < elements.length; i++) {
+				for (int i = 0; i < elements.length; i++) {
 					System.arraycopy(elements[i], 0, this.elements[i], 0, elements[i].length);
 				}
 				Square[][] squares = new Square[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES];
-				for(int i = 0; i < NUMBER_OF_SQUARES; i++) {
-					for(int j = 0; j < NUMBER_OF_SQUARES; j++) {
+				for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
+					for (int j = 0; j < NUMBER_OF_SQUARES; j++) {
 						Square square = new Square.Builder(this.elements, i, j).build();
 						squares[i][j] = square;
 					}
 				}
-				substitutableBlocks = new SubstitutableBlock[NUMBER_OF_SUBSTITUTABLE_BLOCKS][NUMBER_OF_SUBSTITUTABLE_BLOCKS];
-				for(int i = 0; i < NUMBER_OF_SQUARES; i++) {
-					for(int j = 0; j < NUMBER_OF_SQUARES; j++) {
+				substitutableBlocks =
+						new SubstitutableBlock[NUMBER_OF_SUBSTITUTABLE_BLOCKS][NUMBER_OF_SUBSTITUTABLE_BLOCKS];
+				for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
+					for (int j = 0; j < NUMBER_OF_SQUARES; j++) {
 						int upRowIndex = (i - 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
 						int upColumnIndex = (j + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
 						int downRowIndex = (i + 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
@@ -111,8 +112,8 @@ public class GameField {
 		}
 
 		private boolean checkSubArrayLength(Element[][] elements) {
-			for(Element[] els : elements) {
-				if(els.length != GameField.NUMBER_OF_ELEMENTS_IN_ROW) {
+			for (Element[] els : elements) {
+				if (els.length != GameField.NUMBER_OF_ELEMENTS_IN_ROW) {
 					return false;
 				}
 			}

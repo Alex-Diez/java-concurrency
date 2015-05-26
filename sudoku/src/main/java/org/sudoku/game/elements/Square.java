@@ -20,8 +20,8 @@ public class Square {
 
 	public Element get(int i, int j) {
 		int position = i * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + j;
-		for(Map.Entry<Element, Integer> entry : elements.entrySet()) {
-			if(position == entry.getValue()) {
+		for (Map.Entry<Element, Integer> entry : elements.entrySet()) {
+			if (position == entry.getValue()) {
 				return entry.getKey();
 			}
 		}
@@ -30,8 +30,10 @@ public class Square {
 
 	public void putElement(Element element, Integer position) {
 		elements.put(element, position);
-		int i = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + position / GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
-		int j = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW + position % GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
+		int i = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN +
+				position / GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+		int j = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW +
+				position % GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
 		matrix[i][j] = element;
 	}
 
@@ -62,10 +64,10 @@ public class Square {
 
 	@Override
 	public boolean equals(Object object) {
-		if(this == object) {
+		if (this == object) {
 			return true;
 		}
-		if(object != null
+		if (object != null
 				&& object.getClass().equals(getClass())) {
 			Square square = (Square) object;
 			return square.elements.equals(elements)
@@ -83,18 +85,18 @@ public class Square {
 		final int minJ = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
 		final int maxJ = (rowIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
 		sb.append("  === === === \n");
-		for(int i = minI; i < maxI; i++) {
+		for (int i = minI; i < maxI; i++) {
 			sb.append("||");
-			for(int j = minJ; j < maxJ; j++) {
+			for (int j = minJ; j < maxJ; j++) {
 				sb.append(matrix[i][j]);
-				if((j + 1) % 3 == 0) {
+				if ((j + 1) % 3 == 0) {
 					sb.append("||");
 				}
 				else {
 					sb.append("|");
 				}
 			}
-			if((i + 1) % 3 == 0) {
+			if ((i + 1) % 3 == 0) {
 				sb.append("\n  === === === \n");
 			}
 			else {
@@ -112,17 +114,17 @@ public class Square {
 		private final int columnIndex;
 
 		public Builder(Element[][] elements, int columnIndex, int rowIndex) {
-			if(elements.length == GameField.NUMBER_OF_ELEMENTS
+			if (elements.length == GameField.NUMBER_OF_ELEMENTS
 					&& checkSubArrayLength(elements)) {
 				this.matrix = elements;
 				this.rowIndex = rowIndex;
 				this.columnIndex = columnIndex;
-				for(int i = 0; i < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN; i++) {
-					for(int j = 0; j < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW; j++) {
+				for (int i = 0; i < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN; i++) {
+					for (int j = 0; j < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW; j++) {
 						int cI = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + i;
 						int rI = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW + j;
 						Element e = elements[cI][rI];
-						if(Element.EMPTY_ELEMENT.compareTo(e) != 0) {
+						if (Element.EMPTY_ELEMENT.equals(e)) {
 							int elementPosition = GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW * i + j;
 							this.elements.put(e, elementPosition);
 						}
@@ -145,8 +147,8 @@ public class Square {
 		}
 
 		private boolean checkSubArrayLength(Element[][] elements) {
-			for(Element[] els : elements) {
-				if(els.length != GameField.NUMBER_OF_ELEMENTS) {
+			for (Element[] els : elements) {
+				if (els.length != GameField.NUMBER_OF_ELEMENTS) {
 					return false;
 				}
 			}

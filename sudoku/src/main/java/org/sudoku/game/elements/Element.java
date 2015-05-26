@@ -1,11 +1,9 @@
 package org.sudoku.game.elements;
 
-public class Element
-		implements Comparable<Element>,
-				   Cloneable {
+public class Element {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
-	static final Element[] POSSIBLE_ELEMENTS = new Element[] {
+	static final Element[] POSSIBLE_ELEMENTS = new Element[]{
 			new Element(1),
 			new Element(2),
 			new Element(3),
@@ -30,10 +28,10 @@ public class Element
 
 	@Override
 	public boolean equals(Object object) {
-		if(object == this) {
+		if (object == this) {
 			return true;
 		}
-		if(object != null
+		if (object != null
 				&& object.getClass().equals(getClass())) {
 			Element element = (Element) object;
 			return element.value == value;
@@ -41,18 +39,10 @@ public class Element
 		return false;
 	}
 
-	@Override
-	public int compareTo(Element o) {
-		return value - o.value;
-	}
-
-	@Override
-	public Element clone()
-			throws CloneNotSupportedException {
-		return (Element) super.clone();
-	}
-
 	public String toString() {
+		if (value == 0) {
+			return "   ";
+		}
 		return String.format(" %d ", value);
 	}
 
@@ -61,7 +51,7 @@ public class Element
 		private final int value;
 
 		public Builder(int value) {
-			if(value > 0
+			if (value > 0
 					&& value < 10) {
 				this.value = value;
 			}
