@@ -3,7 +3,7 @@ package org.sudoku.game.elements;
 public class Element {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
-	static final Element[] POSSIBLE_ELEMENTS = new Element[]{
+	static final Element[] POSSIBLE_ELEMENTS = new Element[] {
 			new Element(1),
 			new Element(2),
 			new Element(3),
@@ -15,7 +15,7 @@ public class Element {
 			new Element(9)
 	};
 
-	final int value;
+	private final int value;
 
 	private Element(int value) {
 		this.value = value;
@@ -51,13 +51,11 @@ public class Element {
 		private final int value;
 
 		public Builder(int value) {
-			if (value > 0
-					&& value < 10) {
-				this.value = value;
-			}
-			else {
+			if (value < 1
+					&& value > 9) {
 				throw new IllegalArgumentException("Value can't be less then 1 and more 9");
 			}
+			this.value = value;
 		}
 
 		public Element build() {
