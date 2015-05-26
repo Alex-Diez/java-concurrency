@@ -30,8 +30,8 @@ public class Square {
 
 	public void putElement(Element element, Integer position) {
 		elements.put(element, position);
-		int i = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_COLUMN + position % GameField.NUMBER_OF_ELEMENTS_IN_COLUMN;
-		int j = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_ROW + position / GameField.NUMBER_OF_ELEMENTS_IN_ROW;
+		int i = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + position / GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+		int j = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW + position % GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
 		matrix[i][j] = element;
 	}
 
@@ -81,7 +81,7 @@ public class Square {
 		final int minI = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
 		final int maxI = (columnIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
 		final int minJ = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
-		final int maxJ = (columnIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
+		final int maxJ = (rowIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
 		sb.append("  === === === \n");
 		for(int i = minI; i < maxI; i++) {
 			sb.append("||");
