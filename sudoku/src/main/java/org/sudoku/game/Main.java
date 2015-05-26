@@ -2,11 +2,7 @@ package org.sudoku.game;
 
 import org.sudoku.game.elements.Element;
 import org.sudoku.game.elements.GameField;
-import org.sudoku.game.elements.SubstitutableBlock;
-import org.sudoku.game.strategies.ResolveSubstitution;
-import org.sudoku.game.strategies.SearchPossibleSubstitution;
 
-import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -27,13 +23,8 @@ public class Main {
 			int number = (iteration - 1) % 9;
 			int i = number / GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
 			int j = number % GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
-			SubstitutableBlock block = gameField.get(i, j);
-			Callable<Element> searchPossibleSubstitution = new SearchPossibleSubstitution(block);
-			Element possibleSubstitution = executorService.submit(searchPossibleSubstitution).get();
-			if (Element.EMPTY_ELEMENT.equals(possibleSubstitution)) {
-				Runnable substitutionResolver = new ResolveSubstitution(block, possibleSubstitution);
-				executorService.submit(substitutionResolver).get();
-			}
+			Runnable resolver = gameField.build(i, j);
+			executorService.submit(resolver).get();
 			LOG.info("Game field after {} iteration \n{}", iteration, gameField);
 			iteration++;
 		}
@@ -42,7 +33,7 @@ public class Main {
 	static final Element[][] ELEMENTS;
 
 	static {
-		ELEMENTS = new Element[][]{
+		ELEMENTS = new Element[][] {
 				{
 						new Element.Builder(8).build(),
 						new Element.Builder(4).build(),
