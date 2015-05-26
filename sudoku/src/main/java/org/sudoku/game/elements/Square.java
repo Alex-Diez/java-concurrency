@@ -19,13 +19,7 @@ public class Square {
 	}
 
 	public Element get(int i, int j) {
-		int position = i * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + j;
-		for (Map.Entry<Element, Integer> entry : elements.entrySet()) {
-			if (position == entry.getValue()) {
-				return entry.getKey();
-			}
-		}
-		return Element.EMPTY_ELEMENT;
+		return matrix[i][j];
 	}
 
 	public void putElement(Element element, Integer position) {
@@ -41,8 +35,8 @@ public class Square {
 		return elements.get(element);
 	}
 
-	public int size() {
-		return elements.size();
+	public boolean isFilled() {
+		return elements.size() == 9;
 	}
 
 	public boolean hasElement(Element element) {

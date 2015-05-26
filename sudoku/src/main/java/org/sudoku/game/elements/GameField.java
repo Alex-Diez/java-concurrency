@@ -1,6 +1,10 @@
 package org.sudoku.game.elements;
 
+import org.sudoku.game.strategies.ResolverByBlock;
 import org.sudoku.game.strategies.StrategiesFactory;
+
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class GameField
 		implements StrategiesFactory {
@@ -13,51 +17,44 @@ public class GameField
 	public static final int NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN = NUMBER_OF_ELEMENTS_IN_COLUMN / NUMBER_OF_SQUARES;
 	public static final int NUMBER_OF_SUBSTITUTABLE_BLOCKS = NUMBER_OF_SQUARES;
 
-	private final Element[][] elements;
+	private final Square[][] squares;
+	private final ReadWriteLock[][] squaresLocks;
 
-	private GameField(Element[][] elements) {
-		this.elements = elements;
+	private GameField(Square[][] squares, ReadWriteLock[][] squaresLocks) {
+		this.squares = squares;
+		this.squaresLocks = squaresLocks;
 	}
 
 	@Override
 	public Runnable build(int columnIndex, int rowIndex) {
-//		Square[][] squares = new Square[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES];
-//		for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
-//			for (int j = 0; j < NUMBER_OF_SQUARES; j++) {
-//				Square square = new Square.Builder(this.elements, i, j).build();
-//				squares[i][j] = square;
-//			}
-//		}
-//		substitutableBlocks =
-//				new SubstitutableBlock[NUMBER_OF_SUBSTITUTABLE_BLOCKS][NUMBER_OF_SUBSTITUTABLE_BLOCKS];
-//		for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
-//			for (int j = 0; j < NUMBER_OF_SQUARES; j++) {
-//				int upRowIndex = (i - 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int upColumnIndex = (j + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int downRowIndex = (i + 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int downColumnIndex = (j + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int centerRowIndex = (i + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int centerColumnIndex = (j + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int leftRowIndex = (i + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int leftColumnIndex = (j - 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int rightRowIndex = (i + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				int rightColumnIndex = (j + 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-//				substitutableBlocks[i][j] = new SubstitutableBlock(
-//						squares[upRowIndex][upColumnIndex],
-//						squares[downRowIndex][downColumnIndex],
-//						squares[centerRowIndex][centerColumnIndex],
-//						squares[leftRowIndex][leftColumnIndex],
-//						squares[rightRowIndex][rightColumnIndex]
-//				);
-//			}
-//		}
-		return null;
+		int upRowIndex = (columnIndex - 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int upColumnIndex = (rowIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int downRowIndex = (columnIndex + 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int downColumnIndex = (rowIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int centerRowIndex = (columnIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int centerColumnIndex = (rowIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int leftRowIndex = (columnIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int leftColumnIndex = (rowIndex - 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int rightRowIndex = (columnIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		int rightColumnIndex = (rowIndex + 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+		return new ResolverByBlock(
+				squares[upColumnIndex][upRowIndex],
+				squaresLocks[upRowIndex][upRowIndex].readLock(),
+				squares[downColumnIndex][downRowIndex],
+				squaresLocks[downColumnIndex][downRowIndex].readLock(),
+				squares[centerColumnIndex][centerRowIndex],
+				squaresLocks[centerColumnIndex][centerRowIndex],
+				squares[leftColumnIndex][leftRowIndex],
+				squaresLocks[leftColumnIndex][leftRowIndex].readLock(),
+				squares[rightColumnIndex][rightRowIndex],
+				squaresLocks[rightColumnIndex][rightRowIndex].readLock()
+		);
 	}
 
 	public boolean isFilled() {
-		for (Element[] rows : elements) {
-			for (Element element : rows) {
-				if (Element.EMPTY_ELEMENT.equals(element)) {
+		for (Square[] rows : squares) {
+			for (Square square : rows) {
+				if (square.isFilled()) {
 					return false;
 				}
 			}
@@ -72,7 +69,13 @@ public class GameField
 		for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
 			sb.append("||");
 			for (int j = 0; j < NUMBER_OF_ELEMENTS; j++) {
-				sb.append(elements[i][j]);
+				sb.append(
+						squares[i / NUMBER_OF_SQUARES][j / NUMBER_OF_SQUARES]
+								.get(
+										i / NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN,
+										j % NUMBER_OF_ELEMENTS_IN_SQUARE_ROW
+						)
+				);
 				if ((j + 1) % 3 == 0) {
 					sb.append("||");
 				}
@@ -92,7 +95,8 @@ public class GameField
 
 	public static class Builder {
 
-		private final Element[][] elements;
+		private final Square[][] squares;
+		private final ReadWriteLock[][] squaresLocks;
 
 		public Builder(Element[][] elements) {
 			if (elements.length != GameField.NUMBER_OF_ELEMENTS_IN_ROW
@@ -105,9 +109,13 @@ public class GameField
 						)
 				);
 			}
-			this.elements = new Element[NUMBER_OF_ELEMENTS_IN_ROW][NUMBER_OF_ELEMENTS_IN_COLUMN];
-			for (int i = 0; i < elements.length; i++) {
-				System.arraycopy(elements[i], 0, this.elements[i], 0, elements[i].length);
+			squares = new Square[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES];
+			squaresLocks = new ReadWriteLock[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES];
+			for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
+				for (int j = 0; j < NUMBER_OF_SQUARES; j++) {
+					squares[i][j] = new Square.Builder(elements, i, j).build();
+					squaresLocks[i][j] = new ReentrantReadWriteLock();
+				}
 			}
 		}
 
@@ -121,7 +129,7 @@ public class GameField
 		}
 
 		public GameField build() {
-			return new GameField(elements);
+			return new GameField(squares, squaresLocks);
 		}
 	}
 }
