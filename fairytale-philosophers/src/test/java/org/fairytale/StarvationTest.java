@@ -2,6 +2,8 @@ package org.fairytale;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
@@ -11,6 +13,9 @@ import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.fairytale.matchers.MapElements;
+import org.hamcrest.collection.IsMapContaining;
+import org.hamcrest.core.AnyOf;
 import org.hamcrest.core.IsEqual;
 
 import org.junit.Before;
@@ -59,8 +64,8 @@ public class StarvationTest {
 	}
 
 	//tested values
-	private Runnable[] philosophers;
-	private ConcurrentMap<Integer, LongAdder> statistics;
+	private Set<Philosopher> philosophers;
+	private ConcurrentMap<Philosopher, LongAdder> statistics;
 	private CountDownLatch latch;
 
 	public StarvationTest(int numberOfChopsticks, long numbersOfEating) {
@@ -76,17 +81,11 @@ public class StarvationTest {
 		}
 		statistics = new ConcurrentHashMap<>(numberOfChopsticks, 1.0F, numberOfChopsticks);
 		latch = new CountDownLatch(numberOfChopsticks);
-		philosophers = new Runnable[numberOfChopsticks];
+		philosophers = new HashSet<>(numberOfChopsticks);
 		for(int i = 0; i < numberOfChopsticks; i++) {
 			int leftIndex = i;
 			int rightIndex = (i + 1) % numberOfChopsticks;
-			philosophers[i] = new Philosopher(
-					statistics,
-					chopSticks[leftIndex],
-					chopSticks[rightIndex],
-					i,
-					latch
-			);
+			philosophers.add(new Philosopher(statistics, chopSticks[leftIndex], chopSticks[rightIndex], i, latch));
 		}
 	}
 
@@ -100,9 +99,6 @@ public class StarvationTest {
 		}
 		Thread.sleep(numbersOfEating * 6_000);
 		service.shutdown();
-		for(int i = 0; i < numberOfChopsticks; i++) {
-			long numberOfPhilosopherEating = statistics.get(i) != null ? statistics.get(i).longValue() : 0;
-			assertThat(numberOfPhilosopherEating, new IsEqual<>(numbersOfEating));
-		}
+		assertThat(statistics, new MapElements<>(philosophers, numbersOfEating));
 	}
 }

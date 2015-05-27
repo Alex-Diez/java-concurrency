@@ -13,14 +13,14 @@ public class Philosopher
 
 	private static final Logger LOG = LoggerFactory.getLogger(Philosopher.class);
 
-	private final ConcurrentMap<Integer, LongAdder> statistics;
+	private final ConcurrentMap<Philosopher, LongAdder> statistics;
 	private final Lock leftChopStick;
 	private final Lock rightChopStick;
 	private final int number;
 	private final CountDownLatch latch;
 
 	public Philosopher(
-			ConcurrentMap<Integer, LongAdder> statistics,
+			ConcurrentMap<Philosopher, LongAdder> statistics,
 			Lock leftChopStick,
 			Lock rightChopStick,
 			int number,
@@ -78,7 +78,7 @@ public class Philosopher
 			LOG.info("Philosopher N {} starts eating", number);
 			//TODO change for testing need to be more dynamic
 			Thread.sleep(1_000);
-			statistics.computeIfAbsent(this.number, k -> new LongAdder()).increment();
+			statistics.computeIfAbsent(this, k -> new LongAdder()).increment();
 			LOG.info("Philosopher N {} stops eating", number);
 		}
 		finally {
@@ -89,5 +89,10 @@ public class Philosopher
 			//TODO change for testing need to be more dynamic
 			Thread.sleep(5_000);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Philosopher %d", number);
 	}
 }
