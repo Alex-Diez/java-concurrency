@@ -1,96 +1,108 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <modelVersion>4.0.0</modelVersion>
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
 
-    <groupId>java-concurrency</groupId>
-    <artifactId>java-concurrency-parent</artifactId>
-    <packaging>pom</packaging>
-    <version>${project.version}</version>
+	<groupId>java-concurrency</groupId>
+	<artifactId>java-concurrency-parent</artifactId>
+	<packaging>pom</packaging>
+	<version>${project.version}</version>
 
-    <properties>
+	<properties>
 
-        <!--
-        ~ project properties
-        -->
-        <project.version>1.0-SNAPSHOT</project.version>
-        <java.source.version>1.8</java.source.version>
-        <project.encoding>UTF-8</project.encoding>
+		<!--
+		~ project properties
+		-->
+		<project.version>1.0-SNAPSHOT</project.version>
+		<java.source.version>1.8</java.source.version>
+		<project.encoding>UTF-8</project.encoding>
 
-        <!--
-        ~ maven plugin properties
-        -->
-        <version.surefire.plugin>2.16</version.surefire.plugin>
-        <version.compiler.plugin>3.1</version.compiler.plugin>
+		<!--
+		~ maven plugin properties
+		-->
+		<version.surefire.plugin>2.16</version.surefire.plugin>
+		<version.compiler.plugin>3.1</version.compiler.plugin>
 
-        <!--
-         ~ libraries version properties
-         -->
-        <slf4j.version>1.7.10</slf4j.version>
-        <log4j.version>1.2.17</log4j.version>
-        <junit.version>4.12</junit.version>
+		<!--
+		 ~ libraries version properties
+		 -->
+		<slf4j.version>1.7.10</slf4j.version>
+		<log4j.version>1.2.17</log4j.version>
+		<junit.version>4.12</junit.version>
+		<hamcrest.version>1.3</hamcrest.version>
 
-    </properties>
+	</properties>
 
-    <modules>
-        <module>sudoku</module>
-        <module>fairytale-philosophers</module>
-    </modules>
+	<modules>
+		<module>sudoku</module>
+		<module>fairytale-philosophers</module>
+	</modules>
 
-    <build>
-        <plugins>
+	<build>
+		<plugins>
 
-            <!--
-            ~ Plugin for test lifecycle
-            -->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>${version.surefire.plugin}</version>
-            </plugin>
+			<!--
+			~ Plugin for test lifecycle
+			-->
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${version.surefire.plugin}</version>
+			</plugin>
 
-            <!--
-            ~ Plugin for compilation Java source code
-            -->
-            <plugin>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${version.compiler.plugin}</version>
-                <configuration>
-                    <source>${java.source.version}</source>
-                    <target>${java.source.version}</target>
-                    <encoding>${project.encoding}</encoding>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+			<!--
+			~ Plugin for compilation Java source code
+			-->
+			<plugin>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${version.compiler.plugin}</version>
+				<configuration>
+					<source>${java.source.version}</source>
+					<target>${java.source.version}</target>
+					<encoding>${project.encoding}</encoding>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-                <scope>runtime</scope>
-            </dependency>
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-api</artifactId>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-log4j12</artifactId>
+				<version>${slf4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>log4j</groupId>
+				<artifactId>log4j</artifactId>
+				<version>${log4j.version}</version>
+				<scope>runtime</scope>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${junit.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.hamcrest</groupId>
+						<artifactId>hamcrest-core</artifactId>
+					</exclusion>
+				</exclusions>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-all</artifactId>
+				<version>${hamcrest.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 
 </project>
