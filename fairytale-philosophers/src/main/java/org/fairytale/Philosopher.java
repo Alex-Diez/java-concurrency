@@ -38,6 +38,7 @@ public class Philosopher
 			latch.await();
 			long startTime = System.currentTimeMillis();
 			long nextIterationTime = System.currentTimeMillis();
+			//TODO change for testing need to be more dynamic
 			while ((nextIterationTime - startTime) < 60_000) {
 				eating();
 				nextIterationTime = System.currentTimeMillis();
@@ -75,7 +76,8 @@ public class Philosopher
 		}
 		try {
 			LOG.info("Philosopher N {} starts eating", number);
-			Thread.sleep(1000);
+			//TODO change for testing need to be more dynamic
+			Thread.sleep(1_000);
 			statistics.computeIfAbsent(this.number, k -> new LongAdder()).increment();
 			LOG.info("Philosopher N {} stops eating", number);
 		}
@@ -84,7 +86,8 @@ public class Philosopher
 			LOG.info("Philosopher N {} puts {} which is left for him", number, leftChopStick);
 			rightChopStick.unlock();
 			LOG.info("Philosopher N {} puts {} which is right for him", number, rightChopStick);
-			Thread.sleep(5000);
+			//TODO change for testing need to be more dynamic
+			Thread.sleep(5_000);
 		}
 	}
 }
