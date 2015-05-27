@@ -63,36 +63,36 @@ public class Philosopher
 		boolean isRightChopStickTaken = false;
 		while (!isLeftChopStickTaken
 				&& !isRightChopStickTaken) {
-			LOG.info("Philosopher N {} tries to take {} which is left for him", number, leftChopStick);
+			LOG.debug("Philosopher N {} tries to take {} which is left for him", number, leftChopStick);
 			while (!(isLeftChopStickTaken = leftChopStick.tryLock())) {
-				LOG.info("Philosopher N {} doesn't take {} which is left for him", number, leftChopStick);
+				LOG.debug("Philosopher N {} doesn't take {} which is left for him", number, leftChopStick);
 				if(isRightChopStickTaken) {
-					LOG.info("Philosopher N {} has to put {} which is right for him", number, rightChopStick);
+					LOG.debug("Philosopher N {} has to put {} which is right for him", number, rightChopStick);
 					rightChopStick.unlock();
 				}
 			}
-			LOG.info("Philosopher N {} takes {} which is left for him", number, leftChopStick);
-			LOG.info("Philosopher N {} tries to take {} which is right for him", number, rightChopStick);
+			LOG.debug("Philosopher N {} takes {} which is left for him", number, leftChopStick);
+			LOG.debug("Philosopher N {} tries to take {} which is right for him", number, rightChopStick);
 			while (!(isRightChopStickTaken = rightChopStick.tryLock())) {
-				LOG.info("Philosopher N {} doesn't take {} which is right for him", number, rightChopStick);
+				LOG.debug("Philosopher N {} doesn't take {} which is right for him", number, rightChopStick);
 				if(isLeftChopStickTaken) {
-					LOG.info("Philosopher N {} has to put {} which is left for him", number, leftChopStick);
+					LOG.debug("Philosopher N {} has to put {} which is left for him", number, leftChopStick);
 					leftChopStick.unlock();
 				}
 			}
-			LOG.info("Philosopher N {} takes {} which is right for him", number, rightChopStick);
+			LOG.debug("Philosopher N {} takes {} which is right for him", number, rightChopStick);
 		}
 		try {
-			LOG.info("Philosopher N {} starts eating", number);
+			LOG.debug("Philosopher N {} starts eating", number);
 			Thread.sleep(eatingTime);
 			statistics.computeIfAbsent(this, k -> new LongAdder()).increment();
-			LOG.info("Philosopher N {} stops eating", number);
+			LOG.debug("Philosopher N {} stops eating", number);
 		}
 		finally {
 			leftChopStick.unlock();
-			LOG.info("Philosopher N {} puts {} which is left for him", number, leftChopStick);
+			LOG.debug("Philosopher N {} puts {} which is left for him", number, leftChopStick);
 			rightChopStick.unlock();
-			LOG.info("Philosopher N {} puts {} which is right for him", number, rightChopStick);
+			LOG.debug("Philosopher N {} puts {} which is right for him", number, rightChopStick);
 			Thread.sleep(thinkingTime);
 		}
 	}
