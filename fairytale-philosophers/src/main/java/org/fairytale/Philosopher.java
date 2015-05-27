@@ -18,18 +18,27 @@ public class Philosopher
 	private final Lock rightChopStick;
 	private final int number;
 	private final CountDownLatch latch;
+	private final long eatingTime;
+	private final long thinkingTime;
+	private final long numberOfEating;
 
 	public Philosopher(
 			ConcurrentMap<Philosopher, LongAdder> statistics,
 			Lock leftChopStick,
 			Lock rightChopStick,
 			int number,
-			CountDownLatch latch) {
+			CountDownLatch latch,
+			long eatingTime,
+			long thinkingTime,
+			long numberOfEating) {
 		this.statistics = statistics;
 		this.leftChopStick = leftChopStick;
 		this.rightChopStick = rightChopStick;
 		this.number = number;
 		this.latch = latch;
+		this.eatingTime = eatingTime;
+		this.thinkingTime = thinkingTime;
+		this.numberOfEating = numberOfEating;
 	}
 
 	@Override
@@ -38,8 +47,7 @@ public class Philosopher
 			latch.await();
 			long startTime = System.currentTimeMillis();
 			long nextIterationTime = System.currentTimeMillis();
-			//TODO change for testing need to be more dynamic
-			while ((nextIterationTime - startTime) < 60_000) {
+			while ((nextIterationTime - startTime) < (eatingTime + thinkingTime) * numberOfEating) {
 				eating();
 				nextIterationTime = System.currentTimeMillis();
 			}
@@ -76,8 +84,7 @@ public class Philosopher
 		}
 		try {
 			LOG.info("Philosopher N {} starts eating", number);
-			//TODO change for testing need to be more dynamic
-			Thread.sleep(1_000);
+			Thread.sleep(eatingTime);
 			statistics.computeIfAbsent(this, k -> new LongAdder()).increment();
 			LOG.info("Philosopher N {} stops eating", number);
 		}
@@ -86,8 +93,7 @@ public class Philosopher
 			LOG.info("Philosopher N {} puts {} which is left for him", number, leftChopStick);
 			rightChopStick.unlock();
 			LOG.info("Philosopher N {} puts {} which is right for him", number, rightChopStick);
-			//TODO change for testing need to be more dynamic
-			Thread.sleep(5_000);
+			Thread.sleep(thinkingTime);
 		}
 	}
 
