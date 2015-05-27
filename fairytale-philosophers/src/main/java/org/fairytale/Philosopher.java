@@ -22,6 +22,7 @@ public class Philosopher
 	private final long thinkingTime;
 	private final long numberOfEating;
 
+	//todo to much parameters
 	public Philosopher(
 			ConcurrentMap<Philosopher, LongAdder> statistics,
 			Lock leftChopStick,
@@ -95,6 +96,14 @@ public class Philosopher
 			LOG.debug("Philosopher N {} puts {} which is right for him", number, rightChopStick);
 			Thread.sleep(thinkingTime);
 		}
+	}
+
+	public void take(ChopStick chopStick) {
+		//todo
+	}
+
+	public void put(ChopStick chopStick) {
+		//todo
 	}
 
 	@Override
