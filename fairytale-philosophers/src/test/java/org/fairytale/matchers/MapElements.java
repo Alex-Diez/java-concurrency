@@ -4,54 +4,46 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
-import org.fairytale.Philosopher;
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeDiagnosingMatcher;
 
-public class MapElements<Ph extends Philosopher, C extends Number>
-		extends TypeSafeDiagnosingMatcher<Map<Ph, C>> {
+public class MapElements<R extends Runnable, C extends Number>
+		extends TypeSafeDiagnosingMatcher<Map<R, C>> {
 
-	private final Set<Ph> keys;
-	private final long expectedValue;
+	private final Set<R> runnables;
+	private final long expectedNumbersOfInvoking;
 
-	public MapElements(Set<Ph> keys, long expectedValue) {
-		this.keys = keys;
-		this.expectedValue = expectedValue;
+	public MapElements(Set<R> runnables, long expectedNumbersOfInvoking) {
+		this.runnables = runnables;
+		this.expectedNumbersOfInvoking = expectedNumbersOfInvoking;
 	}
 
 	@Override
-	protected boolean matchesSafely(Map<Ph, C> item, Description mismatchDescription) {
-		final Set<Ph> mapsKey = item.keySet();
+	protected boolean matchesSafely(Map<R, C> invokedStatistic, Description mismatchDescription) {
 		boolean result = true;
-		for(Ph key : keys) {
-			if(!mapsKey.contains(key)) {
-				mismatchDescription.appendValue(key)
-						.appendText(" has eaten ")
-						.appendValue(0)
-						.appendText("\n          ");
-				result = false;
-			}
-			else {
-				C mapValue = item.get(key);
-				long actualValue = mapValue.longValue();
-				result &= (expectedValue == actualValue);
-				mismatchDescription.appendValue(key)
-						.appendText(" has eaten ")
-						.appendValue(actualValue)
-						.appendText("\n          ");
-			}
+		for (R runnable : runnables) {
+			final long actualNumberOfInvoking = invokedStatistic.containsKey(runnable)
+					? invokedStatistic.get(runnable).longValue()
+					: 0;
+			result &= (expectedNumbersOfInvoking == actualNumberOfInvoking);
+			mismatchDescription.appendValue(runnable)
+					.appendText(" was invoked ")
+					.appendValue(actualNumberOfInvoking)
+					.appendText(" times")
+					.appendText("\n          ");
 		}
 		return result;
 	}
 
 	@Override
 	public void describeTo(Description description) {
-		Iterator<Ph> iterator = keys.iterator();
-		while(iterator.hasNext()) {
+		Iterator<R> iterator = runnables.iterator();
+		while (iterator.hasNext()) {
 			description.appendValue(iterator.next())
-					.appendText(" has eaten ")
-					.appendValue(expectedValue);
-			if(iterator.hasNext()) {
+					.appendText(" has to be invoked ")
+					.appendValue(expectedNumbersOfInvoking)
+					.appendText(" times");
+			if (iterator.hasNext()) {
 				description.appendText("\n          ");
 			}
 		}

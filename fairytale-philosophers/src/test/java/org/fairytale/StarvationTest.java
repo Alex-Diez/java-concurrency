@@ -2,7 +2,7 @@ package org.fairytale;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -14,14 +14,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.fairytale.matchers.MapElements;
-import org.hamcrest.collection.IsMapContaining;
-import org.hamcrest.core.AnyOf;
-import org.hamcrest.core.IsEqual;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
+import static org.junit.runners.Parameterized.Parameters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 
@@ -34,7 +33,7 @@ public class StarvationTest {
 	private final int numberOfChopsticks;
 	private final long numbersOfEating;
 
-	@Parameterized.Parameters
+	@Parameters
 	public static Collection configuration() {
 		return Arrays.asList(
 				new Object[][] {
@@ -81,7 +80,7 @@ public class StarvationTest {
 		}
 		statistics = new ConcurrentHashMap<>(numberOfChopsticks, 1.0F, numberOfChopsticks);
 		latch = new CountDownLatch(numberOfChopsticks);
-		philosophers = new HashSet<>(numberOfChopsticks);
+		philosophers = new LinkedHashSet<>(numberOfChopsticks);
 		for(int i = 0; i < numberOfChopsticks; i++) {
 			int leftIndex = i;
 			int rightIndex = (i + 1) % numberOfChopsticks;
