@@ -20,6 +20,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.runners.Parameterized.Parameters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -63,6 +64,7 @@ public class StarvationTest {
 
 	//tested values
 	private Set<Runnable> philosophers;
+	private ConcurrentMap<Runnable, LongAdder> statistics;
 
 	public StarvationTest(int numberOfChopsticks, long numbersOfEating, long eatingTime, long thinkingTime) {
 		this.numberOfChopsticks = numberOfChopsticks;
@@ -73,10 +75,15 @@ public class StarvationTest {
 
 	@Before
 	public void init() {
-		ChopStick[] chopSticks = new ChopStick[numberOfChopsticks];
+		Lock[] chopSticks = new Lock[numberOfChopsticks];
 		for(int i = 0; i < numberOfChopsticks; i++) {
-			chopSticks[i] = new ChopStick(new ReentrantLock(), i);
+			chopSticks[i] = new ReentrantLock();
 		}
+		statistics = new ConcurrentHashMap<>(
+				numberOfChopsticks,
+				1.0F,
+				numberOfChopsticks
+		);
 		philosophers = new LinkedHashSet<>(numberOfChopsticks);
 		for(int i = 0; i < numberOfChopsticks; i++) {
 			int leftIndex = i;
@@ -88,7 +95,11 @@ public class StarvationTest {
 							i,
 							eatingTime,
 							thinkingTime
-					)
+					) {
+						public void statistic() {
+							statistics.computeIfAbsent(this, k -> new LongAdder()).increment();
+						}
+					}
 			);
 		}
 	}
@@ -98,11 +109,6 @@ public class StarvationTest {
 			throws Exception {
 		final ExecutorService service = Executors.newFixedThreadPool(numberOfChopsticks);
 		final CountDownLatch latch = new CountDownLatch(numberOfChopsticks);
-		final ConcurrentMap<Runnable, LongAdder> statistics = new ConcurrentHashMap<>(
-				numberOfChopsticks,
-				1.0F,
-				numberOfChopsticks
-		);
 		for(Runnable philosopher : philosophers) {
 			service.submit(
 					() -> {
@@ -117,7 +123,6 @@ public class StarvationTest {
 						while((nextIterationTime - startTime) < (eatingTime + thinkingTime) * numbersOfEating) {
 							philosopher.run();
 							nextIterationTime = System.currentTimeMillis();
-							statistics.computeIfAbsent(philosopher, k -> new LongAdder()).increment();
 						}
 					}
 			);
