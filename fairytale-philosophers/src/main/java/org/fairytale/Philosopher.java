@@ -31,24 +31,26 @@ public class Philosopher
 	@Override
 	public void run() {
 		try {
-			boolean isLeftChopStickTaken = false;
-			boolean isRightChopStickTaken = false;
-			while (!isLeftChopStickTaken
-					&& !isRightChopStickTaken) {
+			Runnable leftOwner = null;
+			Runnable rightOwner = null;
+			while(this != leftOwner
+					&& this != rightOwner) {
 				LOG.debug("Philosopher N {} tries to take {} which is left for him", number, leftChopStick);
-				take(leftChopStick);
-				isLeftChopStickTaken = true;
+				leftOwner = leftChopStick.changeOwner(this, leftOwner);
 				LOG.debug("Philosopher N {} takes {} which is left for him", number, leftChopStick);
-				if(isRightChopStickTaken) {
+				LOG.debug("Philosopher N {} tries to take {} which is right for him", number, rightChopStick);
+				rightOwner = rightChopStick.changeOwner(null, this);
+				if(this == leftOwner
+						&& this != rightOwner) {
 					LOG.debug("Philosopher N {} has to put {} which is right for him", number, rightChopStick);
-					put(rightChopStick);
+					leftOwner = leftChopStick.changeOwner(null, this);
 				}
 				LOG.debug("Philosopher N {} tries to take {} which is right for him", number, rightChopStick);
-				take(rightChopStick);
-				isRightChopStickTaken = true;
-				if(isLeftChopStickTaken) {
+				rightOwner = leftChopStick.changeOwner(this, rightOwner);
+				if(this != leftOwner
+						&& this == rightOwner) {
 					LOG.debug("Philosopher N {} has to put {} which is left for him", number, leftChopStick);
-					put(leftChopStick);
+					rightOwner = rightChopStick.changeOwner(null, this);
 				}
 				LOG.debug("Philosopher N {} takes {} which is right for him", number, rightChopStick);
 			}
@@ -58,29 +60,15 @@ public class Philosopher
 				LOG.debug("Philosopher N {} stops eating", number);
 			}
 			finally {
-				put(leftChopStick);
+				leftChopStick.changeOwner(null, this);
 				LOG.debug("Philosopher N {} puts {} which is left for him", number, leftChopStick);
-				put(rightChopStick);
+				rightChopStick.changeOwner(null, this);
 				LOG.debug("Philosopher N {} puts {} which is right for him", number, rightChopStick);
 				Thread.sleep(thinkingTime);
 			}
 		}
 		catch(InterruptedException e) {
 			Thread.currentThread().interrupt();
-		}
-	}
-
-	public void take(ChopStick chopStick) {
-		Philosopher currentOwner = chopStick.changeOwner(this, null);
-		while(this != currentOwner) {
-			currentOwner = chopStick.changeOwner(this, currentOwner);
-		}
-	}
-
-	public void put(ChopStick chopStick) {
-		Philosopher currentOwner = chopStick.changeOwner(null, this);
-		while(null != currentOwner) {
-			currentOwner = chopStick.changeOwner(currentOwner, null);
 		}
 	}
 

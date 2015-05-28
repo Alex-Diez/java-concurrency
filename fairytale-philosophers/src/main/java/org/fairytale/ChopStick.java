@@ -9,7 +9,7 @@ public class ChopStick {
 	private final Condition condition;
 	private final int number;
 
-	private volatile Philosopher owner;
+	private volatile Runnable owner;
 
 	public ChopStick(Lock lock, int number) {
 		this.number = number;
@@ -17,7 +17,7 @@ public class ChopStick {
 		this.condition = lock.newCondition();
 	}
 
-	public Philosopher changeOwner(Philosopher newOwner, Philosopher expectedOwner) {
+	public Runnable changeOwner(Runnable newOwner, Runnable expectedOwner) {
 		if(newOwner == null
 				&& owner == expectedOwner) {
 			lock.unlock();
@@ -32,7 +32,7 @@ public class ChopStick {
 		return owner;
 	}
 
-	public Philosopher getOwner() {
+	public Runnable getOwner() {
 		return owner;
 	}
 
