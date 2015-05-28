@@ -62,9 +62,7 @@ public class StarvationTest {
 	}
 
 	//tested values
-	private Set<Philosopher> philosophers;
-	private ConcurrentMap<Philosopher, LongAdder> statistics;
-	private CountDownLatch latch;
+	private Set<Runnable> philosophers;
 
 	public StarvationTest(int numberOfChopsticks, long numbersOfEating, long eatingTime, long thinkingTime) {
 		this.numberOfChopsticks = numberOfChopsticks;
@@ -75,26 +73,21 @@ public class StarvationTest {
 
 	@Before
 	public void init() {
-		Lock[] chopSticks = new Lock[numberOfChopsticks];
-		for (int i = 0; i < numberOfChopsticks; i++) {
-			chopSticks[i] = new NamedReentrantLock("Chopstick " + i, new ReentrantLock());
+		ChopStick[] chopSticks = new ChopStick[numberOfChopsticks];
+		for(int i = 0; i < numberOfChopsticks; i++) {
+			chopSticks[i] = new ChopStick(new ReentrantLock(), i);
 		}
-		statistics = new ConcurrentHashMap<>(numberOfChopsticks, 1.0F, numberOfChopsticks);
-		latch = new CountDownLatch(numberOfChopsticks);
 		philosophers = new LinkedHashSet<>(numberOfChopsticks);
-		for (int i = 0; i < numberOfChopsticks; i++) {
+		for(int i = 0; i < numberOfChopsticks; i++) {
 			int leftIndex = i;
 			int rightIndex = (i + 1) % numberOfChopsticks;
 			philosophers.add(
 					new Philosopher(
-							statistics,
 							chopSticks[leftIndex],
 							chopSticks[rightIndex],
 							i,
-							latch,
 							eatingTime,
-							thinkingTime,
-							numbersOfEating
+							thinkingTime
 					)
 			);
 		}
@@ -103,9 +96,31 @@ public class StarvationTest {
 	@Test
 	public void philosophersShouldNotStarve()
 			throws Exception {
-		ExecutorService service = Executors.newFixedThreadPool(numberOfChopsticks);
-		for (Runnable philosopher : philosophers) {
-			service.submit(philosopher);
+		final ExecutorService service = Executors.newFixedThreadPool(numberOfChopsticks);
+		final CountDownLatch latch = new CountDownLatch(numberOfChopsticks);
+		final ConcurrentMap<Runnable, LongAdder> statistics = new ConcurrentHashMap<>(
+				numberOfChopsticks,
+				1.0F,
+				numberOfChopsticks
+		);
+		for(Runnable philosopher : philosophers) {
+			service.submit(
+					() -> {
+						try {
+							latch.await();
+						}
+						catch(InterruptedException e) {
+							Thread.currentThread().interrupt();
+						}
+						long startTime = System.currentTimeMillis();
+						long nextIterationTime = System.currentTimeMillis();
+						while((nextIterationTime - startTime) < (eatingTime + thinkingTime) * numbersOfEating) {
+							philosopher.run();
+							nextIterationTime = System.currentTimeMillis();
+							statistics.computeIfAbsent(philosopher, k -> new LongAdder()).increment();
+						}
+					}
+			);
 			latch.countDown();
 		}
 		Thread.sleep(numbersOfEating * (eatingTime + thinkingTime));

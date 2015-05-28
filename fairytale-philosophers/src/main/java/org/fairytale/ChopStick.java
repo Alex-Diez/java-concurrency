@@ -7,14 +7,37 @@ public class ChopStick {
 
 	private final Lock lock;
 	private final Condition condition;
-	private Philosopher owner;
+	private final int number;
 
-	public ChopStick(Lock lock, Condition condition) {
+	private volatile Philosopher owner;
+
+	public ChopStick(Lock lock, int number) {
+		this.number = number;
 		this.lock = lock;
-		this.condition = condition;
+		this.condition = lock.newCondition();
 	}
 
-	public void changeOwner(Philosopher owner) {
-		this.owner = owner;
+	public Philosopher changeOwner(Philosopher newOwner, Philosopher expectedOwner) {
+		if(newOwner == null
+				&& owner == expectedOwner) {
+			lock.unlock();
+			condition.signal();
+			owner = newOwner;
+		}
+		else if(newOwner != null
+				&& owner == expectedOwner) {
+			lock.lock();
+			owner = newOwner;
+		}
+		return owner;
+	}
+
+	public Philosopher getOwner() {
+		return owner;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Chop stick %d [has owner %s]", number, owner);
 	}
 }
