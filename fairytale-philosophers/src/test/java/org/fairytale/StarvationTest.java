@@ -86,8 +86,8 @@ public class StarvationTest {
 		);
 		philosophers = new LinkedHashSet<>(numberOfChopsticks);
 		for(int i = 0; i < numberOfChopsticks; i++) {
-			int leftIndex = i;
-			int rightIndex = (i + 1) % numberOfChopsticks;
+			int leftIndex = (i + 1) % numberOfChopsticks;
+			int rightIndex = i;
 			philosophers.add(
 					new Philosopher(
 							chopSticks[leftIndex],
