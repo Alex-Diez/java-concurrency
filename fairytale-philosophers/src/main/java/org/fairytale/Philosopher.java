@@ -3,8 +3,6 @@ package org.fairytale;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
 
 public abstract class Philosopher
@@ -18,7 +16,6 @@ public abstract class Philosopher
 	private final long eatingTime;
 	private final long thinkingTime;
 
-	//todo to much parameters
 	public Philosopher(
 			Lock leftChopStick,
 			Lock rightChopStick,

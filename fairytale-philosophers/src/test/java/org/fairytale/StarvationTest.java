@@ -14,13 +14,13 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.fairytale.matchers.MapElements;
+import org.fairytale.util.NamedReentrantLock;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static org.hamcrest.CoreMatchers.is;
 import static org.junit.runners.Parameterized.Parameters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -77,7 +77,7 @@ public class StarvationTest {
 	public void init() {
 		Lock[] chopSticks = new Lock[numberOfChopsticks];
 		for(int i = 0; i < numberOfChopsticks; i++) {
-			chopSticks[i] = new ReentrantLock();
+			chopSticks[i] = new NamedReentrantLock("ChopStick " + i, new ReentrantLock());
 		}
 		statistics = new ConcurrentHashMap<>(
 				numberOfChopsticks,
