@@ -9,6 +9,8 @@ public abstract class Philosopher
 		implements Runnable {
 
 	private static final Logger LOG = LoggerFactory.getLogger(Philosopher.class);
+	public static final String RIGHT_SIDE = "right";
+	public static final String LEFT_SIDE = "left";
 
 	private final Lock leftChopStick;
 	private final Lock rightChopStick;
@@ -26,18 +28,13 @@ public abstract class Philosopher
 	@Override
 	public void run() {
 		try {
-			takeChopstiks();
+			takeChopsticks();
 			try {
-				LOG.debug("Philosopher N {} starts eating", number);
-				eating();
+				eatingProcess();
 				statistic();
-				LOG.debug("Philosopher N {} stops eating", number);
 			}
 			finally {
-				leftChopStick.unlock();
-				LOG.debug("Philosopher N {} puts {} which is left for him", number, leftChopStick);
-				rightChopStick.unlock();
-				LOG.debug("Philosopher N {} puts {} which is right for him", number, rightChopStick);
+				putChopSticks();
 				thinking();
 			}
 		}
@@ -46,13 +43,29 @@ public abstract class Philosopher
 		}
 	}
 
-	private void takeChopstiks() {
+	private void eatingProcess() throws InterruptedException {
+		LOG.debug("Philosopher N {} starts eating", number);
+		eating();
+		LOG.debug("Philosopher N {} stops eating", number);
+	}
+
+	private void putChopSticks() {
+		putChopstick(leftChopStick, LEFT_SIDE);
+		putChopstick(rightChopStick, RIGHT_SIDE);
+	}
+
+	private void putChopstick(Lock leftChopStick, String side) {
+		leftChopStick.unlock();
+		LOG.debug("Philosopher N {} puts {} which is {} for him", number, leftChopStick, side);
+	}
+
+	private void takeChopsticks() {
 		boolean isLeftChopStickTaken = false;
 		boolean isRightChopStickTaken = false;
 		while (!isLeftChopStickTaken
 				|| !isRightChopStickTaken) {
-			isLeftChopStickTaken = takeChopStick(leftChopStick, rightChopStick, isRightChopStickTaken, "left");
-			isRightChopStickTaken = takeChopStick(rightChopStick, leftChopStick, isLeftChopStickTaken, "right");
+			isRightChopStickTaken = takeChopStick(leftChopStick, rightChopStick, isRightChopStickTaken, LEFT_SIDE);
+			isLeftChopStickTaken = takeChopStick(rightChopStick, leftChopStick, isLeftChopStickTaken, RIGHT_SIDE);
 		}
 	}
 
@@ -70,7 +83,7 @@ public abstract class Philosopher
 			}
 		}
 		LOG.debug("Philosopher N {} takes {} which is {} for him", number, chopStick, side);
-		return true;
+		return isOppositeChopStickTaken;
 	}
 
 	public abstract void statistic();
