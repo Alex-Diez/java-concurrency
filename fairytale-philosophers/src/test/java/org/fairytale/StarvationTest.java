@@ -75,33 +75,53 @@ public class StarvationTest {
 
 	@Before
 	public void init() {
+		initStatistics();
+		initPhilosophers();
+	}
+
+	private void initPhilosophers() {
+		Lock[] chopSticks = buildChopsriks();
+		philosophers = new LinkedHashSet<>(numberOfChopsticks);
+		for(int i = 0; i < numberOfChopsticks; i++) {
+			int leftIndex = (i + 1) % numberOfChopsticks;
+			int rightIndex = i;
+			philosophers.add(buildPhilosopher(chopSticks[leftIndex], chopSticks[rightIndex], i));
+		}
+	}
+
+	private Lock[] buildChopsriks() {
 		Lock[] chopSticks = new Lock[numberOfChopsticks];
 		for(int i = 0; i < numberOfChopsticks; i++) {
 			chopSticks[i] = new NamedReentrantLock("ChopStick " + i, new ReentrantLock());
 		}
+		return chopSticks;
+	}
+
+	private Philosopher buildPhilosopher(Lock chopStickLeft, Lock chopStickRight, int number) {
+		return new Philosopher(chopStickLeft, chopStickRight, number) {
+			@Override
+			public void statistic() {
+				statistics.computeIfAbsent(this, k -> new LongAdder()).increment();
+			}
+
+			@Override
+			public void eating() throws InterruptedException {
+				Thread.sleep(eatingTime);
+			}
+
+			@Override
+			public void thinking() throws InterruptedException {
+				Thread.sleep(thinkingTime);
+			}
+		};
+	}
+
+	private void initStatistics() {
 		statistics = new ConcurrentHashMap<>(
 				numberOfChopsticks,
 				1.0F,
 				numberOfChopsticks
 		);
-		philosophers = new LinkedHashSet<>(numberOfChopsticks);
-		for(int i = 0; i < numberOfChopsticks; i++) {
-			int leftIndex = (i + 1) % numberOfChopsticks;
-			int rightIndex = i;
-			philosophers.add(
-					new Philosopher(
-							chopSticks[leftIndex],
-							chopSticks[rightIndex],
-							i,
-							eatingTime,
-							thinkingTime
-					) {
-						public void statistic() {
-							statistics.computeIfAbsent(this, k -> new LongAdder()).increment();
-						}
-					}
-			);
-		}
 	}
 
 	@Test
