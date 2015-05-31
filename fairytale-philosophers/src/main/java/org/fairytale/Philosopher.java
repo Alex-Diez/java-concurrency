@@ -12,9 +12,10 @@ public abstract class Philosopher
 	public static final String RIGHT_SIDE = "right";
 	public static final String LEFT_SIDE = "left";
 
+	private final int number;
 	private final Lock leftChopStick;
 	private final Lock rightChopStick;
-	private final int number;
+
 	private boolean isRightChopStickTaken = false;
 	private boolean isLeftChopStickTaken = false;
 
@@ -33,27 +34,37 @@ public abstract class Philosopher
 			takeChopsticks();
 			try {
 				eatingProcess();
-				statistic();
 			}
 			finally {
 				putChopSticks();
-				thinking();
 			}
+			thinkingProcess();
 		}
 		catch (InterruptedException e) {
+			LOG.debug("Philosopher N {} was interrupted", number);
 			Thread.currentThread().interrupt();
 		}
+	}
+
+	private void thinkingProcess()
+			throws InterruptedException {
+		LOG.debug("Philosopher N {} start thinking", number);
+		thinking();
+		LOG.debug("Philosopher N {} stop thinking", number);
 	}
 
 	private void eatingProcess() throws InterruptedException {
 		LOG.debug("Philosopher N {} starts eating", number);
 		eating();
 		LOG.debug("Philosopher N {} stops eating", number);
+		statistic();
 	}
 
 	private void putChopSticks() {
 		putChopstick(leftChopStick, LEFT_SIDE);
+		isLeftChopStickTaken = false;
 		putChopstick(rightChopStick, RIGHT_SIDE);
+		isRightChopStickTaken = false;
 	}
 
 	private void putChopstick(Lock leftChopStick, String side) {
@@ -65,20 +76,26 @@ public abstract class Philosopher
 		while (!isLeftChopStickTaken
 				|| !isRightChopStickTaken) {
 			takeLeftChopStick();
+			if(isLeftChopStickTaken
+					&& isRightChopStickTaken) {
+				break;
+			}
 			takeRightChopStick();
 		}
 	}
 
 	private void takeLeftChopStick() {
 		if (!(isLeftChopStickTaken = leftChopStick.tryLock())) {
-			LOG.debug("Philosopher N {} tries but doesn't take {} which is {} for him", number, leftChopStick, LEFT_SIDE);
+			LOG.debug("Philosopher N {} tries but doesn't take {} which is left for him", number, leftChopStick, LEFT_SIDE);
 			if (isRightChopStickTaken) {
 				rightChopStick.unlock();
 				isRightChopStickTaken = false;
 				LOG.debug("Philosopher N {} puts {} which is {} for him", number, rightChopStick, RIGHT_SIDE);
 			}
 		}
-		LOG.debug("Philosopher N {} takes {} which is {} for him", number, leftChopStick, LEFT_SIDE);
+		else {
+			LOG.debug("Philosopher N {} takes {} which is {} for him", number, leftChopStick, LEFT_SIDE);
+		}
 	}
 
 	private void takeRightChopStick() {
@@ -90,7 +107,9 @@ public abstract class Philosopher
 				LOG.debug("Philosopher N {} puts {} which is {} for him", number, leftChopStick, LEFT_SIDE);
 			}
 		}
-		LOG.debug("Philosopher N {} takes {} which is {} for him", number, rightChopStick, RIGHT_SIDE);
+		else {
+			LOG.debug("Philosopher N {} takes {} which is {} for him", number, rightChopStick, RIGHT_SIDE);
+		}
 	}
 
 	public abstract void statistic();

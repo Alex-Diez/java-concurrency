@@ -11,9 +11,9 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.LongAdder;
 import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReentrantLock;
 
-import org.fairytale.matchers.MapElements;
+import org.fairytale.matchers.DirectStarvationThreadMatcher;
+import org.fairytale.matchers.RelativeStarvationThreadMatcher;
 import org.fairytale.util.NamedReentrantLock;
 
 import org.junit.Before;
@@ -27,6 +27,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Parameterized.class)
 public class StarvationTest {
+
+	private static final long DELTA_TIME = 100L;
 
 	//configuration values
 	private final int numberOfChopsticks;
@@ -80,7 +82,7 @@ public class StarvationTest {
 	}
 
 	private void initPhilosophers() {
-		Lock[] chopSticks = buildChopsriks();
+		final Lock[] chopSticks = buildChopsticks();
 		philosophers = new LinkedHashSet<>(numberOfChopsticks);
 		for(int i = 0; i < numberOfChopsticks; i++) {
 			int leftIndex = (i + 1) % numberOfChopsticks;
@@ -89,8 +91,8 @@ public class StarvationTest {
 		}
 	}
 
-	private Lock[] buildChopsriks() {
-		Lock[] chopSticks = new Lock[numberOfChopsticks];
+	private Lock[] buildChopsticks() {
+		final Lock[] chopSticks = new Lock[numberOfChopsticks];
 		for(int i = 0; i < numberOfChopsticks; i++) {
 			chopSticks[i] = new NamedReentrantLock("ChopStick " + i, false);
 		}
@@ -125,31 +127,49 @@ public class StarvationTest {
 	}
 
 	@Test
-	public void philosophersShouldNotStarve()
+	public void philosophersRelativeStarvationTest()
 			throws Exception {
 		final ExecutorService service = Executors.newFixedThreadPool(numberOfChopsticks);
 		final CountDownLatch latch = new CountDownLatch(numberOfChopsticks);
+		final long executionTime = (eatingTime + thinkingTime) * numbersOfEating;
 		for(Runnable philosopher : philosophers) {
-			service.submit(
-					() -> {
-						try {
-							latch.await();
-						}
-						catch(InterruptedException e) {
-							Thread.currentThread().interrupt();
-						}
-						long startTime = System.currentTimeMillis();
-						long nextIterationTime = System.currentTimeMillis();
-						while((nextIterationTime - startTime) < (eatingTime + thinkingTime) * numbersOfEating) {
-							philosopher.run();
-							nextIterationTime = System.currentTimeMillis();
-						}
-					}
-			);
+			service.submit(buildTestRunnable(latch, executionTime, philosopher));
 			latch.countDown();
 		}
-		Thread.sleep(numbersOfEating * (eatingTime + thinkingTime));
+		Thread.sleep(executionTime);
 		service.shutdown();
-		assertThat(statistics, new MapElements<>(philosophers, numbersOfEating));
+		assertThat(statistics, new RelativeStarvationThreadMatcher<>(philosophers, 0.1f));
+	}
+
+	@Test
+	public void philosophersDirectStarvationTest()
+			throws Exception {
+		final ExecutorService service = Executors.newFixedThreadPool(numberOfChopsticks);
+		final CountDownLatch latch = new CountDownLatch(numberOfChopsticks);
+		final long executionTime = (eatingTime + thinkingTime) * numbersOfEating;
+		for(Runnable philosopher : philosophers) {
+			service.submit(buildTestRunnable(latch, executionTime, philosopher));
+			latch.countDown();
+		}
+		Thread.sleep(executionTime);
+		service.shutdown();
+		assertThat(statistics, new DirectStarvationThreadMatcher<>(philosophers, numbersOfEating));
+	}
+
+	private Runnable buildTestRunnable(CountDownLatch latch, long executionTime, Runnable philosopher) {
+		return () -> {
+			try {
+				latch.await();
+			}
+			catch(InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			final long startTime = System.currentTimeMillis();
+			long nextIterationTime = System.currentTimeMillis();
+			while((nextIterationTime - startTime) < executionTime) {
+				philosopher.run();
+				nextIterationTime = System.currentTimeMillis();
+			}
+		};
 	}
 }
