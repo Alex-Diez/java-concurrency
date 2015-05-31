@@ -1,28 +1,41 @@
-package org.sudoku.game;
-
-import org.sudoku.game.elements.Element;
-import org.sudoku.game.elements.GameField;
+package org.sudoku;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+import org.sudoku.game.conf.GameFieldConfiguration;
+import org.sudoku.game.elements.Element;
+import org.sudoku.game.elements.GameField;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class Main {
+import org.junit.Before;
+import org.junit.Test;
 
-	private static final Logger LOG = LoggerFactory.getLogger(Main.class);
+public class ResolveSudokuGameFieldTest {
 
-	public static void main(String[] args)
+	//todo temporary
+	private static final Logger LOG = LoggerFactory.getLogger(ResolveSudokuGameFieldTest.class);
+
+	private GameFieldConfiguration configuration;
+
+	@Before
+	public void startUp() {
+		configuration = new GameFieldConfiguration.Builder(9, 9).build();
+	}
+
+	@Test
+	public void main()
 			throws Exception {
-		GameField gameField = new GameField.Builder(ELEMENTS).build();
+		GameField gameField = new GameField.Builder(configuration, ELEMENTS).build();
 		LOG.info("Game field at start \n{}", gameField);
 		ExecutorService executorService = Executors.newFixedThreadPool(1);
 		int iteration = 1;
 		while (!gameField.isFilled()) {
 			int number = (iteration - 1) % 9;
-			int i = number / GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
-			int j = number % GameField.NUMBER_OF_SUBSTITUTABLE_BLOCKS;
+			int i = number / configuration.getNumberOfSquares();
+			int j = number % configuration.getNumberOfSquares();
 			Runnable resolver = gameField.build(i, j);
 			executorService.submit(resolver).get();
 			LOG.info("Game field after {} iteration \n{}", iteration, gameField);
@@ -30,7 +43,7 @@ public class Main {
 		}
 	}
 
-	static final Element[][] ELEMENTS;
+	public static final Element[][] ELEMENTS;
 
 	static {
 		ELEMENTS = new Element[][] {
@@ -135,5 +148,4 @@ public class Main {
 				}
 		};
 	}
-
 }

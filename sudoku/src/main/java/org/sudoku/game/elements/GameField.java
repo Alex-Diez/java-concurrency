@@ -1,5 +1,6 @@
 package org.sudoku.game.elements;
 
+import org.sudoku.game.conf.GameFieldConfiguration;
 import org.sudoku.game.strategies.ResolverByBlock;
 import org.sudoku.game.strategies.StrategiesFactory;
 
@@ -9,35 +10,37 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 public class GameField
 		implements StrategiesFactory {
 
-	public static final int NUMBER_OF_ELEMENTS = 9;
-	public static final int NUMBER_OF_ELEMENTS_IN_ROW = NUMBER_OF_ELEMENTS;
-	public static final int NUMBER_OF_ELEMENTS_IN_COLUMN = NUMBER_OF_ELEMENTS;
-	public static final int NUMBER_OF_SQUARES = 3;
-	public static final int NUMBER_OF_ELEMENTS_IN_SQUARE_ROW = NUMBER_OF_ELEMENTS_IN_ROW / NUMBER_OF_SQUARES;
-	public static final int NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN = NUMBER_OF_ELEMENTS_IN_COLUMN / NUMBER_OF_SQUARES;
-	public static final int NUMBER_OF_SUBSTITUTABLE_BLOCKS = NUMBER_OF_SQUARES;
+	public static final String ROW_SEPARATOR = " --- --- --- --- --- --- --- --- --- ";
+	public static final char COLUMN_SEPARATOR = '|';
 
 	private final Square[][] squares;
 	private final ReadWriteLock[][] squaresLocks;
+	private final GameFieldConfiguration configuration;
 
-	private GameField(Square[][] squares, ReadWriteLock[][] squaresLocks) {
+	private GameField(
+			final GameFieldConfiguration configuration,
+			final Square[][] squares,
+			final ReadWriteLock[][] squaresLocks) {
+		this.configuration = configuration;
 		this.squares = squares;
 		this.squaresLocks = squaresLocks;
 	}
 
 	@Override
-	public Runnable build(int columnIndex, int rowIndex) {
-		int upRowIndex = (columnIndex - 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int upColumnIndex = (rowIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int downRowIndex = (columnIndex + 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int downColumnIndex = (rowIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int centerRowIndex = (columnIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int centerColumnIndex = (rowIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int leftRowIndex = (columnIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int leftColumnIndex = (rowIndex - 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int rightRowIndex = (columnIndex + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
-		int rightColumnIndex = (rowIndex + 1 + NUMBER_OF_SQUARES) % NUMBER_OF_SQUARES;
+	public Runnable build(final int columnIndex, final int rowIndex) {
+		final int numberOfSquares = configuration.getNumberOfSquares();
+		int upRowIndex = (columnIndex - 1 + numberOfSquares) % numberOfSquares;
+		int upColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
+		int downRowIndex = (columnIndex + 1 + numberOfSquares) % numberOfSquares;
+		int downColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
+		int centerRowIndex = (columnIndex + numberOfSquares) % numberOfSquares;
+		int centerColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
+		int leftRowIndex = (columnIndex + numberOfSquares) % numberOfSquares;
+		int leftColumnIndex = (rowIndex - 1 + numberOfSquares) % numberOfSquares;
+		int rightRowIndex = (columnIndex + numberOfSquares) % numberOfSquares;
+		int rightColumnIndex = (rowIndex + 1 + numberOfSquares) % numberOfSquares;
 		return new ResolverByBlock(
+				configuration,
 				squares[upColumnIndex][upRowIndex],
 				squaresLocks[upRowIndex][upRowIndex].readLock(),
 				squares[downColumnIndex][downRowIndex],
@@ -64,64 +67,85 @@ public class GameField
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		sb.append("  === === ===  === === ===  === === === \n");
-		for (int i = 0; i < NUMBER_OF_ELEMENTS; i++) {
-			sb.append("||");
-			for (int j = 0; j < NUMBER_OF_ELEMENTS; j++) {
+		StringBuilder sb = new StringBuilder(ROW_SEPARATOR + "\n");
+		final int numberOfElements = configuration.getNumberOfElements();
+		for (int i = 0; i < numberOfElements; i++) {
+			sb.append(COLUMN_SEPARATOR);
+			final int squareColumnIndex = calculateSquareColumnIndex(i);
+			for (int j = 0; j < numberOfElements; j++) {
+				final int squareRowIndex = calculateSquareRowIndex(j);
 				sb.append(
-						squares[i / NUMBER_OF_SQUARES][j / NUMBER_OF_SQUARES]
+						squares[squareColumnIndex][squareRowIndex]
 								.get(
-										i / NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN,
-										j % NUMBER_OF_ELEMENTS_IN_SQUARE_ROW
-						)
-				);
-				if ((j + 1) % 3 == 0) {
-					sb.append("||");
-				}
-				else {
-					sb.append("|");
-				}
+										calculateColumnOffset(i),
+										calculateRowOffset(j)
+								)
+				).append(COLUMN_SEPARATOR);
 			}
-			if ((i + 1) % 3 == 0) {
-				sb.append("\n  === === ===  === === ===  === === === \n");
-			}
-			else {
-				sb.append("\n  --- --- ---  --- --- ---  --- --- --- \n");
-			}
+			sb.append("\n" + ROW_SEPARATOR + "\n");
 		}
 		return sb.toString();
+	}
+
+	private int calculateRowOffset(final int rowIndex) {
+		return rowIndex % configuration.getNumberOfElementsInSquareRow();
+	}
+
+	private int calculateColumnOffset(final int columnIndex) {
+		return columnIndex % configuration.getNumberOfElementsInSquareColumn();
+	}
+
+	private int calculateSquareRowIndex(final int rowIndex) {
+		return rowIndex / configuration.getNumberOfSquaresInRow();
+	}
+
+	private int calculateSquareColumnIndex(final int columnIndex) {
+		return columnIndex / configuration.getNumberOfSquaresInColumn();
 	}
 
 	public static class Builder {
 
 		private final Square[][] squares;
 		private final ReadWriteLock[][] squaresLocks;
+		private GameFieldConfiguration configuration;
 
-		public Builder(Element[][] elements) {
-			if (elements.length != GameField.NUMBER_OF_ELEMENTS_IN_ROW
-					&& !isSubArraysHaveProperlyLengths(elements)) {
-				throw new IllegalArgumentException(
-						String.format(
-								"Game field can contains only %s elements in rows and %s elements in columns",
-								GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW,
-								GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN
-						)
-				);
-			}
-			squares = new Square[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES];
-			squaresLocks = new ReadWriteLock[NUMBER_OF_SQUARES][NUMBER_OF_SQUARES];
-			for (int i = 0; i < NUMBER_OF_SQUARES; i++) {
-				for (int j = 0; j < NUMBER_OF_SQUARES; j++) {
-					squares[i][j] = new Square.Builder(elements, i, j).build();
+		public Builder(final GameFieldConfiguration configuration, final Element[][] elements) {
+			isInputElementsEnoughLength(configuration, elements);
+			this.configuration = configuration;
+			final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
+			final int numberOfSquaresInRow = configuration.getNumberOfSquaresInRow();
+			squares = new Square[numberOfSquaresInColumn][numberOfSquaresInRow];
+			squaresLocks = new ReadWriteLock[numberOfSquaresInColumn][numberOfSquaresInRow];
+			for (int i = 0; i < numberOfSquaresInColumn; i++) {
+				for (int j = 0; j < numberOfSquaresInRow; j++) {
+					squares[i][j] = new Square.Builder(configuration, elements, i, j).build();
 					squaresLocks[i][j] = new ReentrantReadWriteLock();
 				}
 			}
 		}
 
-		private boolean isSubArraysHaveProperlyLengths(Element[][] elements) {
+		private void isInputElementsEnoughLength(
+				final GameFieldConfiguration configuration,
+				final Element[][] elements) {
+			final int numberOfElements = configuration.getNumberOfElements();
+			if (elements.length != numberOfElements
+					&& !isSubArraysHaveProperlyLengths(configuration, elements)) {
+				throw new NotRightElementArrayLengthException(
+						String.format(
+								"Game field can contains only %s elements in rows and %s elements in columns",
+								configuration.getNumberOfElementsInSquareRow(),
+								configuration.getNumberOfElementsInSquareColumn()
+						)
+				);
+			}
+		}
+
+		private boolean isSubArraysHaveProperlyLengths(
+				final GameFieldConfiguration configuration,
+				final Element[][] elements) {
+			final int numberOfElementsInRow = configuration.getNumberOfElementsInRow();
 			for (Element[] els : elements) {
-				if (els.length != GameField.NUMBER_OF_ELEMENTS_IN_ROW) {
+				if (els.length != numberOfElementsInRow) {
 					return false;
 				}
 			}
@@ -129,7 +153,7 @@ public class GameField
 		}
 
 		public GameField build() {
-			return new GameField(squares, squaresLocks);
+			return new GameField(configuration, squares, squaresLocks);
 		}
 	}
 }

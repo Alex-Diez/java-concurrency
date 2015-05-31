@@ -1,7 +1,7 @@
 package org.sudoku.game.strategies;
 
+import org.sudoku.game.conf.GameFieldConfiguration;
 import org.sudoku.game.elements.Element;
-import org.sudoku.game.elements.GameField;
 import org.sudoku.game.elements.Square;
 
 import java.util.ArrayList;
@@ -38,12 +38,14 @@ public class ResolverByBlock
 
 	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
+	private final GameFieldConfiguration configuration;
 	private final Set<Square> horizontal;
 	private final Set<Square> vertical;
 	private final Square center;
 	private final BlockLock readWriteLock;
 
 	public ResolverByBlock(
+			GameFieldConfiguration configuration,
 			Square up,
 			Lock upReadLock,
 			Square down,
@@ -54,6 +56,7 @@ public class ResolverByBlock
 			Lock leftReadLock,
 			Square right,
 			Lock rightLock) {
+		this.configuration = configuration;
 		this.horizontal = new HashSet<>(2, 1.0f);
 		this.horizontal.add(left);
 		this.horizontal.add(right);
@@ -102,7 +105,7 @@ public class ResolverByBlock
 				(subSquare) -> {
 					if (subSquare.hasElement(element)) {
 						Integer position = subSquare.getElementPosition(element);
-						Integer rowColPosition = position / GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+						Integer rowColPosition = position / configuration.getNumberOfElementsInSquareColumn();
 						positions.addAll(ROW_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
@@ -116,7 +119,7 @@ public class ResolverByBlock
 				(subSquare) -> {
 					if (subSquare.hasElement(element)) {
 						Integer position = subSquare.getElementPosition(element);
-						Integer rowColPosition = position % GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+						Integer rowColPosition = position % configuration.getNumberOfElementsInSquareRow();
 						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}

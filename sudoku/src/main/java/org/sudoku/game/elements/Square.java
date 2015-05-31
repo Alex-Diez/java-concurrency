@@ -1,20 +1,33 @@
 package org.sudoku.game.elements;
 
+import org.sudoku.game.conf.GameFieldConfiguration;
+
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Square {
 
+	private static final String ROW_SEPARATOR = " --- --- --- ";
+	private static final char COLUMN_SEPARATOR = '|';
+
 	private final int rowIndex;
 	private final int columnIndex;
+	private final GameFieldConfiguration configuration;
 	private final Element[][] matrix;
-	private final Map<Element, Integer> elements = new LinkedHashMap<>(GameField.NUMBER_OF_ELEMENTS, 1.0f);
+	private final Map<Element, Integer> elements;
 
-	private Square(Element[][] matrix, Map<Element, Integer> elements, int rowIndex, int columnIndex) {
+	private Square(
+			final GameFieldConfiguration configurations,
+			final int rowIndex,
+			final int columnIndex,
+			final Element[][] matrix,
+			final Map<Element, Integer> elements) {
+		this.configuration = configurations;
 		this.matrix = matrix;
 		this.rowIndex = rowIndex;
 		this.columnIndex = columnIndex;
+		this.elements = new LinkedHashMap<>(configurations.getNumberOfElements(), 1.0f);
 		this.elements.putAll(elements);
 	}
 
@@ -24,11 +37,25 @@ public class Square {
 
 	public void putElement(Element element, Integer position) {
 		elements.put(element, position);
-		int i = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN +
-				position / GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
-		int j = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW +
-				position % GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
+		int i = calculateFirstColumnIndex() + calculateColumnOffset(position);
+		int j = calculateFirstRowIndex() + calculateRowOffset(position);
 		matrix[i][j] = element;
+	}
+
+	private int calculateFirstColumnIndex() {
+		return columnIndex * configuration.getNumberOfElementsInSquareColumn();
+	}
+
+	private int calculateColumnOffset(Integer position) {
+		return position / configuration.getNumberOfElementsInSquareColumn();
+	}
+
+	private int calculateFirstRowIndex() {
+		return rowIndex * configuration.getNumberOfElementsInSquareRow();
+	}
+
+	private int calculateRowOffset(Integer position) {
+		return position % configuration.getNumberOfElementsInSquareRow();
 	}
 
 	public Integer getElementPosition(Element element) {
@@ -73,80 +100,99 @@ public class Square {
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder();
-		final int minI = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
-		final int maxI = (columnIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
-		final int minJ = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
-		final int maxJ = (rowIndex + 1) * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW;
-		sb.append("  === === === \n");
-		for (int i = minI; i < maxI; i++) {
-			sb.append("||");
-			for (int j = minJ; j < maxJ; j++) {
-				sb.append(matrix[i][j]);
-				if ((j + 1) % 3 == 0) {
-					sb.append("||");
-				}
-				else {
-					sb.append("|");
-				}
+		StringBuilder sb = new StringBuilder(ROW_SEPARATOR + "\n");
+		final int numberOfElementsInSquareColumn = configuration.getNumberOfElementsInSquareColumn();
+		final int numberOfElementsInSquareRow = configuration.getNumberOfElementsInSquareRow();
+		for (int i = 0; i < numberOfElementsInSquareColumn; i++) {
+			sb.append(COLUMN_SEPARATOR);
+			for (int j = 0; j < numberOfElementsInSquareRow; j++) {
+				sb.append(matrix[i][j]).append(COLUMN_SEPARATOR);
 			}
-			if ((i + 1) % 3 == 0) {
-				sb.append("\n  === === === \n");
-			}
-			else {
-				sb.append("\n  --- --- --- \n");
-			}
+			sb.append("\n" + ROW_SEPARATOR + "\n");
 		}
 		return sb.toString();
 	}
 
+	private int calculateLastRowIndex() {
+		return (rowIndex + 1) * configuration.getNumberOfElementsInSquareRow();
+	}
+
+	private int calculateLastColumnIndex() {
+		return (columnIndex + 1) * configuration.getNumberOfElementsInSquareColumn();
+	}
+
 	static class Builder {
 
-		private final Map<Element, Integer> elements = new LinkedHashMap<>(GameField.NUMBER_OF_ELEMENTS, 1.0f);
-		private final Element[][] matrix;
+		private final GameFieldConfiguration configuration;
 		private final int rowIndex;
 		private final int columnIndex;
+		private final Map<Element, Integer> elements;
+		private final Element[][] matrix;
 
-		public Builder(Element[][] elements, int columnIndex, int rowIndex) {
-			if (elements.length == GameField.NUMBER_OF_ELEMENTS
-					&& checkSubArrayLength(elements)) {
-				this.matrix = elements;
-				this.rowIndex = rowIndex;
-				this.columnIndex = columnIndex;
-				for (int i = 0; i < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN; i++) {
-					for (int j = 0; j < GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW; j++) {
-						int cI = columnIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN + i;
-						int rI = rowIndex * GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW + j;
-						Element e = elements[cI][rI];
-						if (Element.EMPTY_ELEMENT.equals(e)) {
-							int elementPosition = GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW * i + j;
-							this.elements.put(e, elementPosition);
-						}
+		public Builder(
+				final GameFieldConfiguration configuration,
+				final Element[][] elements,
+				final int columnIndex,
+				final int rowIndex) {
+			isInputElementsEnoughLength(configuration, elements);
+			this.configuration = configuration;
+			this.elements = new LinkedHashMap<>(
+					configuration.getNumberOfElements(),
+					1.0f
+			);
+			final int numberOfElementsInSquareColumn = configuration.getNumberOfElementsInSquareColumn();
+			final int numberOfElementsInSquareRow = configuration.getNumberOfElementsInSquareRow();
+			final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
+			this.matrix = new Element[numberOfElementsInSquareColumn][numberOfElementsInSquareRow];
+			for (int i = 0; i < numberOfSquaresInColumn; i++) {
+				System.arraycopy(
+						elements[columnIndex * numberOfElementsInSquareColumn + i],
+						rowIndex * numberOfElementsInSquareRow,
+						matrix[i],
+						0,
+						numberOfElementsInSquareRow
+				);
+			}
+			this.rowIndex = rowIndex;
+			this.columnIndex = columnIndex;
+			for (int i = 0; i < numberOfElementsInSquareColumn; i++) {
+				for (int j = 0; j < numberOfElementsInSquareRow; j++) {
+					int cI = columnIndex * numberOfElementsInSquareColumn + i;
+					int rI = rowIndex * numberOfElementsInSquareRow + j;
+					Element e = elements[cI][rI];
+					if (Element.EMPTY_ELEMENT.equals(e)) {
+						int elementPosition = numberOfElementsInSquareRow * i + j;
+						this.elements.put(e, elementPosition);
 					}
 				}
 			}
-			else {
-				throw new IllegalArgumentException(
+		}
+
+		private void isInputElementsEnoughLength(GameFieldConfiguration configuration, Element[][] elements) {
+			final int numberOfElements = configuration.getNumberOfElements();
+			if (elements.length != numberOfElements
+					&& !isSubArraysHaveProperlyLengths(configuration, elements)) {
+				throw new NotRightElementArrayLengthException(
 						String.format(
-								"Square can contains only %s elements in rows and %s elements in columns",
-								GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_ROW,
-								GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN
+								"Game field can contains only %s elements in rows and %s elements in columns",
+								configuration.getNumberOfElementsInSquareRow(),
+								configuration.getNumberOfElementsInSquareColumn()
 						)
 				);
 			}
 		}
 
-		public Square build() {
-			return new Square(matrix, elements, rowIndex, columnIndex);
-		}
-
-		private boolean checkSubArrayLength(Element[][] elements) {
+		private boolean isSubArraysHaveProperlyLengths(GameFieldConfiguration configurations, Element[][] elements) {
 			for (Element[] els : elements) {
-				if (els.length != GameField.NUMBER_OF_ELEMENTS) {
+				if (els.length != configurations.getNumberOfElements()) {
 					return false;
 				}
 			}
 			return true;
+		}
+
+		public Square build() {
+			return new Square(configuration, rowIndex, columnIndex, matrix, elements);
 		}
 	}
 }

@@ -3,21 +3,10 @@ package org.sudoku.game.elements;
 public class Element {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
-	static final Element[] POSSIBLE_ELEMENTS = new Element[] {
-			new Element(1),
-			new Element(2),
-			new Element(3),
-			new Element(4),
-			new Element(5),
-			new Element(6),
-			new Element(7),
-			new Element(8),
-			new Element(9)
-	};
 
 	private final int value;
 
-	private Element(int value) {
+	private Element(final int value) {
 		this.value = value;
 	}
 
@@ -27,7 +16,7 @@ public class Element {
 	}
 
 	@Override
-	public boolean equals(Object object) {
+	public boolean equals(final Object object) {
 		if (object == this) {
 			return true;
 		}
@@ -39,6 +28,7 @@ public class Element {
 		return false;
 	}
 
+	@Override
 	public String toString() {
 		if (value == 0) {
 			return "   ";
@@ -50,7 +40,7 @@ public class Element {
 
 		private final int value;
 
-		public Builder(int value) {
+		public Builder(final int value) {
 			if (value < 1
 					&& value > 9) {
 				throw new IllegalArgumentException("Value can't be less then 1 and more 9");
