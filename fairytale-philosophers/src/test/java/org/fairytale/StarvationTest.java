@@ -28,8 +28,6 @@ import static org.hamcrest.MatcherAssert.assertThat;
 @RunWith(Parameterized.class)
 public class StarvationTest {
 
-	private static final long DELTA_TIME = 100L;
-
 	//configuration values
 	private final int numberOfChopsticks;
 	private final long numbersOfEating;
@@ -85,10 +83,18 @@ public class StarvationTest {
 		final Lock[] chopSticks = buildChopsticks();
 		philosophers = new LinkedHashSet<>(numberOfChopsticks);
 		for(int i = 0; i < numberOfChopsticks; i++) {
-			int leftIndex = (i + 1) % numberOfChopsticks;
-			int rightIndex = i;
+			int leftIndex = findIndexOfLeftChopstick(i);
+			int rightIndex = findIndexOfRightChopstick(i);
 			philosophers.add(buildPhilosopher(chopSticks[leftIndex], chopSticks[rightIndex], i));
 		}
+	}
+
+	private int findIndexOfRightChopstick(int i) {
+		return i;
+	}
+
+	private int findIndexOfLeftChopstick(int i) {
+		return (i + 1) % numberOfChopsticks;
 	}
 
 	private Lock[] buildChopsticks() {
@@ -127,33 +133,49 @@ public class StarvationTest {
 	}
 
 	@Test
-	public void philosophersRelativeStarvationTest()
-			throws Exception {
-		final ExecutorService service = Executors.newFixedThreadPool(numberOfChopsticks);
-		final CountDownLatch latch = new CountDownLatch(numberOfChopsticks);
-		final long executionTime = (eatingTime + thinkingTime) * numbersOfEating;
-		for(Runnable philosopher : philosophers) {
-			service.submit(buildTestRunnable(latch, executionTime, philosopher));
-			latch.countDown();
-		}
-		Thread.sleep(executionTime);
+	public void philosophersRelativeStarvationTest() {
+		final ExecutorService service = initializeThreadPool();
+		final long executionTime = calculateExecutionTime();
+		submitPhilosophers(service, executionTime);
+		waitTime(executionTime);
 		service.shutdown();
-		assertThat(statistics, new RelativeStarvationThreadMatcher<>(philosophers, 0.1f));
+		assertThat(statistics, new RelativeStarvationThreadMatcher<>(philosophers, 0.1F));
 	}
 
 	@Test
-	public void philosophersDirectStarvationTest()
-			throws Exception {
-		final ExecutorService service = Executors.newFixedThreadPool(numberOfChopsticks);
+	public void philosophersDirectStarvationTest() {
+		final ExecutorService service = initializeThreadPool();
+		final long executionTime = calculateExecutionTime();
+		submitPhilosophers(service, executionTime);
+		waitTime(executionTime);
+		service.shutdown();
+		assertThat(statistics, new DirectStarvationThreadMatcher<>(philosophers, numbersOfEating));
+	}
+
+	private void waitTime(long executionTime) {
+		try {
+			Thread.sleep(executionTime);
+		}
+		catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new RuntimeException(e);
+		}
+	}
+
+	private ExecutorService initializeThreadPool() {
+		return Executors.newFixedThreadPool(numberOfChopsticks);
+	}
+
+	private long calculateExecutionTime() {
+		return (eatingTime + thinkingTime) * numbersOfEating;
+	}
+
+	private void submitPhilosophers(ExecutorService service, long executionTime) {
 		final CountDownLatch latch = new CountDownLatch(numberOfChopsticks);
-		final long executionTime = (eatingTime + thinkingTime) * numbersOfEating;
 		for(Runnable philosopher : philosophers) {
 			service.submit(buildTestRunnable(latch, executionTime, philosopher));
 			latch.countDown();
 		}
-		Thread.sleep(executionTime);
-		service.shutdown();
-		assertThat(statistics, new DirectStarvationThreadMatcher<>(philosophers, numbersOfEating));
 	}
 
 	private Runnable buildTestRunnable(CountDownLatch latch, long executionTime, Runnable philosopher) {
