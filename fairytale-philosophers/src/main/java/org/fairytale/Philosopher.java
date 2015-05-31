@@ -15,6 +15,8 @@ public abstract class Philosopher
 	private final Lock leftChopStick;
 	private final Lock rightChopStick;
 	private final int number;
+	private boolean isRightChopStickTaken = false;
+	private boolean isLeftChopStickTaken = false;
 
 	public Philosopher(
 			Lock leftChopStick,
@@ -60,30 +62,35 @@ public abstract class Philosopher
 	}
 
 	private void takeChopsticks() {
-		boolean isLeftChopStickTaken = false;
-		boolean isRightChopStickTaken = false;
 		while (!isLeftChopStickTaken
 				|| !isRightChopStickTaken) {
-			isRightChopStickTaken = takeChopStick(leftChopStick, rightChopStick, isRightChopStickTaken, LEFT_SIDE);
-			isLeftChopStickTaken = takeChopStick(rightChopStick, leftChopStick, isLeftChopStickTaken, RIGHT_SIDE);
+			takeLeftChopStick();
+			takeRightChopStick();
 		}
 	}
 
-	private boolean takeChopStick(
-			Lock chopStick,
-			Lock oppositeChopStick,
-			boolean isOppositeChopStickTaken,
-			String side) {
-		while (!chopStick.tryLock()) {
-			LOG.debug("Philosopher N {} tries but doesn't take {} which is {} for him", number, chopStick, side);
-			if (isOppositeChopStickTaken) {
-				oppositeChopStick.unlock();
-				isOppositeChopStickTaken = false;
-				LOG.debug("Philosopher N {} puts {} which is {} for him", number, oppositeChopStick, side);
+	private void takeLeftChopStick() {
+		if (!(isLeftChopStickTaken = leftChopStick.tryLock())) {
+			LOG.debug("Philosopher N {} tries but doesn't take {} which is {} for him", number, leftChopStick, LEFT_SIDE);
+			if (isRightChopStickTaken) {
+				rightChopStick.unlock();
+				isRightChopStickTaken = false;
+				LOG.debug("Philosopher N {} puts {} which is {} for him", number, rightChopStick, RIGHT_SIDE);
 			}
 		}
-		LOG.debug("Philosopher N {} takes {} which is {} for him", number, chopStick, side);
-		return isOppositeChopStickTaken;
+		LOG.debug("Philosopher N {} takes {} which is {} for him", number, leftChopStick, LEFT_SIDE);
+	}
+
+	private void takeRightChopStick() {
+		if (!(isRightChopStickTaken = rightChopStick.tryLock())) {
+			LOG.debug("Philosopher N {} tries but doesn't take {} which is {} for him", number, rightChopStick, RIGHT_SIDE);
+			if (isLeftChopStickTaken) {
+				leftChopStick.unlock();
+				isLeftChopStickTaken = false;
+				LOG.debug("Philosopher N {} puts {} which is {} for him", number, leftChopStick, LEFT_SIDE);
+			}
+		}
+		LOG.debug("Philosopher N {} takes {} which is {} for him", number, rightChopStick, RIGHT_SIDE);
 	}
 
 	public abstract void statistic();

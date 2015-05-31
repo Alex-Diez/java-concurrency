@@ -11,9 +11,9 @@ public class NamedReentrantLock
 	private final String name;
 	private final ReentrantLock reentrantLock;
 
-	public NamedReentrantLock(String name, ReentrantLock reentrantLock) {
+	public NamedReentrantLock(String name, boolean fair) {
 		this.name = name;
-		this.reentrantLock = reentrantLock;
+		this.reentrantLock =  new ReentrantLock(fair);
 	}
 
 	@Override

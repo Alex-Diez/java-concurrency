@@ -92,7 +92,7 @@ public class StarvationTest {
 	private Lock[] buildChopsriks() {
 		Lock[] chopSticks = new Lock[numberOfChopsticks];
 		for(int i = 0; i < numberOfChopsticks; i++) {
-			chopSticks[i] = new NamedReentrantLock("ChopStick " + i, new ReentrantLock());
+			chopSticks[i] = new NamedReentrantLock("ChopStick " + i, false);
 		}
 		return chopSticks;
 	}
