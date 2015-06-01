@@ -37,21 +37,13 @@ public class Square {
 
 	public void putElement(Element element, Integer position) {
 		elements.put(element, position);
-		int i = calculateFirstColumnIndex() + calculateColumnOffset(position);
-		int j = calculateFirstRowIndex() + calculateRowOffset(position);
+		int i = calculateColumnOffset(position);
+		int j = calculateRowOffset(position);
 		matrix[i][j] = element;
-	}
-
-	private int calculateFirstColumnIndex() {
-		return columnIndex * configuration.getNumberOfElementsInSquareColumn();
 	}
 
 	private int calculateColumnOffset(Integer position) {
 		return position / configuration.getNumberOfElementsInSquareColumn();
-	}
-
-	private int calculateFirstRowIndex() {
-		return rowIndex * configuration.getNumberOfElementsInSquareRow();
 	}
 
 	private int calculateRowOffset(Integer position) {
@@ -72,6 +64,10 @@ public class Square {
 
 	public Collection<Integer> filledPositions() {
 		return elements.values();
+	}
+
+	public int size() {
+		return elements.size();
 	}
 
 	@Override
@@ -113,14 +109,6 @@ public class Square {
 		return sb.toString();
 	}
 
-	private int calculateLastRowIndex() {
-		return (rowIndex + 1) * configuration.getNumberOfElementsInSquareRow();
-	}
-
-	private int calculateLastColumnIndex() {
-		return (columnIndex + 1) * configuration.getNumberOfElementsInSquareColumn();
-	}
-
 	static class Builder {
 
 		private final GameFieldConfiguration configuration;
@@ -160,7 +148,7 @@ public class Square {
 					int cI = columnIndex * numberOfElementsInSquareColumn + i;
 					int rI = rowIndex * numberOfElementsInSquareRow + j;
 					Element e = elements[cI][rI];
-					if (Element.EMPTY_ELEMENT.equals(e)) {
+					if (!Element.EMPTY_ELEMENT.equals(e)) {
 						int elementPosition = numberOfElementsInSquareRow * i + j;
 						this.elements.put(e, elementPosition);
 					}

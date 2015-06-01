@@ -28,17 +28,18 @@ public class GameField
 
 	@Override
 	public Runnable build(final int columnIndex, final int rowIndex) {
-		final int numberOfSquares = configuration.getNumberOfSquares();
-		int upRowIndex = (columnIndex - 1 + numberOfSquares) % numberOfSquares;
-		int upColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
-		int downRowIndex = (columnIndex + 1 + numberOfSquares) % numberOfSquares;
-		int downColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
-		int centerRowIndex = (columnIndex + numberOfSquares) % numberOfSquares;
-		int centerColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
-		int leftRowIndex = (columnIndex + numberOfSquares) % numberOfSquares;
-		int leftColumnIndex = (rowIndex - 1 + numberOfSquares) % numberOfSquares;
-		int rightRowIndex = (columnIndex + numberOfSquares) % numberOfSquares;
-		int rightColumnIndex = (rowIndex + 1 + numberOfSquares) % numberOfSquares;
+		final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
+		final int numberOfSquaresInRow = configuration.getNumberOfSquaresInRow();
+		int upRowIndex = (rowIndex - 1 + numberOfSquaresInRow) % numberOfSquaresInRow;
+		int upColumnIndex = (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+		int downRowIndex = (rowIndex + 1 + numberOfSquaresInRow) % numberOfSquaresInRow;
+		int downColumnIndex = (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+		int centerRowIndex = (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
+		int centerColumnIndex = (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+		int leftRowIndex = (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
+		int leftColumnIndex = (columnIndex - 1 + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+		int rightRowIndex = (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
+		int rightColumnIndex = (columnIndex + 1 + numberOfSquaresInColumn) % numberOfSquaresInColumn;
 		return new ResolverByBlock(
 				configuration,
 				squares[upColumnIndex][upRowIndex],
@@ -57,7 +58,7 @@ public class GameField
 	public boolean isFilled() {
 		for (Square[] rows : squares) {
 			for (Square square : rows) {
-				if (square.isFilled()) {
+				if (!square.isFilled()) {
 					return false;
 				}
 			}
