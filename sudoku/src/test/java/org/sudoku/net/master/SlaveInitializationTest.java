@@ -1,5 +1,6 @@
 package org.sudoku.net.master;
 
+import org.sudoku.TestsConstants;
 import org.sudoku.conf.GameFieldConfiguration;
 import org.sudoku.elements.Element;
 import org.sudoku.elements.GameField;
@@ -20,118 +21,12 @@ public class SlaveInitializationTest {
 		slaveInitializer = new SlaveInitializer();
 		slaveIndex = 1;
 		final GameFieldConfiguration configuration = new GameFieldConfiguration.Builder(9).build();
-		gameField = new GameField.Builder(configuration, ELEMENTS).build();
+		gameField = new GameField.Builder(configuration, TestsConstants.ELEMENTS).build();
 		networkManager = new MasterNetworkManager();
 	}
 
 	@Test
 	public void testSlaveInitialization() {
 		SlaveConfiguration configuration = slaveInitializer.initializeSlave(slaveIndex, gameField, networkManager);
-	}
-
-	private static final Element[][] ELEMENTS;
-
-	static {
-		ELEMENTS = new Element[][] {
-				{
-						new Element.Builder(8).build(),
-						new Element.Builder(4).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(5).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(2).build()
-				},
-				{
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(5).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(9).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(3).build(),
-						new Element.Builder(6).build()
-				},
-				{
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(2).build(),
-						new Element.Builder(8).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(6).build(),
-						new Element.Builder(4).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT
-				},
-				{
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(6).build(),
-						new Element.Builder(8).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(1).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(5).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT
-				},
-				{
-						new Element.Builder(9).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(5).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(4).build()
-				},
-				{
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(3).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(6).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(7).build(),
-						new Element.Builder(1).build(),
-						Element.EMPTY_ELEMENT,
-				},
-				{
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(9).build(),
-						new Element.Builder(1).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(7).build(),
-						new Element.Builder(3).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT
-				},
-				{
-						new Element.Builder(2).build(),
-						new Element.Builder(1).build(),
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(4).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(8).build(),
-						Element.EMPTY_ELEMENT
-				},
-				{
-						new Element.Builder(7).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(8).build(),
-						Element.EMPTY_ELEMENT,
-						Element.EMPTY_ELEMENT,
-						new Element.Builder(2).build(),
-						new Element.Builder(9).build()
-				}
-		};
 	}
 }

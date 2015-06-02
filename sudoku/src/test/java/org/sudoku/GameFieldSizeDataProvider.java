@@ -14,7 +14,7 @@ public class GameFieldSizeDataProvider {
 		this.counterInitialValue = counterInitialValue;
 	}
 
-	public Collection provideData() {
+	public Collection<Integer> provideData() {
 		return Stream.generate(
 				() -> {
 					final int testCounter = retrieveTestCounter();
