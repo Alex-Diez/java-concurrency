@@ -15,6 +15,8 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
+import org.sudoku.conf.GameFieldConfiguration;
+
 public class SubstitutableBlock {
 
 	private static final Map<Integer, Collection<Integer>> COLUMN_CLOSED_POSITIONS;
@@ -34,15 +36,18 @@ public class SubstitutableBlock {
 	private final Set<Square> horizontal;
 	private final Set<Square> vertical;
 	private final Square center;
+	private final GameFieldConfiguration configuration;
 
 	private final ReadWriteLock readWriteLock;
 
-	public SubstitutableBlock(
+	private SubstitutableBlock(
+			final GameFieldConfiguration configuration,
 			Square up,
 			Square down,
 			Square center,
 			Square left,
 			Square right) {
+		this.configuration = configuration;
 		this.horizontal = new HashSet<>(2, 1.0f);
 		this.horizontal.add(left);
 		this.horizontal.add(right);
@@ -79,9 +84,9 @@ public class SubstitutableBlock {
 		Collection<Integer> positions = new ArrayList<>();
 		horizontal.forEach(
 				(subSquare) -> {
-					if (subSquare.hasElement(element)) {
+					if(subSquare.hasElement(element)) {
 						Integer position = subSquare.getElementPosition(element);
-						Integer rowColPosition = position / GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+						Integer rowColPosition = position / configuration.getNumberOfElementsInSquareRow();
 						positions.addAll(ROW_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
@@ -93,9 +98,9 @@ public class SubstitutableBlock {
 		Collection<Integer> positions = new ArrayList<>();
 		vertical.forEach(
 				(subSquare) -> {
-					if (subSquare.hasElement(element)) {
+					if(subSquare.hasElement(element)) {
 						Integer position = subSquare.getElementPosition(element);
-						Integer rowColPosition = position % GameField.NUMBER_OF_ELEMENTS_IN_SQUARE_COLUMN;
+						Integer rowColPosition = position % configuration.getNumberOfElementsInSquareColumn();
 						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
@@ -112,19 +117,19 @@ public class SubstitutableBlock {
 	}
 
 	public Element elementToSubstitution() {
-		for (Element element : Element.POSSIBLE_ELEMENTS) {
+		for(Element element : Element.POSSIBLE_ELEMENTS) {
 			boolean canBeSearchable = !center.hasElement(element);
-			if (canBeSearchable) {
+			if(canBeSearchable) {
 				int counter = 0;
 				Iterator<Square> iterator = new CompositeIterator<>(
 						horizontal.iterator(),
 						vertical.iterator()
 				);
-				while (iterator.hasNext()) {
+				while(iterator.hasNext()) {
 					Square square = iterator.next();
 					counter += (square.hasElement(element) ? 1 : 0);
 				}
-				if (counter > 2) {
+				if(counter > 2) {
 					return element;
 				}
 			}
@@ -199,7 +204,8 @@ public class SubstitutableBlock {
 		}
 
 		@Override
-		public void lockInterruptibly() throws InterruptedException {
+		public void lockInterruptibly()
+				throws InterruptedException {
 			upSubSquareLock.lockInterruptibly();
 			downSubSquareLock.lockInterruptibly();
 			centerSubSquareLock.lockInterruptibly();
@@ -214,20 +220,21 @@ public class SubstitutableBlock {
 					&& centerSubSquareLock.tryLock()
 					&& leftSubSquareLock.tryLock()
 					&& rightSubSquareLock.tryLock();
-			if (!locked) {
+			if(!locked) {
 				unlock();
 			}
 			return locked;
 		}
 
 		@Override
-		public boolean tryLock(long time, TimeUnit unit) throws InterruptedException {
+		public boolean tryLock(long time, TimeUnit unit)
+				throws InterruptedException {
 			boolean locked = upSubSquareLock.tryLock(time, unit)
 					&& downSubSquareLock.tryLock(time, unit)
 					&& centerSubSquareLock.tryLock(time, unit)
 					&& leftSubSquareLock.tryLock(time, unit)
 					&& rightSubSquareLock.tryLock(time, unit);
-			if (!locked) {
+			if(!locked) {
 				unlock();
 			}
 			return locked;
@@ -300,9 +307,9 @@ public class SubstitutableBlock {
 
 		@Override
 		public boolean hasNext() {
-			while (!iterators[current].hasNext()) {
+			while(!iterators[current].hasNext()) {
 				current++;
-				if (current == iterators.length) {
+				if(current == iterators.length) {
 					return false;
 				}
 			}
@@ -311,10 +318,24 @@ public class SubstitutableBlock {
 
 		@Override
 		public E next() {
-			if (hasNext()) {
+			if(hasNext()) {
 				return iterators[current].next();
 			}
 			throw new NoSuchElementException();
+		}
+	}
+
+	public static class Builder {
+		public Builder(
+				final GameFieldConfiguration configuration,
+				final GameField gameField,
+				final int columnIndex,
+				final int rowIndex) {
+
+		}
+
+		public SubstitutableBlock build() {
+			return null;
 		}
 	}
 }

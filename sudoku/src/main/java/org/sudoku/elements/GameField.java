@@ -144,7 +144,11 @@ public class GameField
 		return columnIndex / configuration.getNumberOfSquaresInColumn();
 	}
 
-	public Square retrieveSquare(int index) {
+	public Square retrieveSquare(final int index) {
+		return null;
+	}
+
+	public SubstitutableBlock buildBlock(final int columnIndex, final int rowIndex) {
 		return null;
 	}
 

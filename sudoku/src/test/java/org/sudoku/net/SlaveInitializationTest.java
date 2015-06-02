@@ -1,9 +1,11 @@
-package org.sudoku.net.master;
+package org.sudoku.net;
 
 import org.sudoku.TestsConstants;
 import org.sudoku.conf.GameFieldConfiguration;
-import org.sudoku.elements.Element;
 import org.sudoku.elements.GameField;
+import org.sudoku.net.master.MasterNetworkManager;
+import org.sudoku.net.master.SlaveConfiguration;
+import org.sudoku.net.master.SlaveInitializer;
 import org.sudoku.net.spi.NetworkManager;
 
 import org.junit.Test;

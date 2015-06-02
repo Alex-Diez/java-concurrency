@@ -27,7 +27,7 @@ public class ResolveSudokuGameFieldTest {
 	@Test
 	public void main()
 			throws Exception {
-		GameField gameField = new GameField.Builder(configuration, TestsConstants.ELEMENTS).build();
+		GameField gameField = new GameField.Builder(TestsConstants.CONFIGURATION, TestsConstants.ELEMENTS).build();
 		LOG.info("Game field at start \n{}", gameField);
 		ExecutorService executorService = Executors.newFixedThreadPool(3);
 		int iteration = 1;
