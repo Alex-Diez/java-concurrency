@@ -1,6 +1,6 @@
-package org.sudoku.game.elements;
+package org.sudoku.elements;
 
-import org.sudoku.game.conf.GameFieldConfiguration;
+import org.sudoku.conf.GameFieldConfiguration;
 
 import java.io.Serializable;
 import java.util.Collection;

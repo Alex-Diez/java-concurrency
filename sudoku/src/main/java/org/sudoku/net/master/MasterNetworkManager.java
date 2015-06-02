@@ -2,7 +2,7 @@ package org.sudoku.net.master;
 
 import java.io.IOException;
 
-import org.sudoku.game.elements.Square;
+import org.sudoku.elements.Square;
 import org.sudoku.net.spi.NetworkManager;
 
 public class MasterNetworkManager

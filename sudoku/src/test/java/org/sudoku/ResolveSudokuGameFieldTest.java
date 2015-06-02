@@ -3,9 +3,9 @@ package org.sudoku;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.sudoku.game.conf.GameFieldConfiguration;
-import org.sudoku.game.elements.Element;
-import org.sudoku.game.elements.GameField;
+import org.sudoku.conf.GameFieldConfiguration;
+import org.sudoku.elements.Element;
+import org.sudoku.elements.GameField;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

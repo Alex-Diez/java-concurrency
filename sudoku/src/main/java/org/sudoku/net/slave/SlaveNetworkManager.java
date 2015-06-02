@@ -7,7 +7,7 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-import org.sudoku.game.elements.Square;
+import org.sudoku.elements.Square;
 import org.sudoku.net.spi.NetworkManager;
 
 import org.slf4j.Logger;

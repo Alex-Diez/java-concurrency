@@ -1,6 +1,6 @@
 package org.sudoku.net.slave;
 
-import org.sudoku.game.elements.Square;
+import org.sudoku.elements.Square;
 
 public class SlaveSudokuResolversManager
 		implements Runnable {

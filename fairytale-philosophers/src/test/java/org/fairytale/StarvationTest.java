@@ -34,7 +34,7 @@ public class StarvationTest {
 	private final long eatingTime;
 	private final long thinkingTime;
 
-	@Parameters()
+	@Parameters
 	public static Collection configuration() {
 		return Arrays.asList(
 				new Object[][] {

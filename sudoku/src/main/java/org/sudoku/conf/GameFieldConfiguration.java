@@ -1,4 +1,4 @@
-package org.sudoku.game.conf;
+package org.sudoku.conf;
 
 public class GameFieldConfiguration {
 
@@ -27,7 +27,7 @@ public class GameFieldConfiguration {
 	}
 
 	public int getNumberOfSubstitutableBlocks() {
-		return numberOfElements;
+		return numberOfSquares;
 	}
 
 	public int getNumberOfElementsInSquareColumn() {
@@ -48,11 +48,10 @@ public class GameFieldConfiguration {
 
 	public static class Builder {
 
-		private final int numberOfSquares;
+		private final int numberOfSquares = 0;
 		private final int numberOfElements;
 
-		public Builder(final int numberOfSquares, final int numberOfElements) {
-			this.numberOfSquares = numberOfSquares;
+		public Builder(final int numberOfElements) {
 			this.numberOfElements = numberOfElements;
 		}
 

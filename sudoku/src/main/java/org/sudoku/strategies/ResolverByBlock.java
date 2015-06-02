@@ -1,8 +1,8 @@
-package org.sudoku.game.strategies;
+package org.sudoku.strategies;
 
-import org.sudoku.game.conf.GameFieldConfiguration;
-import org.sudoku.game.elements.Element;
-import org.sudoku.game.elements.Square;
+import org.sudoku.conf.GameFieldConfiguration;
+import org.sudoku.elements.Element;
+import org.sudoku.elements.Square;
 
 import java.util.ArrayList;
 import java.util.Arrays;

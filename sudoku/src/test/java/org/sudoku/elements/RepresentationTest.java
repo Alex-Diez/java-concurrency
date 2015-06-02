@@ -1,8 +1,8 @@
-package org.sudoku.game.elements;
+package org.sudoku.elements;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sudoku.game.conf.GameFieldConfiguration;
+import org.sudoku.conf.GameFieldConfiguration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;

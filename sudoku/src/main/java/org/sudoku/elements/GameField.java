@@ -1,8 +1,8 @@
-package org.sudoku.game.elements;
+package org.sudoku.elements;
 
-import org.sudoku.game.conf.GameFieldConfiguration;
-import org.sudoku.game.strategies.ResolverByBlock;
-import org.sudoku.game.strategies.StrategiesFactory;
+import org.sudoku.conf.GameFieldConfiguration;
+import org.sudoku.strategies.ResolverByBlock;
+import org.sudoku.strategies.StrategiesFactory;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;

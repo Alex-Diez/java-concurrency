@@ -1,4 +1,4 @@
-package org.sudoku.game.elements;
+package org.sudoku.elements;
 
 public class NotRightElementArrayLengthException
 		extends RuntimeException {

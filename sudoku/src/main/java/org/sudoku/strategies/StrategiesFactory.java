@@ -1,4 +1,4 @@
-package org.sudoku.game.strategies;
+package org.sudoku.strategies;
 
 public interface StrategiesFactory {
 

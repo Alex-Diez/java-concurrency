@@ -2,7 +2,7 @@ package org.sudoku.net.spi;
 
 import java.io.IOException;
 
-import org.sudoku.game.elements.Square;
+import org.sudoku.elements.Square;
 
 public interface NetworkManager
 		extends AutoCloseable {
