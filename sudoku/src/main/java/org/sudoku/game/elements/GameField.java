@@ -30,16 +30,16 @@ public class GameField
 	public Runnable build(final int columnIndex, final int rowIndex) {
 		final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
 		final int numberOfSquaresInRow = configuration.getNumberOfSquaresInRow();
-		int upRowIndex = (rowIndex - 1 + numberOfSquaresInRow) % numberOfSquaresInRow;
-		int upColumnIndex = (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
-		int downRowIndex = (rowIndex + 1 + numberOfSquaresInRow) % numberOfSquaresInRow;
-		int downColumnIndex = (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
-		int centerRowIndex = (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
-		int centerColumnIndex = (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
-		int leftRowIndex = (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
-		int leftColumnIndex = (columnIndex - 1 + numberOfSquaresInColumn) % numberOfSquaresInColumn;
-		int rightRowIndex = (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
-		int rightColumnIndex = (columnIndex + 1 + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+		final int upRowIndex = calculateUpRowIndex(rowIndex, numberOfSquaresInRow);
+		final int upColumnIndex = calculateUpColumnIndex(columnIndex, numberOfSquaresInColumn);
+		final int downRowIndex = calculateDownRowIndex(rowIndex, numberOfSquaresInRow);
+		final int downColumnIndex = calculateDownColumnIndex(columnIndex, numberOfSquaresInColumn);
+		final int centerRowIndex = calculateCenterRowIndex(rowIndex, numberOfSquaresInRow);
+		final int centerColumnIndex = calculateCenterColumnIndex(columnIndex, numberOfSquaresInColumn);
+		final int leftRowIndex = calculateLeftRowIndex(rowIndex, numberOfSquaresInRow);
+		final int leftColumnIndex = calculateLeftColumnIndex(columnIndex, numberOfSquaresInColumn);
+		final int rightRowIndex = calculateRightRowIndex(rowIndex, numberOfSquaresInRow);
+		final int rightColumnIndex = calculateRightColumnIndex(columnIndex, numberOfSquaresInColumn);
 		return new ResolverByBlock(
 				configuration,
 				squares[upColumnIndex][upRowIndex],
@@ -53,6 +53,46 @@ public class GameField
 				squares[rightColumnIndex][rightRowIndex],
 				squaresLocks[rightColumnIndex][rightRowIndex].readLock()
 		);
+	}
+
+	private int calculateRightColumnIndex(int columnIndex, int numberOfSquaresInColumn) {
+		return (columnIndex + 1 + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+	}
+
+	private int calculateRightRowIndex(int rowIndex, int numberOfSquaresInRow) {
+		return (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
+	}
+
+	private int calculateLeftRowIndex(int rowIndex, int numberOfSquaresInRow) {
+		return (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
+	}
+
+	private int calculateCenterColumnIndex(int columnIndex, int numberOfSquaresInColumn) {
+		return (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+	}
+
+	private int calculateCenterRowIndex(int rowIndex, int numberOfSquaresInRow) {
+		return (rowIndex + numberOfSquaresInRow) % numberOfSquaresInRow;
+	}
+
+	private int calculateDownColumnIndex(int columnIndex, int numberOfSquaresInColumn) {
+		return (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+	}
+
+	private int calculateDownRowIndex(int rowIndex, int numberOfSquaresInRow) {
+		return (rowIndex + 1 + numberOfSquaresInRow) % numberOfSquaresInRow;
+	}
+
+	private int calculateUpColumnIndex(int columnIndex, int numberOfSquaresInColumn) {
+		return (columnIndex + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+	}
+
+	private int calculateLeftColumnIndex(int columnIndex, int numberOfSquaresInColumn) {
+		return (columnIndex - 1 + numberOfSquaresInColumn) % numberOfSquaresInColumn;
+	}
+
+	private int calculateUpRowIndex(int rowIndex, int numberOfSquaresInRow) {
+		return (rowIndex - 1 + numberOfSquaresInRow) % numberOfSquaresInRow;
 	}
 
 	public boolean isFilled() {
@@ -102,6 +142,10 @@ public class GameField
 
 	private int calculateSquareColumnIndex(final int columnIndex) {
 		return columnIndex / configuration.getNumberOfSquaresInColumn();
+	}
+
+	public Square retrieveSquare(int index) {
+		return null;
 	}
 
 	public static class Builder {

@@ -72,7 +72,7 @@ public abstract class Philosopher
 	private void putRightChopstick() {
 		rightChopStick.unlock();
 		isRightChopStickTaken = false;
-		LOG.debug("Philosopher N {} puts {} which is right for him", number, leftChopStick);
+		LOG.debug("Philosopher N {} puts {} which is right for him", number, rightChopStick);
 	}
 
 	private void takeChopsticks() {
@@ -94,9 +94,7 @@ public abstract class Philosopher
 		if (!(isLeftChopStickTaken = leftChopStick.tryLock())) {
 			LOG.debug("Philosopher N {} tries but doesn't take {} which is left for him", number, leftChopStick);
 			if (isRightChopStickTaken) {
-				rightChopStick.unlock();
-				isRightChopStickTaken = false;
-				LOG.debug("Philosopher N {} puts {} which is right for him", number, rightChopStick);
+				putRightChopstick();
 			}
 		}
 		else {
@@ -108,9 +106,7 @@ public abstract class Philosopher
 		if (!(isRightChopStickTaken = rightChopStick.tryLock())) {
 			LOG.debug("Philosopher N {} tries but doesn't take {} which is right for him", number, rightChopStick);
 			if (isLeftChopStickTaken) {
-				leftChopStick.unlock();
-				isLeftChopStickTaken = false;
-				LOG.debug("Philosopher N {} puts {} which is left for him", number, leftChopStick);
+				putLeftChopstick();
 			}
 		}
 		else {

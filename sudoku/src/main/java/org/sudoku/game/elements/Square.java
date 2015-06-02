@@ -2,11 +2,13 @@ package org.sudoku.game.elements;
 
 import org.sudoku.game.conf.GameFieldConfiguration;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Square {
+public class Square
+		implements Serializable {
 
 	private static final String ROW_SEPARATOR = " --- --- --- ";
 	private static final char COLUMN_SEPARATOR = '|';

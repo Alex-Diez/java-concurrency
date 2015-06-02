@@ -5,7 +5,7 @@ public class GameFieldConfiguration {
 	private final int numberOfSquares;
 	private final int numberOfElements;
 
-	private GameFieldConfiguration(int numberOfSquares, int numberOfElements) {
+	private GameFieldConfiguration(final int numberOfSquares, final int numberOfElements) {
 		this.numberOfSquares = numberOfSquares;
 		this.numberOfElements = numberOfElements;
 	}
@@ -51,7 +51,7 @@ public class GameFieldConfiguration {
 		private final int numberOfSquares;
 		private final int numberOfElements;
 
-		public Builder(int numberOfSquares, int numberOfElements) {
+		public Builder(final int numberOfSquares, final int numberOfElements) {
 			this.numberOfSquares = numberOfSquares;
 			this.numberOfElements = numberOfElements;
 		}
