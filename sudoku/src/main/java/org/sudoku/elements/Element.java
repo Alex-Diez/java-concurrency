@@ -1,5 +1,7 @@
 package org.sudoku.elements;
 
+import org.sudoku.conf.GameFieldConfiguration;
+
 public class Element {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
@@ -51,7 +53,7 @@ public class Element {
 
 		private final int value;
 
-		public Builder(final int value) {
+		public Builder(final GameFieldConfiguration configuration, final int value) {
 			if (value < 1
 					&& value > 9) {
 				throw new IllegalArgumentException("Value can't be less then 1 and more 9");

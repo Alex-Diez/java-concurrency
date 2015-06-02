@@ -22,7 +22,7 @@ public class ResolveSudokuGameFieldTest {
 
 	@Before
 	public void startUp() {
-		configuration = new GameFieldConfiguration.Builder(9, 9).build();
+		configuration = new GameFieldConfiguration.Builder(9).build();
 	}
 
 	@Test

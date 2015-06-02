@@ -19,7 +19,7 @@ public class SlaveInitializationTest {
 	public void setUp() {
 		slaveInitializer = new SlaveInitializer();
 		slaveIndex = 1;
-		final GameFieldConfiguration configuration = new GameFieldConfiguration.Builder(9, 9).build();
+		final GameFieldConfiguration configuration = new GameFieldConfiguration.Builder(9).build();
 		gameField = new GameField.Builder(configuration, ELEMENTS).build();
 		networkManager = new MasterNetworkManager();
 	}
