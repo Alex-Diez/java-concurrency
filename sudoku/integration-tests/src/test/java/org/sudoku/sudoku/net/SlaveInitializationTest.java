@@ -2,9 +2,10 @@ package org.sudoku.sudoku.net;
 
 import org.sudoku.TestsConstants;
 import org.sudoku.conf.GameFieldConfiguration;
+import org.sudoku.conf.NodeConfiguration;
 import org.sudoku.elements.GameField;
 import org.sudoku.master.MasterNetworkManager;
-import org.sudoku.master.SlaveConfiguration;
+import org.sudoku.slave.conf.SlaveConfiguration;
 import org.sudoku.master.SlaveInitializer;
 import org.sudoku.spi.net.NetworkManager;
 
@@ -29,6 +30,6 @@ public class SlaveInitializationTest {
 
 	@Test
 	public void testSlaveInitialization() {
-		SlaveConfiguration configuration = slaveInitializer.initializeSlave(slaveIndex, gameField, networkManager);
+		NodeConfiguration configuration = slaveInitializer.initializeSlave(slaveIndex, gameField, networkManager);
 	}
 }
