@@ -5,6 +5,7 @@ import java.net.Socket;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sudoku.spi.net.NetworkManager;
 
 public class Slave {
 
@@ -15,8 +16,8 @@ public class Slave {
 
 	public static void main(String[] args) {
 		try {
-			Socket socket = new Socket(DEFAULT_MASTER_HOST, DEFAULT_MASTER_PORT);
-			SlaveNetworkManager networkManager = new SlaveNetworkManager(socket);
+			Connector connector = new Connector(DEFAULT_MASTER_PORT, DEFAULT_MASTER_HOST);
+			NetworkManager networkManager = connector.connect();
 
 		}
 		catch(IOException e) {

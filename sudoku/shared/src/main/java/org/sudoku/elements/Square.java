@@ -111,7 +111,7 @@ public class Square
 		return sb.toString();
 	}
 
-	static class Builder {
+	public static class Builder {
 
 		private final GameFieldConfiguration configuration;
 		private final int rowIndex;

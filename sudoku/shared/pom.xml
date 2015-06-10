@@ -11,4 +11,11 @@
 
 	<artifactId>shared</artifactId>
 
+	<dependencies>
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-jaxrs</artifactId>
+		</dependency>
+	</dependencies>
+
 </project>

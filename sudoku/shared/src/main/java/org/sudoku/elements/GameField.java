@@ -152,6 +152,10 @@ public class GameField
 		return null;
 	}
 
+	public Square buildSquareAt(final int columnIndex, final int rowIndex) {
+		return null;
+	}
+
 	public static class Builder {
 
 		private final Square[][] squares;
