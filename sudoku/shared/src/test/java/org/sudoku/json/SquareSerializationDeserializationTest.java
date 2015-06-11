@@ -3,6 +3,7 @@ package org.sudoku.json;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
 import org.sudoku.conf.GameFieldConfiguration;
 import org.sudoku.elements.GameField;
 import org.sudoku.elements.Square;
@@ -26,44 +27,44 @@ public class SquareSerializationDeserializationTest {
 			"			" + ELEMENT_VALUE + " : 8" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 0," +
-			"			"+COLUMN_POSITION+" : 1," +
-			"			"+ ELEMENT_VALUE + " : 4" +
+			"			" + ROW_POSITION + " : 0," +
+			"			" + COLUMN_POSITION + " : 1," +
+			"			" + ELEMENT_VALUE + " : 4" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 0," +
-			"			"+COLUMN_POSITION+" : 2," +
-			"			"+ ELEMENT_VALUE + " : 0" +
+			"			" + ROW_POSITION + " : 0," +
+			"			" + COLUMN_POSITION + " : 2," +
+			"			" + ELEMENT_VALUE + " : 0" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 1," +
-			"			"+COLUMN_POSITION+" : 0," +
-			"			"+ ELEMENT_VALUE + " : 0" +
+			"			" + ROW_POSITION + " : 1," +
+			"			" + COLUMN_POSITION + " : 0," +
+			"			" + ELEMENT_VALUE + " : 0" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 1," +
-			"			"+COLUMN_POSITION+" : 1," +
-			"			"+ ELEMENT_VALUE + " : 5" +
+			"			" + ROW_POSITION + " : 1," +
+			"			" + COLUMN_POSITION + " : 1," +
+			"			" + ELEMENT_VALUE + " : 5" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 1," +
-			"			"+COLUMN_POSITION+" : 2," +
-			"			"+ ELEMENT_VALUE + " : 0" +
+			"			" + ROW_POSITION + " : 1," +
+			"			" + COLUMN_POSITION + " : 2," +
+			"			" + ELEMENT_VALUE + " : 0" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 2," +
-			"			"+COLUMN_POSITION+" : 0," +
-			"			"+ ELEMENT_VALUE + " : 0" +
+			"			" + ROW_POSITION + " : 2," +
+			"			" + COLUMN_POSITION + " : 0," +
+			"			" + ELEMENT_VALUE + " : 0" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 2," +
-			"			"+COLUMN_POSITION+" : 1," +
-			"			"+ ELEMENT_VALUE + " : 0" +
+			"			" + ROW_POSITION + " : 2," +
+			"			" + COLUMN_POSITION + " : 1," +
+			"			" + ELEMENT_VALUE + " : 0" +
 			"		}," +
 			"		" + ELEMENT + " : {" +
-			"			"+ROW_POSITION+" : 2," +
-			"			"+COLUMN_POSITION+" : 2," +
-			"			"+ ELEMENT_VALUE + " : 2" +
+			"			" + ROW_POSITION + " : 2," +
+			"			" + COLUMN_POSITION + " : 2," +
+			"			" + ELEMENT_VALUE + " : 2" +
 			"		}" +
 			"	}" +
 			"}";
