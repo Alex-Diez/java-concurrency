@@ -1,4 +1,4 @@
-package org.sudoku.strategies;
+package org.sudoku.slave.strategies;
 
 public interface StrategiesFactory {
 
