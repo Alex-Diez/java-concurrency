@@ -34,20 +34,16 @@ public class SlaveNetworkManager
 		}
 	}
 
-	public void writeToNetwork(Square square)
+	@Override
+	public void writeToNetwork(String square)
 			throws IOException {
-		output.writeObject(square);
+		output.writeUTF(square);
 		output.flush();
 	}
 
-	public Square readFromNetwork()
+	public String readFromNetwork()
 			throws IOException {
-		try {
-			return (Square) input.readObject();
-		}
-		catch(ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
+		return input.readUTF();
 	}
 
 	@Override

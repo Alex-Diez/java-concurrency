@@ -9,13 +9,13 @@ public class MasterNetworkManager
 		implements NetworkManager {
 
 	@Override
-	public Square readFromNetwork()
+	public String readFromNetwork()
 			throws IOException {
 		return null;
 	}
 
 	@Override
-	public void writeToNetwork(Square square)
+	public void writeToNetwork(String message)
 			throws IOException {
 
 	}

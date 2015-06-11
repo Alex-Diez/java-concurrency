@@ -7,10 +7,10 @@ import org.sudoku.elements.Square;
 public interface NetworkManager
 		extends AutoCloseable {
 
-	Square readFromNetwork()
+	String readFromNetwork()
 			throws IOException;
 
-	void writeToNetwork(Square square)
+	void writeToNetwork(String message)
 			throws IOException;
 
 }

@@ -16,9 +16,9 @@ public class Slave {
 
 	public static void main(String[] args) {
 		try {
-			Connector connector = new Connector(DEFAULT_MASTER_PORT, DEFAULT_MASTER_HOST);
-			NetworkManager networkManager = connector.connect();
-
+			final Connector connector = new Connector(DEFAULT_MASTER_PORT, DEFAULT_MASTER_HOST);
+			final NetworkManager networkManager = connector.connect();
+			final Receiver receiver = new Receiver(networkManager);
 		}
 		catch(IOException e) {
 			LOG.debug("IO while create connection to master");
