@@ -5,7 +5,8 @@ public enum SquareLocation {
 	LEFT("left"),
 	UP("up"),
 	RIGHT("right"),
-	DOWN("down");
+	DOWN("down"),
+	CENTER("center");
 
 	private final String name;
 
