@@ -29,7 +29,7 @@ public class SlaveNetworkManager
 			output = new ObjectOutputStream(socket.getOutputStream());
 		}
 		catch(IOException e) {
-			LOG.debug("IO exception when acquire networks streams");
+			LOG.debug("IO exception when acquire networks streams", e);
 			throw new RuntimeException(e);
 		}
 	}
@@ -41,6 +41,7 @@ public class SlaveNetworkManager
 		output.flush();
 	}
 
+	@Override
 	public String readFromNetwork()
 			throws IOException {
 		return input.readUTF();

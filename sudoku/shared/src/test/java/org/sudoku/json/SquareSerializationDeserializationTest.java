@@ -2,26 +2,22 @@ package org.sudoku.json;
 
 import java.io.IOException;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import org.codehaus.jackson.JsonGenerationException;
 import org.codehaus.jackson.map.JsonMappingException;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.sudoku.elements.GameField;
 import org.sudoku.elements.Square;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.sudoku.TestsConstants.CONFIGURATION;
-import static org.sudoku.TestsConstants.ELEMENTS;
 import static org.sudoku.spi.json.ElementsJsonConstant.SQUARE;
 import static org.sudoku.spi.json.ElementsJsonConstant.ELEMENT;
 import static org.sudoku.spi.json.ElementsJsonConstant.COLUMN_POSITION;
 import static org.sudoku.spi.json.ElementsJsonConstant.ROW_POSITION;
 import static org.sudoku.spi.json.ElementsJsonConstant.ELEMENT_VALUE;
 
-public class SquareSerializationDeserializationTest {
+public class SquareSerializationDeserializationTest
+		extends AbstractJsonSerializationDeserializationTest {
 
 	private static final String JSON_REPRESENTATION = "{" +
 			"	" + SQUARE + " : {" +
@@ -73,33 +69,25 @@ public class SquareSerializationDeserializationTest {
 			"	}" +
 			"}";
 
-	private ObjectMapper mapper;
 	private Square squareToTest;
 
-	@Before
-	public void setUp() {
-		final GameField gameField = new GameField.Builder(CONFIGURATION, ELEMENTS).build();
-		squareToTest = gameField.buildSquareAt(0, 0);
-		mapper = new ObjectMapper();
-	}
-
 	@Test
-	public void testSerialization()
-			throws IOException, JsonGenerationException, JsonMappingException {
+	public void testSquareSerialization()
+			throws IOException {
 		final String result = mapper.writeValueAsString(squareToTest);
 		assertThat(result, is(JSON_REPRESENTATION));
 	}
 
 	@Test
-	public void testDeserialization()
-			throws IOException, JsonGenerationException, JsonMappingException {
+	public void testSquareDeserialization()
+			throws IOException {
 		final Square result = mapper.readValue(JSON_REPRESENTATION, Square.class);
 		assertThat(result, is(squareToTest));
 	}
 
 	@Test
-	public void testSerializationDeserialization()
-			throws IOException, JsonGenerationException, JsonMappingException {
+	public void testSquareSerializationDeserialization()
+			throws IOException {
 		final String serializationResult = mapper.writeValueAsString(squareToTest);
 		final Square temporary = mapper.readValue(serializationResult, Square.class);
 		final String finalResult = mapper.writeValueAsString(temporary);
@@ -107,8 +95,8 @@ public class SquareSerializationDeserializationTest {
 	}
 
 	@Test
-	public void testDeserializationSerialization()
-			throws IOException, JsonGenerationException, JsonMappingException {
+	public void testSquareDeserializationSerialization()
+			throws IOException {
 		final Square deserializationResult = mapper.readValue(JSON_REPRESENTATION, Square.class);
 		final String temporary = mapper.writeValueAsString(deserializationResult);
 		final Square finalResult = mapper.readValue(temporary, Square.class);
