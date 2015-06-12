@@ -1,14 +1,12 @@
 package org.sudoku.elements;
 
 import org.sudoku.conf.GameFieldConfiguration;
-import org.sudoku.slave.strategies.ResolverByBlock;
-import org.sudoku.slave.strategies.StrategiesFactory;
 
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class GameField
-		implements StrategiesFactory {
+		/*implements StrategiesFactory*/ {
 
 	public static final String ROW_SEPARATOR = " --- --- --- --- --- --- --- --- --- ";
 	public static final char COLUMN_SEPARATOR = '|';
@@ -26,34 +24,34 @@ public class GameField
 		this.squaresLocks = squaresLocks;
 	}
 
-	@Override
-	public Runnable build(final int columnIndex, final int rowIndex) {
-		final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
-		final int numberOfSquaresInRow = configuration.getNumberOfSquaresInRow();
-		final int upRowIndex = calculateUpRowIndex(rowIndex, numberOfSquaresInRow);
-		final int upColumnIndex = calculateUpColumnIndex(columnIndex, numberOfSquaresInColumn);
-		final int downRowIndex = calculateDownRowIndex(rowIndex, numberOfSquaresInRow);
-		final int downColumnIndex = calculateDownColumnIndex(columnIndex, numberOfSquaresInColumn);
-		final int centerRowIndex = calculateCenterRowIndex(rowIndex, numberOfSquaresInRow);
-		final int centerColumnIndex = calculateCenterColumnIndex(columnIndex, numberOfSquaresInColumn);
-		final int leftRowIndex = calculateLeftRowIndex(rowIndex, numberOfSquaresInRow);
-		final int leftColumnIndex = calculateLeftColumnIndex(columnIndex, numberOfSquaresInColumn);
-		final int rightRowIndex = calculateRightRowIndex(rowIndex, numberOfSquaresInRow);
-		final int rightColumnIndex = calculateRightColumnIndex(columnIndex, numberOfSquaresInColumn);
-		return new ResolverByBlock(
-				configuration,
-				squares[upColumnIndex][upRowIndex],
-				squaresLocks[upRowIndex][upRowIndex].readLock(),
-				squares[downColumnIndex][downRowIndex],
-				squaresLocks[downColumnIndex][downRowIndex].readLock(),
-				squares[centerColumnIndex][centerRowIndex],
-				squaresLocks[centerColumnIndex][centerRowIndex],
-				squares[leftColumnIndex][leftRowIndex],
-				squaresLocks[leftColumnIndex][leftRowIndex].readLock(),
-				squares[rightColumnIndex][rightRowIndex],
-				squaresLocks[rightColumnIndex][rightRowIndex].readLock()
-		);
-	}
+//	@Override
+//	public Runnable build(final int columnIndex, final int rowIndex) {
+//		final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
+//		final int numberOfSquaresInRow = configuration.getNumberOfSquaresInRow();
+//		final int upRowIndex = calculateUpRowIndex(rowIndex, numberOfSquaresInRow);
+//		final int upColumnIndex = calculateUpColumnIndex(columnIndex, numberOfSquaresInColumn);
+//		final int downRowIndex = calculateDownRowIndex(rowIndex, numberOfSquaresInRow);
+//		final int downColumnIndex = calculateDownColumnIndex(columnIndex, numberOfSquaresInColumn);
+//		final int centerRowIndex = calculateCenterRowIndex(rowIndex, numberOfSquaresInRow);
+//		final int centerColumnIndex = calculateCenterColumnIndex(columnIndex, numberOfSquaresInColumn);
+//		final int leftRowIndex = calculateLeftRowIndex(rowIndex, numberOfSquaresInRow);
+//		final int leftColumnIndex = calculateLeftColumnIndex(columnIndex, numberOfSquaresInColumn);
+//		final int rightRowIndex = calculateRightRowIndex(rowIndex, numberOfSquaresInRow);
+//		final int rightColumnIndex = calculateRightColumnIndex(columnIndex, numberOfSquaresInColumn);
+//		return new ResolverByBlock(
+//				configuration,
+//				squares[upColumnIndex][upRowIndex],
+//				squaresLocks[upRowIndex][upRowIndex].readLock(),
+//				squares[downColumnIndex][downRowIndex],
+//				squaresLocks[downColumnIndex][downRowIndex].readLock(),
+//				squares[centerColumnIndex][centerRowIndex],
+//				squaresLocks[centerColumnIndex][centerRowIndex],
+//				squares[leftColumnIndex][leftRowIndex],
+//				squaresLocks[leftColumnIndex][leftRowIndex].readLock(),
+//				squares[rightColumnIndex][rightRowIndex],
+//				squaresLocks[rightColumnIndex][rightRowIndex].readLock()
+//		);
+//	}
 
 	private int calculateRightColumnIndex(int columnIndex, int numberOfSquaresInColumn) {
 		return (columnIndex + 1 + numberOfSquaresInColumn) % numberOfSquaresInColumn;
@@ -148,9 +146,9 @@ public class GameField
 		return null;
 	}
 
-	public SubstitutableBlock buildBlock(final int columnIndex, final int rowIndex) {
-		return null;
-	}
+//	public SubstitutableBlock buildBlock(final int columnIndex, final int rowIndex) {
+//		return null;
+//	}
 
 	public Square buildSquareAt(final int columnIndex, final int rowIndex) {
 		return null;

@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.sudoku.conf.SlaveStatus;
+import org.sudoku.slave.strategies.ResolverByBlock;
 import org.sudoku.spi.net.NetworkManager;
 
 public class Slave {
@@ -42,6 +43,15 @@ public class Slave {
 
 	private void start() {
 		status = SlaveStatus.READY_TO_SERVE;
-		sender.sendStatus(status);
+//		sender.sendStatus(status);
+//		retrieveNeededData
+		ResolverByBlock resolverByBlock = null;
+//		buildResolver();
+		while(status != SlaveStatus.DONE) {
+			status = resolverByBlock.execute();
+			if(status == SlaveStatus.IDLE) {
+//				takeDataFromMaster
+			}
+		}
 	}
 }

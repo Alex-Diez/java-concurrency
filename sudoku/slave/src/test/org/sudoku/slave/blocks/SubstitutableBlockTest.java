@@ -1,10 +1,11 @@
-package org.sudoku.elements;
+package org.sudoku.slave.blocks;
 
 import java.util.Arrays;
 import java.util.Collection;
 
 import org.sudoku.TestsConstants;
 import org.sudoku.conf.GameFieldConfiguration;
+import org.sudoku.elements.GameField;
 
 import org.junit.Before;
 import org.junit.Ignore;
@@ -63,19 +64,5 @@ public class SubstitutableBlockTest {
 	public void testBuildSubstitutableBlock() {
 		SubstitutableBlock block = new SubstitutableBlock.Builder(configuration, gameField, columnIndex, rowIndex).build();
 		assertThat(block, is(notNullValue()));
-	}
-
-	@Test
-	@Ignore
-	public void testBuildFormGameField() {
-		SubstitutableBlock block = null;
-		SubstitutableBlock toTest = gameField.buildBlock(columnIndex, rowIndex);
-		assertThat(toTest, is(block));
-	}
-
-	@Test
-	@Ignore
-	public void testExclusiveLock() {
-		fail();
 	}
 }

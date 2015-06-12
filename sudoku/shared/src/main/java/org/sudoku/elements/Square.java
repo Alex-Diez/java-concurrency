@@ -33,6 +33,27 @@ public class Square
 		this.elements.putAll(elements);
 	}
 
+	public boolean onSamePositionWith(Square square) {
+		return hasSameRowIndex(square)
+				&& hasSameColumnIndex(square);
+	}
+
+	private boolean hasSameColumnIndex(Square square) {
+		return square.columnIndex == columnIndex;
+	}
+
+	private boolean hasSameRowIndex(Square square) {
+		return square.rowIndex == rowIndex;
+	}
+
+	public int elementsInRow() {
+		return configuration.getNumberOfElementsInSquareRow();
+	}
+
+	public int elementsInColumn() {
+		return configuration.getNumberOfElementsInSquareColumn();
+	}
+
 	public Element get(int i, int j) {
 		return matrix[i][j];
 	}
@@ -90,8 +111,8 @@ public class Square
 				&& object.getClass().equals(getClass())) {
 			Square square = (Square) object;
 			return square.elements.equals(elements)
-					&& square.rowIndex == rowIndex
-					&& square.columnIndex == columnIndex;
+					&& hasSameRowIndex(square)
+					&& hasSameColumnIndex(square);
 		}
 		return false;
 	}
