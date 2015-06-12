@@ -3,11 +3,8 @@ package org.sudoku.slave.blocks;
 import java.util.Arrays;
 import java.util.Collection;
 
-import org.sudoku.TestsConstants;
-import org.sudoku.conf.GameFieldConfiguration;
-import org.sudoku.elements.GameField;
+import org.sudoku.elements.Square;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -29,40 +26,33 @@ public class SubstitutableBlockTest {
 		for(int size : sizes) {
 			resultSize += size*size;
 		}
-		int[][] result = new int[resultSize][3];
+		int[][] result = new int[resultSize][2];
 		for(int i = 0; i < sizes.length; i++) {
 			final int size = sizes[i];
 			for(int j = 0; j < size; j++) {
 				for(int k = 0; k < size; k++) {
-					result[i][0] = (int)Math.pow(size, 4);
-					result[i][1] = j;
-					result[i][2] = k;
+					result[i][0] = j;
+					result[i][1] = k;
 				}
 			}
 		}
 		return Arrays.asList(result);
 	}
 
-	private final int columnIndex;
 	private final int rowIndex;
-	private final GameFieldConfiguration configuration;
+	private final int columnIndex;
 
-	public SubstitutableBlockTest(final int numberOfElements, final int columnIndex, final int rowIndex) {
-		this.configuration = new GameFieldConfiguration.Builder(numberOfElements).build();
+	public SubstitutableBlockTest(final int columnIndex, final int rowIndex) {
 		this.columnIndex = columnIndex;
 		this.rowIndex = rowIndex;
 	}
 
-	private GameField gameField;
-
-	@Before
-	public void setUp() {
-		gameField = new GameField.Builder(configuration, TestsConstants.ELEMENTS).build();
-	}
-
 	@Test
+	@Ignore
 	public void testBuildSubstitutableBlock() {
-		SubstitutableBlock block = new SubstitutableBlock.Builder(configuration, gameField, columnIndex, rowIndex).build();
+		fail();
+		SubstitutableBlock block = new SubstitutableBlock();
+		//build squares and merge into block
 		assertThat(block, is(notNullValue()));
 	}
 }

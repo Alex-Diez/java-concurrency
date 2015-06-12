@@ -11,48 +11,42 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
-import org.sudoku.conf.GameFieldConfiguration;
 import org.sudoku.conf.SquareLocation;
 import org.sudoku.elements.Element;
-import org.sudoku.elements.GameField;
 import org.sudoku.elements.Square;
 
 public class SubstitutableBlock {
 
-	private static final Map<Integer, Collection<Integer>> COLUMN_CLOSED_POSITIONS;
-	private static final Map<Integer, Collection<Integer>> ROW_CLOSED_POSITIONS;
+	private static final Map<Integer, Collection<Integer>> COLUMN_CLOSED_POSITIONS
+			= new HashMap<Integer, Collection<Integer>>() {
+		{
+			put(0, Arrays.asList(0, 3, 6));
+			put(1, Arrays.asList(1, 4, 7));
+			put(2, Arrays.asList(2, 5, 8));
+		}
+	};
 
-	static {
-		COLUMN_CLOSED_POSITIONS = new HashMap<>();
-		COLUMN_CLOSED_POSITIONS.put(0, Arrays.asList(0, 3, 6));
-		COLUMN_CLOSED_POSITIONS.put(1, Arrays.asList(1, 4, 7));
-		COLUMN_CLOSED_POSITIONS.put(2, Arrays.asList(2, 5, 8));
-		ROW_CLOSED_POSITIONS = new HashMap<>();
-		ROW_CLOSED_POSITIONS.put(0, Arrays.asList(0, 1, 2));
-		ROW_CLOSED_POSITIONS.put(1, Arrays.asList(3, 4, 5));
-		ROW_CLOSED_POSITIONS.put(2, Arrays.asList(6, 7, 8));
-	}
+	private static final Map<Integer, Collection<Integer>> ROW_CLOSED_POSITIONS
+			= new HashMap<Integer, Collection<Integer>>() {
+		{
+			put(0, Arrays.asList(0, 1, 2));
+			put(1, Arrays.asList(3, 4, 5));
+			put(2, Arrays.asList(6, 7, 8));
+		}
+	};
 
 	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
-	private final Map<SquareLocation, Square> container = new EnumMap<>(SquareLocation.class);
+	private final Map<SquareLocation, Square> container;
 
-	private SubstitutableBlock(
-			final Square up,
-			final Square down,
-			final Square center,
-			final Square left,
-			final Square right) {
-		container.put(SquareLocation.UP, up);
-		container.put(SquareLocation.DOWN, down);
-		container.put(SquareLocation.CENTER, center);
-		container.put(SquareLocation.LEFT, left);
-		container.put(SquareLocation.RIGHT, right);
+	public SubstitutableBlock() {
+		container = new EnumMap<>(SquareLocation.class);
 	}
 
 	public void mergeInto(Square newSquare, SquareLocation location) {
 		final Square oldSquare = container.get(location);
-		if(!oldSquare.onSamePositionWith(newSquare)) {
+		if(oldSquare != null
+				&& !oldSquare.onSamePositionWith(newSquare)) {
 			throw new SquaresNotOnTheSamePositionsException(
 					String.format(
 							"Old square %s and new square %s has different column/row indexes",
@@ -66,10 +60,6 @@ public class SubstitutableBlock {
 
 	public boolean isFilled() {
 		return getCenterSquare().size() == 9;
-	}
-
-	public boolean filledEnough() {
-		return getCenterSquare().size() > 2;
 	}
 
 	public Integer positionToSubstitution(Element element) {
@@ -96,7 +86,7 @@ public class SubstitutableBlock {
 		return -1;
 	}
 
-	public Collection<Integer> closedPositionsByRows(Element element) {
+	private Collection<Integer> closedPositionsByRows(Element element) {
 		Collection<Integer> positions = new ArrayList<>();
 		getSquaresOnHorizontalPositions().forEach(
 				(square) -> {
@@ -110,7 +100,7 @@ public class SubstitutableBlock {
 		return positions;
 	}
 
-	public Collection<Integer> closedPositionsByColumns(Element element) {
+	private Collection<Integer> closedPositionsByColumns(Element element) {
 		Collection<Integer> positions = new ArrayList<>();
 		getSquaresOnVerticalPositions().forEach(
 				(square) -> {
@@ -175,20 +165,6 @@ public class SubstitutableBlock {
 				return currentSquare;
 			}
 			throw new NoSuchElementException();
-		}
-	}
-
-	public static class Builder {
-		public Builder(
-				final GameFieldConfiguration configuration,
-				final GameField gameField,
-				final int columnIndex,
-				final int rowIndex) {
-
-		}
-
-		public SubstitutableBlock build() {
-			return null;
 		}
 	}
 }

@@ -19,9 +19,6 @@ public class ResolverByBlock {
 
 	public SlaveStatus execute() {
 		LOG.info("Block before resolution\n{}", block);
-		if(!block.filledEnough()) {
-			return SlaveStatus.IDLE;
-		}
 		Integer position = -1;
 		Element elementToSubstitute = Element.EMPTY_ELEMENT;
 		for(int i = 0; i < Element.POSSIBLE_ELEMENTS.length && position == -1; i++) {
@@ -30,14 +27,21 @@ public class ResolverByBlock {
 				elementToSubstitute = Element.POSSIBLE_ELEMENTS[i];
 			}
 		}
+		SlaveStatus status;
 		if(position != -1) {
 			block.putIn(elementToSubstitute, position);
+			if(block.isFilled()) {
+				status = SlaveStatus.DONE;
+			}
+			else {
+				status = SlaveStatus.SERVE;
+			}
+		}
+		else {
+			status = SlaveStatus.IDLE;
 		}
 		LOG.info("Block after resolution\n{}", block);
-		if(block.isFilled()) {
-			return SlaveStatus.DONE;
-		}
-		return SlaveStatus.SERVE;
+		return status;
 	}
 
 }
