@@ -3,8 +3,10 @@ package org.sudoku.slave.blocks;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.sudoku.conf.SquareLocation;
 import org.sudoku.elements.Square;
 
+import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -15,6 +17,8 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.junit.runners.Parameterized.Parameters;
+import static org.sudoku.TestsConstants.ELEMENTS;
+import static org.sudoku.TestsConstants.CONFIGURATION;
 
 @RunWith(Parameterized.class)
 public class SubstitutableBlockTest {
@@ -48,11 +52,26 @@ public class SubstitutableBlockTest {
 	}
 
 	@Test
-	@Ignore
-	public void testBuildSubstitutableBlock() {
-		fail();
+	public void testNonFilledSubstitutableBlockFilled() {
 		SubstitutableBlock block = new SubstitutableBlock();
-		//build squares and merge into block
+		Square nonFilledCenterSquare = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 0).build();
+		block.mergeInto(nonFilledCenterSquare, SquareLocation.CENTER);
+		Assert.assertThat(block.isFilled(), is(false));
+	}
+
+	@Test
+	public void testBuildSubstitutableBlock() {
+		SubstitutableBlock block = new SubstitutableBlock();
+		Square centerSquare = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 0).build();
+		block.mergeInto(centerSquare, SquareLocation.CENTER);
+		Square upSquare = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 2).build();
+		block.mergeInto(upSquare, SquareLocation.UP);
+		Square downSquare = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 1).build();
+		block.mergeInto(downSquare, SquareLocation.DOWN);
+		Square leftSquare = new Square.Builder(CONFIGURATION, ELEMENTS, 2, 0).build();
+		block.mergeInto(leftSquare, SquareLocation.LEFT);
+		Square rightSquare = new Square.Builder(CONFIGURATION, ELEMENTS, 1, 0).build();
+		block.mergeInto(rightSquare, SquareLocation.RIGHT);
 		assertThat(block, is(notNullValue()));
 	}
 }
