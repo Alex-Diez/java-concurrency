@@ -38,7 +38,8 @@
 	</properties>
 
 	<modules>
-		<module>sudoku</module>
+		<module>sudoku-standalone</module>
+		<module>sudoku-distributed</module>
 		<module>fairytale-philosophers</module>
 	</modules>
 
