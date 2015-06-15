@@ -1,5 +1,7 @@
 package org.sudoku.game.conf;
 
+import static java.lang.Math.sqrt;
+
 public class GameFieldConfiguration {
 
 	private final int numberOfElements;
@@ -9,7 +11,7 @@ public class GameFieldConfiguration {
 	}
 
 	public int getNumberOfSquares() {
-		return numberOfElements;
+		return (int)sqrt(numberOfElements);
 	}
 
 	public int getNumberOfElements() {
@@ -17,15 +19,11 @@ public class GameFieldConfiguration {
 	}
 
 	public int getNumberOfElementsInColumn() {
-		return numberOfElements;
+		return (int) sqrt(numberOfElements);
 	}
 
 	public int getNumberOfElementsInRow() {
-		return numberOfElements;
-	}
-
-	public int getNumberOfSubstitutableBlocks() {
-		return numberOfElements;
+		return (int)sqrt(numberOfElements);
 	}
 
 	public int getNumberOfElementsInSquareColumn() {
@@ -37,11 +35,11 @@ public class GameFieldConfiguration {
 	}
 
 	public int getNumberOfSquaresInColumn() {
-		return (int)Math.sqrt(getNumberOfSquares());
+		return (int) sqrt(getNumberOfSquares());
 	}
 
 	public int getNumberOfSquaresInRow() {
-		return (int)Math.sqrt(getNumberOfSquares());
+		return (int) sqrt(getNumberOfSquares());
 	}
 
 	public static class Builder {
