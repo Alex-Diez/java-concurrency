@@ -2,16 +2,14 @@ package org.sudoku.game.conf;
 
 public class GameFieldConfiguration {
 
-	private final int numberOfSquares;
 	private final int numberOfElements;
 
-	private GameFieldConfiguration(int numberOfSquares, int numberOfElements) {
-		this.numberOfSquares = numberOfSquares;
+	private GameFieldConfiguration(int numberOfElements) {
 		this.numberOfElements = numberOfElements;
 	}
 
 	public int getNumberOfSquares() {
-		return numberOfSquares;
+		return numberOfElements;
 	}
 
 	public int getNumberOfElements() {
@@ -48,16 +46,14 @@ public class GameFieldConfiguration {
 
 	public static class Builder {
 
-		private final int numberOfSquares;
 		private final int numberOfElements;
 
-		public Builder(int numberOfSquares, int numberOfElements) {
-			this.numberOfSquares = numberOfSquares;
+		public Builder(int numberOfElements) {
 			this.numberOfElements = numberOfElements;
 		}
 
 		public GameFieldConfiguration build() {
-			return new GameFieldConfiguration(numberOfSquares, numberOfElements);
+			return new GameFieldConfiguration(numberOfElements);
 		}
 	}
 }

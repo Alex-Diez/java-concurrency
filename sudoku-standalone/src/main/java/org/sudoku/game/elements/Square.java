@@ -37,8 +37,8 @@ public class Square {
 
 	public void putElement(Element element, Integer position) {
 		elements.put(element, position);
-		int i = calculateFirstColumnIndex() + calculateColumnOffset(position);
-		int j = calculateFirstRowIndex() + calculateRowOffset(position);
+		int i = calculateColumnOffset(position);
+		int j = calculateRowOffset(position);
 		matrix[i][j] = element;
 	}
 
@@ -160,7 +160,7 @@ public class Square {
 					int cI = columnIndex * numberOfElementsInSquareColumn + i;
 					int rI = rowIndex * numberOfElementsInSquareRow + j;
 					Element e = elements[cI][rI];
-					if (Element.EMPTY_ELEMENT.equals(e)) {
+					if (!Element.EMPTY_ELEMENT.equals(e)) {
 						int elementPosition = numberOfElementsInSquareRow * i + j;
 						this.elements.put(e, elementPosition);
 					}

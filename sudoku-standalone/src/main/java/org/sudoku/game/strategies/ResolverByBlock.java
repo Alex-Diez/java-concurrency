@@ -9,7 +9,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -22,19 +24,23 @@ public class ResolverByBlock
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResolverByBlock.class);
 
-	private static final Map<Integer, Collection<Integer>> COLUMN_CLOSED_POSITIONS;
-	private static final Map<Integer, Collection<Integer>> ROW_CLOSED_POSITIONS;
+	private static final Map<Integer, Collection<Integer>> COLUMN_CLOSED_POSITIONS
+			= new HashMap<Integer, Collection<Integer>>() {
+		{
+			put(0, Arrays.asList(0, 3, 6));
+			put(1, Arrays.asList(1, 4, 7));
+			put(2, Arrays.asList(2, 5, 8));
+		}
+	};
 
-	static {
-		COLUMN_CLOSED_POSITIONS = new HashMap<>();
-		COLUMN_CLOSED_POSITIONS.put(0, Arrays.asList(0, 3, 6));
-		COLUMN_CLOSED_POSITIONS.put(1, Arrays.asList(1, 4, 7));
-		COLUMN_CLOSED_POSITIONS.put(2, Arrays.asList(2, 5, 8));
-		ROW_CLOSED_POSITIONS = new HashMap<>();
-		ROW_CLOSED_POSITIONS.put(0, Arrays.asList(0, 1, 2));
-		ROW_CLOSED_POSITIONS.put(1, Arrays.asList(3, 4, 5));
-		ROW_CLOSED_POSITIONS.put(2, Arrays.asList(6, 7, 8));
-	}
+	private static final Map<Integer, Collection<Integer>> ROW_CLOSED_POSITIONS
+			= new HashMap<Integer, Collection<Integer>>() {
+		{
+			put(0, Arrays.asList(0, 1, 2));
+			put(1, Arrays.asList(3, 4, 5));
+			put(2, Arrays.asList(6, 7, 8));
+		}
+	};
 
 	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
@@ -77,35 +83,75 @@ public class ResolverByBlock
 	public void run() {
 		LOG.info("Block before resolution\n{}", center);
 		Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);
+		Integer position = -1;
+		Element elementToSubstitute = Element.EMPTY_ELEMENT;
 		readWriteLock.readLock();
 		try {
-//			Collection<Integer> filledPositions = new ArrayList<>(block.filledPositions());
-//			filledPositions.addAll(block.closedPositionsByColumns(elementToSubstitute));
-//			filledPositions.addAll(block.closedPositionsByRows(elementToSubstitute));
-//			substitutionPosition.removeAll(filledPositions);
+			for (int i = 0; i < Element.POSSIBLE_ELEMENTS.length && position == -1; i++) {
+				position = positionToSubstitution(Element.POSSIBLE_ELEMENTS[i]);
+				if (position != -1) {
+					elementToSubstitute = Element.POSSIBLE_ELEMENTS[i];
+				}
+			}
 		}
 		finally {
 			readWriteLock.readUnlock();
 		}
-		if (substitutionPosition.size() == 1) {
+		if(position != -1) {
 			readWriteLock.writeLock();
 			try {
-//				block.putIn(elementToSubstitute, substitutionPosition.iterator().next());
+				center.putElement(elementToSubstitute, position);
 			}
-			finally {
+			finally{
 				readWriteLock.writeUnlock();
 			}
 		}
 		LOG.info("Block after resolution\n{}", center);
 	}
 
-	public Collection<Integer> closedPositionsByRows(Element element) {
+	public Integer positionToSubstitution(Element element) {
+		boolean canBeSearchable = !center.hasElement(element);
+		if(canBeSearchable) {
+			Iterator<Square> iterator = new CompositeIterator<>(
+					horizontal.iterator(),
+					vertical.iterator()
+			);
+			Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);
+			while(iterator.hasNext()) {
+				Square square = iterator.next();
+				Collection<Integer> filledPositions = new ArrayList<>(center.filledPositions());
+				filledPositions.addAll(closedPositionsByRows(element));
+				filledPositions.addAll(closedPositionsByColumns(element));
+				substitutionPosition.removeAll(filledPositions);
+			}
+			if(substitutionPosition.size() == 1) {
+				return substitutionPosition.iterator().next();
+			}
+		}
+		return -1;
+	}
+
+	private Collection<Integer> closedPositionsByColumns(Element element) {
 		Collection<Integer> positions = new ArrayList<>();
 		horizontal.forEach(
-				(subSquare) -> {
-					if (subSquare.hasElement(element)) {
-						Integer position = subSquare.getElementPosition(element);
-						Integer rowColPosition = position / configuration.getNumberOfElementsInSquareColumn();
+				(square) -> {
+					if (square.hasElement(element)) {
+						Integer position = square.getElementPosition(element);
+						Integer rowColPosition = position % configuration.getNumberOfElementsInSquareColumn();
+						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
+					}
+				}
+		);
+		return positions;
+	}
+
+	private Collection<Integer> closedPositionsByRows(Element element) {
+		Collection<Integer> positions = new ArrayList<>();
+		vertical.forEach(
+				(square) -> {
+					if (square.hasElement(element)) {
+						Integer position = square.getElementPosition(element);
+						Integer rowColPosition = position / configuration.getNumberOfElementsInSquareRow();
 						positions.addAll(ROW_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
@@ -113,18 +159,35 @@ public class ResolverByBlock
 		return positions;
 	}
 
-	public Collection<Integer> closedPositionsByColumns(Element element) {
-		Collection<Integer> positions = new ArrayList<>();
-		vertical.forEach(
-				(subSquare) -> {
-					if (subSquare.hasElement(element)) {
-						Integer position = subSquare.getElementPosition(element);
-						Integer rowColPosition = position % configuration.getNumberOfElementsInSquareRow();
-						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
-					}
+	private static class CompositeIterator<E>
+			implements Iterator<E> {
+
+		private final Iterator<E>[] iterators;
+		private int current;
+
+		CompositeIterator(Iterator<E>... iterators) {
+			this.iterators = iterators;
+			this.current = 0;
+		}
+
+		@Override
+		public boolean hasNext() {
+			while(!iterators[current].hasNext()) {
+				current++;
+				if(current == iterators.length) {
+					return false;
 				}
-		);
-		return positions;
+			}
+			return iterators[current].hasNext();
+		}
+
+		@Override
+		public E next() {
+			if(hasNext()) {
+				return iterators[current].next();
+			}
+			throw new NoSuchElementException();
+		}
 	}
 
 	private static class BlockLock {

@@ -21,7 +21,7 @@ public class ResolveSudokuGameFieldTest {
 
 	@Before
 	public void startUp() {
-		configuration = new GameFieldConfiguration.Builder(9, 9).build();
+		configuration = new GameFieldConfiguration.Builder(9).build();
 	}
 
 	@Test
@@ -29,12 +29,12 @@ public class ResolveSudokuGameFieldTest {
 			throws Exception {
 		GameField gameField = new GameField.Builder(configuration, ELEMENTS).build();
 		LOG.info("Game field at start \n{}", gameField);
-		ExecutorService executorService = Executors.newFixedThreadPool(1);
+		ExecutorService executorService = Executors.newFixedThreadPool(3);
 		int iteration = 1;
 		while (!gameField.isFilled()) {
 			int number = (iteration - 1) % 9;
-			int i = number / configuration.getNumberOfSquares();
-			int j = number % configuration.getNumberOfSquares();
+			int i = number / configuration.getNumberOfSquaresInColumn();
+			int j = number % configuration.getNumberOfSquaresInRow();
 			Runnable resolver = gameField.build(i, j);
 			executorService.submit(resolver).get();
 			LOG.info("Game field after {} iteration \n{}", iteration, gameField);

@@ -28,7 +28,7 @@ public class GameField
 
 	@Override
 	public Runnable build(final int columnIndex, final int rowIndex) {
-		final int numberOfSquares = configuration.getNumberOfSquares();
+		final int numberOfSquares = configuration.getNumberOfSquaresInColumn();
 		int upRowIndex = (columnIndex - 1 + numberOfSquares) % numberOfSquares;
 		int upColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
 		int downRowIndex = (columnIndex + 1 + numberOfSquares) % numberOfSquares;
@@ -57,7 +57,7 @@ public class GameField
 	public boolean isFilled() {
 		for (Square[] rows : squares) {
 			for (Square square : rows) {
-				if (square.isFilled()) {
+				if (!square.isFilled()) {
 					return false;
 				}
 			}
