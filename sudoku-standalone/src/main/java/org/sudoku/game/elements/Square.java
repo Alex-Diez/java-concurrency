@@ -42,16 +42,8 @@ public class Square {
 		matrix[i][j] = element;
 	}
 
-	private int calculateFirstColumnIndex() {
-		return columnIndex * configuration.getNumberOfElementsInSquareColumn();
-	}
-
 	private int calculateColumnOffset(Integer position) {
 		return position / configuration.getNumberOfElementsInSquareColumn();
-	}
-
-	private int calculateFirstRowIndex() {
-		return rowIndex * configuration.getNumberOfElementsInSquareRow();
 	}
 
 	private int calculateRowOffset(Integer position) {
@@ -113,14 +105,6 @@ public class Square {
 		return sb.toString();
 	}
 
-	private int calculateLastRowIndex() {
-		return (rowIndex + 1) * configuration.getNumberOfElementsInSquareRow();
-	}
-
-	private int calculateLastColumnIndex() {
-		return (columnIndex + 1) * configuration.getNumberOfElementsInSquareColumn();
-	}
-
 	static class Builder {
 
 		private final GameFieldConfiguration configuration;
@@ -169,8 +153,8 @@ public class Square {
 		}
 
 		private void isInputElementsEnoughLength(GameFieldConfiguration configuration, Element[][] elements) {
-			final int numberOfElements = configuration.getNumberOfElements();
-			if (elements.length != numberOfElements
+			final int numberOfElementsInColumn = configuration.getNumberOfElementsInColumn();
+			if (elements.length != numberOfElementsInColumn
 					&& !isSubArraysHaveProperlyLengths(configuration, elements)) {
 				throw new NotRightElementArrayLengthException(
 						String.format(
@@ -184,7 +168,7 @@ public class Square {
 
 		private boolean isSubArraysHaveProperlyLengths(GameFieldConfiguration configurations, Element[][] elements) {
 			for (Element[] els : elements) {
-				if (els.length != configurations.getNumberOfElements()) {
+				if (els.length != configurations.getNumberOfElementsInRow()) {
 					return false;
 				}
 			}

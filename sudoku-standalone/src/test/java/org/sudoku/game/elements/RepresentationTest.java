@@ -1,12 +1,12 @@
 package org.sudoku.game.elements;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.sudoku.game.conf.GameFieldConfiguration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.sudoku.ResolveSudokuGameFieldTest.CONFIGURATION;
 import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
 
 public class RepresentationTest {
@@ -31,9 +31,8 @@ public class RepresentationTest {
 	}
 
 	@Test
-	@Ignore
 	public void squareRepresentationTest() {
-		Square square = new Square.Builder(configuration, ELEMENTS, 0, 0).build();
+		Square square = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 0).build();
 		String printableSquare =
 				" --- --- --- \n" +
 				"| 8 | 4 |   |\n" +
@@ -46,9 +45,8 @@ public class RepresentationTest {
 	}
 
 	@Test
-	@Ignore
 	public void gameFieldRepresentationTest() {
-		GameField gameField = new GameField.Builder(configuration, ELEMENTS).build();
+		GameField gameField = new GameField.Builder(CONFIGURATION, ELEMENTS).build();
 		String printableGameField =
 				" --- --- --- --- --- --- --- --- --- \n" +
 				"| 8 | 4 |   |   | 5 |   |   |   | 2 |\n" +

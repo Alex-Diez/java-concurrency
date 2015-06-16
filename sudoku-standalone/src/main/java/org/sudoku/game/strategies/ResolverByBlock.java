@@ -9,9 +9,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -150,37 +148,6 @@ public class ResolverByBlock
 				}
 		);
 		return positions;
-	}
-
-	private static class CompositeIterator<E>
-			implements Iterator<E> {
-
-		private final Iterator<E>[] iterators;
-		private int current;
-
-		CompositeIterator(Iterator<E>... iterators) {
-			this.iterators = iterators;
-			this.current = 0;
-		}
-
-		@Override
-		public boolean hasNext() {
-			while(!iterators[current].hasNext()) {
-				current++;
-				if(current == iterators.length) {
-					return false;
-				}
-			}
-			return iterators[current].hasNext();
-		}
-
-		@Override
-		public E next() {
-			if(hasNext()) {
-				return iterators[current].next();
-			}
-			throw new NoSuchElementException();
-		}
 	}
 
 	private static class BlockLock {

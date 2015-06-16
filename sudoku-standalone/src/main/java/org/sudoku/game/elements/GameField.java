@@ -68,11 +68,12 @@ public class GameField
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(ROW_SEPARATOR + "\n");
-		final int numberOfElements = configuration.getNumberOfElements();
-		for (int i = 0; i < numberOfElements; i++) {
+		final int numberOfElementsInColumn = configuration.getNumberOfElementsInColumn();
+		final int numberOfElementsInRow = configuration.getNumberOfElementsInRow();
+		for (int i = 0; i < numberOfElementsInColumn; i++) {
 			sb.append(COLUMN_SEPARATOR);
 			final int squareColumnIndex = calculateSquareColumnIndex(i);
-			for (int j = 0; j < numberOfElements; j++) {
+			for (int j = 0; j < numberOfElementsInRow; j++) {
 				final int squareRowIndex = calculateSquareRowIndex(j);
 				sb.append(
 						squares[squareColumnIndex][squareRowIndex]
