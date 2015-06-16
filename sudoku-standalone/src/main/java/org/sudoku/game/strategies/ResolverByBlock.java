@@ -82,15 +82,15 @@ public class ResolverByBlock
 	@Override
 	public void run() {
 		LOG.info("Block before resolution\n{}", center);
-		Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);
 		Integer position = -1;
 		Element elementToSubstitute = Element.EMPTY_ELEMENT;
 		readWriteLock.readLock();
 		try {
-			for (int i = 0; i < Element.POSSIBLE_ELEMENTS.length && position == -1; i++) {
-				position = positionToSubstitution(Element.POSSIBLE_ELEMENTS[i]);
+			Element[] possibleElements = Element.getPossibleElements(configuration);
+			for (int i = 0; i < possibleElements.length && position == -1; i++) {
+				position = positionToSubstitution(possibleElements[i]);
 				if (position != -1) {
-					elementToSubstitute = Element.POSSIBLE_ELEMENTS[i];
+					elementToSubstitute = possibleElements[i];
 				}
 			}
 		}
@@ -112,18 +112,11 @@ public class ResolverByBlock
 	public Integer positionToSubstitution(Element element) {
 		boolean canBeSearchable = !center.hasElement(element);
 		if(canBeSearchable) {
-			Iterator<Square> iterator = new CompositeIterator<>(
-					horizontal.iterator(),
-					vertical.iterator()
-			);
 			Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);
-			while(iterator.hasNext()) {
-				Square square = iterator.next();
-				Collection<Integer> filledPositions = new ArrayList<>(center.filledPositions());
-				filledPositions.addAll(closedPositionsByRows(element));
-				filledPositions.addAll(closedPositionsByColumns(element));
-				substitutionPosition.removeAll(filledPositions);
-			}
+			Collection<Integer> filledPositions = new ArrayList<>(center.filledPositions());
+			filledPositions.addAll(closedPositionsByRows(element));
+			filledPositions.addAll(closedPositionsByColumns(element));
+			substitutionPosition.removeAll(filledPositions);
 			if(substitutionPosition.size() == 1) {
 				return substitutionPosition.iterator().next();
 			}

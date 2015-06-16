@@ -5,20 +5,16 @@ import org.sudoku.game.conf.GameFieldConfiguration;
 public class Element {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
-	public static final Element[] POSSIBLE_ELEMENTS = new Element[] {
-			new Element(1),
-			new Element(2),
-			new Element(3),
-			new Element(4),
-			new Element(5),
-			new Element(6),
-			new Element(7),
-			new Element(8),
-			new Element(9)
-	};
 
+	public static Element[] getPossibleElements(final GameFieldConfiguration configuration) {
+		Element[] possibleElements = new Element[configuration.getNumberOfElementsInColumn()];
+		for (int i = 0; i < configuration.getNumberOfElementsInColumn(); i++) {
+			possibleElements [i] = new Element.Builder(configuration, i + 1).build();
+		}
+		return possibleElements;
+	}
 
-	private final int value;
+	final int value;
 
 	private Element(final int value) {
 		this.value = value;
