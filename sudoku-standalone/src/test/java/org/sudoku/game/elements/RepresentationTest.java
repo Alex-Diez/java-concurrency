@@ -15,12 +15,12 @@ public class RepresentationTest {
 
 	@Before
 	public void startUp() {
-		configuration = new GameFieldConfiguration.Builder(9).build();
+		configuration = new GameFieldConfiguration.Builder(81).build();
 	}
 
 	@Test
 	public void elementRepresentationTest() {
-		Element e = new Element.Builder(8).build();
+		Element e = new Element.Builder(configuration, 8).build();
 		assertThat(e.toString(), is(" 8 "));
 	}
 
