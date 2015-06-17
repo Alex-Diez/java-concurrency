@@ -6,7 +6,8 @@ import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class Square {
+public class Square
+		implements ReadOnlySquare {
 
 	private static final String ROW_SEPARATOR = " --- --- --- ";
 	private static final char COLUMN_SEPARATOR = '|';
@@ -30,6 +31,16 @@ public class Square {
 		this.elements = new LinkedHashMap<>(numberOfElementsOnSquare, 1.0f);
 		this.elements.putAll(elements);
 		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
+	}
+
+	@Override
+	public boolean lockForRead() {
+		return false;
+	}
+
+	@Override
+	public Element readFrom(int rowIndex, int columnIndex) {
+		return matrix[rowIndex][columnIndex];
 	}
 
 	public Element get(int i, int j) {
