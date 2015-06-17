@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class Square
-		implements ReadOnlySquare {
+		implements ReadWriteSquare {
 
 	private static final String ROW_SEPARATOR = " --- --- --- ";
 	private static final char COLUMN_SEPARATOR = '|';
@@ -41,6 +41,18 @@ public class Square
 	@Override
 	public Element readFrom(int rowIndex, int columnIndex) {
 		return matrix[rowIndex][columnIndex];
+	}
+
+	@Override
+	public boolean lockForWrite() {
+		return false;
+	}
+
+	@Override
+	public void writeTo(int rowIndex, int columnIndex, Element element) {
+		int position = rowIndex * numberOfElementsOnSquareSide + columnIndex;
+		elements.put(element, position);
+		matrix[rowIndex][columnIndex] = element;
 	}
 
 	public Element get(int i, int j) {
