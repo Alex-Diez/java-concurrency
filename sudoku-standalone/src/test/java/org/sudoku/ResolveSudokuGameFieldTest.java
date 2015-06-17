@@ -23,10 +23,11 @@ public class ResolveSudokuGameFieldTest {
 		LOG.info("Game field at start \n{}", gameField);
 		ExecutorService executorService = Executors.newFixedThreadPool(3);
 		int iteration = 1;
+		final int numberOfSquaresOnSide = CONFIGURATION.getNumberOfSquaresOnSide();
 		while (!gameField.isFilled()) {
 			int number = (iteration - 1) % 9;
-			int i = number / CONFIGURATION.getNumberOfSquaresInColumn();
-			int j = number % CONFIGURATION.getNumberOfSquaresInRow();
+			int i = number / numberOfSquaresOnSide;
+			int j = number % numberOfSquaresOnSide;
 			Runnable resolver = gameField.build(i, j);
 			executorService.submit(resolver).get();
 			LOG.info("Game field after {} iteration \n{}", iteration, gameField);

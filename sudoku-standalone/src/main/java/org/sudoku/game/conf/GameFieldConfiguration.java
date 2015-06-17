@@ -18,27 +18,15 @@ public class GameFieldConfiguration {
 		return numberOfElements;
 	}
 
-	public int getNumberOfElementsInColumn() {
+	public int getNumberOfElementsOnSide() {
 		return (int) sqrt(numberOfElements);
 	}
 
-	public int getNumberOfElementsInRow() {
-		return (int)sqrt(numberOfElements);
+	public int getNumberOfElementsOnSquareSide() {
+		return getNumberOfElementsOnSide() / getNumberOfSquaresOnSide();
 	}
 
-	public int getNumberOfElementsInSquareColumn() {
-		return getNumberOfElementsInColumn() / getNumberOfSquaresInColumn();
-	}
-
-	public int getNumberOfElementsInSquareRow() {
-		return getNumberOfElementsInRow() / getNumberOfSquaresInRow();
-	}
-
-	public int getNumberOfSquaresInColumn() {
-		return (int) sqrt(getNumberOfSquares());
-	}
-
-	public int getNumberOfSquaresInRow() {
+	public int getNumberOfSquaresOnSide() {
 		return (int) sqrt(getNumberOfSquares());
 	}
 

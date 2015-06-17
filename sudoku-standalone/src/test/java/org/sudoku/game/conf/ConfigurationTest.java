@@ -49,56 +49,29 @@ public class ConfigurationTest {
 	}
 
 	@Test
-	public void testNumberOfElementsInColumn() throws Exception {
-		assertThat(configuration.getNumberOfElementsInColumn(), is(calculateNumberOfElementsInColumn()));
+	public void testNumberOfElementsOnSide() throws Exception {
+		assertThat(configuration.getNumberOfElementsOnSide(), is(calculateNumberOfElementsOnSide()));
 	}
 
-	private int calculateNumberOfElementsInColumn() {
+	private int calculateNumberOfElementsOnSide() {
 		return (int) sqrt(numberOfElements);
 	}
 
 	@Test
-	public void testNumberOfElementsInRow() throws Exception {
-		assertThat(configuration.getNumberOfElementsInRow(), is(calculateNumberOfElementsInRow()));
+	public void testNumberOfElementsOnSquareSide() throws Exception {
+		assertThat(configuration.getNumberOfElementsOnSquareSide(), is(calculateNumberOfElementsOnSquareSide()));
 	}
 
-	private int calculateNumberOfElementsInRow() {
-		return (int) sqrt(numberOfElements);
-	}
-
-	@Test
-	public void testNumberOfElementsInSquareColumn() throws Exception {
-		assertThat(configuration.getNumberOfElementsInSquareColumn(), is(calculateNumberOfElementsInSquareColumn()));
-	}
-
-	private int calculateNumberOfElementsInSquareColumn() {
+	private int calculateNumberOfElementsOnSquareSide() {
 		return (int) sqrt(sqrt(numberOfElements));
 	}
 
 	@Test
-	public void testNumberOfElementsInSquareRow() throws Exception {
-		assertThat(configuration.getNumberOfSquaresInRow(), is(calculateNumberOfElementsInSquareRow()));
+	public void testNumberOfSquaresOnSide() throws Exception {
+		assertThat(configuration.getNumberOfSquaresOnSide(), is(calculateNumberOfSquaresOnSide()));
 	}
 
-	private int calculateNumberOfElementsInSquareRow() {
-		return (int) sqrt(sqrt(numberOfElements));
-	}
-
-	@Test
-	public void testNumberOfSquaresInColumn() throws Exception {
-		assertThat(configuration.getNumberOfSquaresInColumn(), is(calculateNumberOfSquaresInColumn()));
-	}
-
-	private int calculateNumberOfSquaresInColumn() {
-		return (int) sqrt(sqrt(numberOfElements));
-	}
-
-	@Test
-	public void testNumberOfSquaresInRow() throws Exception {
-		assertThat(configuration.getNumberOfSquaresInRow(), is(calculateNumberOfSquareInRow()));
-	}
-
-	private int calculateNumberOfSquareInRow() {
+	private int calculateNumberOfSquaresOnSide() {
 		return (int) sqrt(sqrt(numberOfElements));
 	}
 }

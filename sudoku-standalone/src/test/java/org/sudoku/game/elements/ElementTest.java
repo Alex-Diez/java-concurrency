@@ -41,24 +41,24 @@ public class ElementTest {
 		elements = Stream.iterate(
 				new Element.Builder(configuration, 1).build(),
 				element -> new Element.Builder(configuration, element.value + 1).build()
-		).limit(configuration.getNumberOfElementsInColumn())
+		).limit(configuration.getNumberOfElementsOnSide())
 				.collect(Collectors.toList());
 	}
 
 	@Test
 	public void testBuildElementWithAcceptedValue() throws Exception {
-		new Element.Builder(configuration, configuration.getNumberOfElementsInColumn()).build();
+		new Element.Builder(configuration, configuration.getNumberOfElementsOnSide()).build();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testBuildElementWithUnacceptedValue() throws Exception {
-		new Element.Builder(configuration, configuration.getNumberOfElementsInColumn() + 1).build();
+		new Element.Builder(configuration, configuration.getNumberOfElementsOnSide() + 1).build();
 	}
 
 	@Test
 	public void testNumberPossibleElements() throws Exception {
 		Element[] possibleElements = Element.getPossibleElements(configuration);
-		assertThat(possibleElements.length, is(configuration.getNumberOfElementsInColumn()));
+		assertThat(possibleElements.length, is(configuration.getNumberOfElementsOnSide()));
 	}
 
 	@Test

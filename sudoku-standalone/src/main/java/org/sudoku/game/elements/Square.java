@@ -43,11 +43,11 @@ public class Square {
 	}
 
 	private int calculateColumnOffset(Integer position) {
-		return position / configuration.getNumberOfElementsInSquareColumn();
+		return position / configuration.getNumberOfElementsOnSquareSide();
 	}
 
 	private int calculateRowOffset(Integer position) {
-		return position % configuration.getNumberOfElementsInSquareRow();
+		return position % configuration.getNumberOfElementsOnSquareSide();
 	}
 
 	public Integer getElementPosition(Element element) {
@@ -93,11 +93,10 @@ public class Square {
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(ROW_SEPARATOR + "\n");
-		final int numberOfElementsInSquareColumn = configuration.getNumberOfElementsInSquareColumn();
-		final int numberOfElementsInSquareRow = configuration.getNumberOfElementsInSquareRow();
-		for (int i = 0; i < numberOfElementsInSquareColumn; i++) {
+		final int numberOfElementsOnSquareSide = configuration.getNumberOfElementsOnSquareSide();
+		for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
 			sb.append(COLUMN_SEPARATOR);
-			for (int j = 0; j < numberOfElementsInSquareRow; j++) {
+			for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
 				sb.append(matrix[i][j]).append(COLUMN_SEPARATOR);
 			}
 			sb.append("\n" + ROW_SEPARATOR + "\n");
@@ -124,28 +123,27 @@ public class Square {
 					configuration.getNumberOfElements(),
 					1.0f
 			);
-			final int numberOfElementsInSquareColumn = configuration.getNumberOfElementsInSquareColumn();
-			final int numberOfElementsInSquareRow = configuration.getNumberOfElementsInSquareRow();
-			final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
-			this.matrix = new Element[numberOfElementsInSquareColumn][numberOfElementsInSquareRow];
-			for (int i = 0; i < numberOfSquaresInColumn; i++) {
+			final int numberOfElementsOnSquareSide = configuration.getNumberOfElementsOnSquareSide();
+			final int numberOfSquaresOnSide = configuration.getNumberOfSquaresOnSide();
+			this.matrix = new Element[numberOfElementsOnSquareSide][numberOfElementsOnSquareSide];
+			for (int i = 0; i < numberOfSquaresOnSide; i++) {
 				System.arraycopy(
-						elements[columnIndex * numberOfElementsInSquareColumn + i],
-						rowIndex * numberOfElementsInSquareRow,
+						elements[columnIndex * numberOfElementsOnSquareSide + i],
+						rowIndex * numberOfElementsOnSquareSide,
 						matrix[i],
 						0,
-						numberOfElementsInSquareRow
+						numberOfElementsOnSquareSide
 				);
 			}
 			this.rowIndex = rowIndex;
 			this.columnIndex = columnIndex;
-			for (int i = 0; i < numberOfElementsInSquareColumn; i++) {
-				for (int j = 0; j < numberOfElementsInSquareRow; j++) {
-					int cI = columnIndex * numberOfElementsInSquareColumn + i;
-					int rI = rowIndex * numberOfElementsInSquareRow + j;
+			for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
+				for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
+					int cI = columnIndex * numberOfElementsOnSquareSide + i;
+					int rI = rowIndex * numberOfElementsOnSquareSide + j;
 					Element e = elements[cI][rI];
 					if (!Element.EMPTY_ELEMENT.equals(e)) {
-						int elementPosition = numberOfElementsInSquareRow * i + j;
+						int elementPosition = numberOfElementsOnSquareSide * i + j;
 						this.elements.put(e, elementPosition);
 					}
 				}
@@ -153,22 +151,24 @@ public class Square {
 		}
 
 		private void isInputElementsEnoughLength(GameFieldConfiguration configuration, Element[][] elements) {
-			final int numberOfElementsInColumn = configuration.getNumberOfElementsInColumn();
-			if (elements.length != numberOfElementsInColumn
-					&& !isSubArraysHaveProperlyLengths(configuration, elements)) {
+			final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+			if (elements.length != numberOfElementsOnSide
+					&& !isSubArraysHaveProperlyLengths(numberOfElementsOnSide, elements)) {
 				throw new NotRightElementArrayLengthException(
 						String.format(
-								"Game field can contains only %s elements in rows and %s elements in columns",
-								configuration.getNumberOfElementsInSquareRow(),
-								configuration.getNumberOfElementsInSquareColumn()
+								"Game field can contains only %s elements on side but is %s elements on side",
+								configuration.getNumberOfElementsOnSquareSide(),
+								elements.length
 						)
 				);
 			}
 		}
 
-		private boolean isSubArraysHaveProperlyLengths(GameFieldConfiguration configurations, Element[][] elements) {
+		private boolean isSubArraysHaveProperlyLengths(
+				final int numberOfElementsOnSide,
+				final Element[][] elements) {
 			for (Element[] els : elements) {
-				if (els.length != configurations.getNumberOfElementsInRow()) {
+				if (els.length != numberOfElementsOnSide) {
 					return false;
 				}
 			}

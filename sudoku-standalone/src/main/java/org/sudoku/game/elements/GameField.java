@@ -28,7 +28,7 @@ public class GameField
 
 	@Override
 	public Runnable build(final int columnIndex, final int rowIndex) {
-		final int numberOfSquares = configuration.getNumberOfSquaresInColumn();
+		final int numberOfSquares = configuration.getNumberOfSquaresOnSide();
 		int upRowIndex = (columnIndex - 1 + numberOfSquares) % numberOfSquares;
 		int upColumnIndex = (rowIndex + numberOfSquares) % numberOfSquares;
 		int downRowIndex = (columnIndex + 1 + numberOfSquares) % numberOfSquares;
@@ -68,12 +68,11 @@ public class GameField
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder(ROW_SEPARATOR + "\n");
-		final int numberOfElementsInColumn = configuration.getNumberOfElementsInColumn();
-		final int numberOfElementsInRow = configuration.getNumberOfElementsInRow();
-		for (int i = 0; i < numberOfElementsInColumn; i++) {
+		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+		for (int i = 0; i < numberOfElementsOnSide; i++) {
 			sb.append(COLUMN_SEPARATOR);
 			final int squareColumnIndex = calculateSquareColumnIndex(i);
-			for (int j = 0; j < numberOfElementsInRow; j++) {
+			for (int j = 0; j < numberOfElementsOnSide; j++) {
 				final int squareRowIndex = calculateSquareRowIndex(j);
 				sb.append(
 						squares[squareColumnIndex][squareRowIndex]
@@ -89,19 +88,19 @@ public class GameField
 	}
 
 	private int calculateRowOffset(final int rowIndex) {
-		return rowIndex % configuration.getNumberOfElementsInSquareRow();
+		return rowIndex % configuration.getNumberOfElementsOnSquareSide();
 	}
 
 	private int calculateColumnOffset(final int columnIndex) {
-		return columnIndex % configuration.getNumberOfElementsInSquareColumn();
+		return columnIndex % configuration.getNumberOfElementsOnSquareSide();
 	}
 
 	private int calculateSquareRowIndex(final int rowIndex) {
-		return rowIndex / configuration.getNumberOfSquaresInRow();
+		return rowIndex / configuration.getNumberOfSquaresOnSide();
 	}
 
 	private int calculateSquareColumnIndex(final int columnIndex) {
-		return columnIndex / configuration.getNumberOfSquaresInColumn();
+		return columnIndex / configuration.getNumberOfSquaresOnSide();
 	}
 
 	public static class Builder {
@@ -113,12 +112,11 @@ public class GameField
 		public Builder(final GameFieldConfiguration configuration, final Element[][] elements) {
 			isInputElementsEnoughLength(configuration, elements);
 			this.configuration = configuration;
-			final int numberOfSquaresInColumn = configuration.getNumberOfSquaresInColumn();
-			final int numberOfSquaresInRow = configuration.getNumberOfSquaresInRow();
-			squares = new Square[numberOfSquaresInColumn][numberOfSquaresInRow];
-			squaresLocks = new ReadWriteLock[numberOfSquaresInColumn][numberOfSquaresInRow];
-			for (int i = 0; i < numberOfSquaresInColumn; i++) {
-				for (int j = 0; j < numberOfSquaresInRow; j++) {
+			final int numberOfSquaresOnSide = configuration.getNumberOfSquaresOnSide();
+			squares = new Square[numberOfSquaresOnSide][numberOfSquaresOnSide];
+			squaresLocks = new ReadWriteLock[numberOfSquaresOnSide][numberOfSquaresOnSide];
+			for (int i = 0; i < numberOfSquaresOnSide; i++) {
+				for (int j = 0; j < numberOfSquaresOnSide; j++) {
 					squares[i][j] = new Square.Builder(configuration, elements, i, j).build();
 					squaresLocks[i][j] = new ReentrantReadWriteLock();
 				}
@@ -128,25 +126,24 @@ public class GameField
 		private void isInputElementsEnoughLength(
 				final GameFieldConfiguration configuration,
 				final Element[][] elements) {
-			final int numberOfElements = configuration.getNumberOfElements();
-			if (elements.length != numberOfElements
-					&& !isSubArraysHaveProperlyLengths(configuration, elements)) {
+			final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+			if (elements.length != numberOfElementsOnSide
+					&& !isSubArraysHaveProperlyLengths(numberOfElementsOnSide, elements)) {
 				throw new NotRightElementArrayLengthException(
 						String.format(
-								"Game field can contains only %s elements in rows and %s elements in columns",
-								configuration.getNumberOfElementsInSquareRow(),
-								configuration.getNumberOfElementsInSquareColumn()
+								"Game field can contains only %s elements on side but is %s elements on side",
+								configuration.getNumberOfElementsOnSquareSide(),
+								elements.length
 						)
 				);
 			}
 		}
 
 		private boolean isSubArraysHaveProperlyLengths(
-				final GameFieldConfiguration configuration,
+				final int numberOfElementsOnSide,
 				final Element[][] elements) {
-			final int numberOfElementsInRow = configuration.getNumberOfElementsInRow();
 			for (Element[] els : elements) {
-				if (els.length != numberOfElementsInRow) {
+				if (els.length != numberOfElementsOnSide) {
 					return false;
 				}
 			}

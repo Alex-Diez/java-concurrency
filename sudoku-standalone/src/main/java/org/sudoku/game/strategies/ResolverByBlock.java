@@ -128,7 +128,7 @@ public class ResolverByBlock
 				(square) -> {
 					if (square.hasElement(element)) {
 						Integer position = square.getElementPosition(element);
-						Integer rowColPosition = position % configuration.getNumberOfElementsInSquareColumn();
+						Integer rowColPosition = position % configuration.getNumberOfElementsOnSquareSide();
 						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
@@ -142,7 +142,7 @@ public class ResolverByBlock
 				(square) -> {
 					if (square.hasElement(element)) {
 						Integer position = square.getElementPosition(element);
-						Integer rowColPosition = position / configuration.getNumberOfElementsInSquareRow();
+						Integer rowColPosition = position / configuration.getNumberOfElementsOnSquareSide();
 						positions.addAll(ROW_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
