@@ -79,7 +79,7 @@ public class GameField
 				final int squareRowIndex = calculateSquareRowIndex(j);
 				sb.append(
 						squares[squareColumnIndex][squareRowIndex]
-								.get(
+								.readFrom(
 										calculateColumnOffset(i),
 										calculateRowOffset(j)
 								)

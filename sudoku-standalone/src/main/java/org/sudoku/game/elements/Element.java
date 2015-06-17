@@ -1,7 +1,5 @@
 package org.sudoku.game.elements;
 
-import org.sudoku.game.conf.GameFieldConfiguration;
-
 public class Element {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);

@@ -12,22 +12,16 @@ public class Square
 	private static final String ROW_SEPARATOR = " --- --- --- ";
 	private static final char COLUMN_SEPARATOR = '|';
 
-	private final int rowIndex;
-	private final int columnIndex;
 	private final Element[][] matrix;
 	private final Map<Element, Integer> elements;
 	private final int numberOfElementsOnSquareSide;
 
 	private Square(
-			final int rowIndex,
-			final int columnIndex,
 			final int numberOfElementsOnSquare,
 			final int numberOfElementsOnSquareSide,
 			final Element[][] matrix,
 			final Map<Element, Integer> elements) {
 		this.matrix = matrix;
-		this.rowIndex = rowIndex;
-		this.columnIndex = columnIndex;
 		this.elements = new LinkedHashMap<>(numberOfElementsOnSquare, 1.0f);
 		this.elements.putAll(elements);
 		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
@@ -55,25 +49,6 @@ public class Square
 		matrix[rowIndex][columnIndex] = element;
 	}
 
-	public Element get(int i, int j) {
-		return matrix[i][j];
-	}
-
-	public void putElement(Element element, Integer position) {
-		elements.put(element, position);
-		int i = calculateColumnOffset(position);
-		int j = calculateRowOffset(position);
-		matrix[i][j] = element;
-	}
-
-	private int calculateColumnOffset(Integer position) {
-		return position / numberOfElementsOnSquareSide;
-	}
-
-	private int calculateRowOffset(Integer position) {
-		return position % numberOfElementsOnSquareSide;
-	}
-
 	public Integer getElementPosition(Element element) {
 		return elements.get(element);
 	}
@@ -93,9 +68,7 @@ public class Square
 	@Override
 	public int hashCode() {
 		int result = 17;
-		result = 31 * result + (elements.hashCode());
-		result = 31 * result + rowIndex;
-		result = 31 * result + columnIndex;
+		result = 31 * result + elements.hashCode();
 		return result;
 	}
 
@@ -107,9 +80,7 @@ public class Square
 		if (object != null
 				&& object.getClass().equals(getClass())) {
 			Square square = (Square) object;
-			return square.elements.equals(elements)
-					&& square.rowIndex == rowIndex
-					&& square.columnIndex == columnIndex;
+			return square.elements.equals(elements);
 		}
 		return false;
 	}
@@ -130,8 +101,6 @@ public class Square
 
 	static class Builder {
 
-		private final int rowIndex;
-		private final int columnIndex;
 		private final Map<Element, Integer> elements;
 		private final Element[][] matrix;
 		private final int numberOfElementsOnSide;
@@ -147,27 +116,45 @@ public class Square
 			isInputElementsEnoughLength(numberOfElementsOnSide, numberOfElementsOnSquareSide, elements);
 			this.elements = new LinkedHashMap<>(numberOfElementsOnSide, 1.0f);
 			this.matrix = new Element[numberOfElementsOnSquareSide][numberOfElementsOnSquareSide];
+			populateMatrix(elements, columnIndex, rowIndex);
+			populateElements(elements, columnIndex, rowIndex);
+		}
+
+		private void populateElements(Element[][] elements, int columnIndex, int rowIndex) {
+			for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
+				for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
+					int columnIndexOffset = calculateColumnIndexOffset(columnIndex, i);
+					int rowIndexOffset = calculateRowIndexOffset(rowIndex, j);
+					Element e = elements[rowIndexOffset][columnIndexOffset];
+					if (!Element.EMPTY_ELEMENT.equals(e)) {
+						int elementPosition = calculateElementPosition(i, j);
+						this.elements.put(e, elementPosition);
+					}
+				}
+			}
+		}
+
+		private int calculateElementPosition(int i, int j) {
+			return numberOfElementsOnSquareSide * i + j;
+		}
+
+		private int calculateRowIndexOffset(int rowIndex, int j) {
+			return rowIndex * numberOfElementsOnSquareSide + j;
+		}
+
+		private int calculateColumnIndexOffset(int columnIndex, int i) {
+			return columnIndex * numberOfElementsOnSquareSide + i;
+		}
+
+		private void populateMatrix(Element[][] elements, int columnIndex, int rowIndex) {
 			for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
 				System.arraycopy(
-						elements[rowIndex * numberOfElementsOnSquareSide + i],
+						elements[calculateRowIndexOffset(rowIndex, i)],
 						columnIndex * numberOfElementsOnSquareSide,
 						matrix[i],
 						0,
 						numberOfElementsOnSquareSide
 				);
-			}
-			this.rowIndex = rowIndex;
-			this.columnIndex = columnIndex;
-			for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
-				for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
-					int cI = columnIndex * numberOfElementsOnSquareSide + i;
-					int rI = rowIndex * numberOfElementsOnSquareSide + j;
-					Element e = elements[cI][rI];
-					if (!Element.EMPTY_ELEMENT.equals(e)) {
-						int elementPosition = numberOfElementsOnSquareSide * i + j;
-						this.elements.put(e, elementPosition);
-					}
-				}
 			}
 		}
 
@@ -200,8 +187,6 @@ public class Square
 
 		public Square build() {
 			return new Square(
-					rowIndex,
-					columnIndex,
 					numberOfElementsOnSide,
 					numberOfElementsOnSquareSide,
 					matrix,

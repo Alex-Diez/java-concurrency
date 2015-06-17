@@ -1,7 +1,5 @@
 package org.sudoku.game.strategies;
 
-import org.sudoku.game.elements.SubstitutableBlock;
-
 import org.junit.Ignore;
 import org.junit.Test;
 

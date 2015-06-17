@@ -104,7 +104,9 @@ public class ResolverByBlock
 		if(position != -1) {
 			readWriteLock.writeLock();
 			try {
-				center.putElement(elementToSubstitute, position);
+				int rowIndex = position / numberOfElementsOnSquareSide;
+				int columnIndex = position % numberOfElementsOnSquareSide;
+				center.writeTo(rowIndex, columnIndex, elementToSubstitute);
 			}
 			finally{
 				readWriteLock.writeUnlock();

@@ -35,7 +35,7 @@ public class SquareTest {
 	public void testHasElement()
 			throws Exception {
 		final Element e = new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build();
-		square.putElement(e, 2);
+		square.writeTo(0, 2, e);
 		assertThat(square.hasElement(e), is(true));
 	}
 
@@ -44,7 +44,7 @@ public class SquareTest {
 			throws Exception {
 		final Element e = new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build();
 		final int position = 2;
-		square.putElement(e, position);
+		square.writeTo(0, 2, e);
 		assertThat(square.getElementPosition(e), is(position));
 	}
 }
