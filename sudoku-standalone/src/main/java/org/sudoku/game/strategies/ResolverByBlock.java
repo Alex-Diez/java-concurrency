@@ -3,6 +3,7 @@ package org.sudoku.game.strategies;
 import org.sudoku.game.conf.GameFieldConfiguration;
 import org.sudoku.game.elements.Element;
 import org.sudoku.game.elements.Square;
+import org.sudoku.game.elements.SubstitutableBlock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -77,6 +78,10 @@ public class ResolverByBlock
 		);
 	}
 
+//	public ResolverByBlock(final SubstitutableBlock[] substitutableBlocks) {
+//
+//	}
+
 	@Override
 	public void run() {
 		LOG.info("Block before resolution\n{}", center);
@@ -107,7 +112,7 @@ public class ResolverByBlock
 		LOG.info("Block after resolution\n{}", center);
 	}
 
-	public Integer positionToSubstitution(Element element) {
+	private Integer positionToSubstitution(Element element) {
 		boolean canBeSearchable = !center.hasElement(element);
 		if(canBeSearchable) {
 			Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);

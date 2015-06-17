@@ -16,6 +16,9 @@ public class GameField
 	private final Square[][] squares;
 	private final ReadWriteLock[][] squaresLocks;
 	private final GameFieldConfiguration configuration;
+//	private final int numberOfElementsOnSide;
+//	private final int numberOfElementsOnSquareSide;
+//	private final int numberOfSquaresOnSide;
 
 	private GameField(
 			final GameFieldConfiguration configuration,
@@ -24,6 +27,9 @@ public class GameField
 		this.configuration = configuration;
 		this.squares = squares;
 		this.squaresLocks = squaresLocks;
+//		numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+//		numberOfElementsOnSquareSide = configuration.getNumberOfElementsOnSquareSide();
+//		numberOfSquaresOnSide = configuration.getNumberOfSquaresOnSide();
 	}
 
 	@Override
