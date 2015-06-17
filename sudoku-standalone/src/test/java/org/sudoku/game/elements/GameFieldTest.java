@@ -9,40 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sudoku.ResolveSudokuGameFieldTest.CONFIGURATION;
 import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
 
-public class RepresentationTest {
-
-	private GameFieldConfiguration configuration;
-
-	@Before
-	public void startUp() {
-		configuration = new GameFieldConfiguration.Builder(81).build();
-	}
-
-	@Test
-	public void elementRepresentationTest() {
-		Element e = new Element.Builder(configuration, 8).build();
-		assertThat(e.toString(), is(" 8 "));
-	}
-
-	@Test
-	public void emptyElementRepresentationTest() {
-		Element e = Element.EMPTY_ELEMENT;
-		assertThat(e.toString(), is("   "));
-	}
-
-	@Test
-	public void squareRepresentationTest() {
-		Square square = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 0).build();
-		String printableSquare =
-				" --- --- --- \n" +
-				"| 8 | 4 |   |\n" +
-				" --- --- --- \n" +
-				"|   | 5 |   |\n" +
-				" --- --- --- \n" +
-				"|   |   | 2 |\n" +
-				" --- --- --- \n";
-		assertThat(square.toString(), is(printableSquare));
-	}
+public class GameFieldTest {
 
 	@Test
 	public void gameFieldRepresentationTest() {

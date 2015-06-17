@@ -66,4 +66,16 @@ public class ElementTest {
 		Element[] possibleElements = Element.getPossibleElements(configuration);
 		assertThat(Arrays.asList(possibleElements), everyItem(isIn(elements)));
 	}
+
+	@Test
+	public void elementRepresentationTest() {
+		Element e = new Element.Builder(configuration, 8).build();
+		assertThat(e.toString(), is(" 8 "));
+	}
+
+	@Test
+	public void emptyElementRepresentationTest() {
+		Element e = Element.EMPTY_ELEMENT;
+		assertThat(e.toString(), is("   "));
+	}
 }
