@@ -38,38 +38,44 @@ public class ElementTest {
 	@Before
 	public void setUp() throws Exception {
 		configuration = new GameFieldConfiguration.Builder(numberOfElements).build();
+		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
 		elements = Stream.iterate(
-				new Element.Builder(configuration, 1).build(),
-				element -> new Element.Builder(configuration, element.value + 1).build()
+				new Element.Builder(numberOfElementsOnSide, 1).build(),
+				element -> new Element.Builder(numberOfElementsOnSide, element.value + 1).build()
 		).limit(configuration.getNumberOfElementsOnSide())
 				.collect(Collectors.toList());
 	}
 
 	@Test
 	public void testBuildElementWithAcceptedValue() throws Exception {
-		new Element.Builder(configuration, configuration.getNumberOfElementsOnSide()).build();
+		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+		new Element.Builder(numberOfElementsOnSide, numberOfElementsOnSide).build();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testBuildElementWithUnacceptedValue() throws Exception {
-		new Element.Builder(configuration, configuration.getNumberOfElementsOnSide() + 1).build();
+		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+		new Element.Builder(numberOfElementsOnSide, numberOfElementsOnSide + 1).build();
 	}
 
 	@Test
 	public void testNumberPossibleElements() throws Exception {
-		Element[] possibleElements = Element.getPossibleElements(configuration);
-		assertThat(possibleElements.length, is(configuration.getNumberOfElementsOnSide()));
+		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+		Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);
+		assertThat(possibleElements.length, is(numberOfElementsOnSide));
 	}
 
 	@Test
 	public void testThatPossibleElementsDoesNotHaveDuplicates() throws Exception {
-		Element[] possibleElements = Element.getPossibleElements(configuration);
+		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+		Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);
 		assertThat(Arrays.asList(possibleElements), everyItem(isIn(elements)));
 	}
 
 	@Test
 	public void elementRepresentationTest() {
-		Element e = new Element.Builder(configuration, 8).build();
+		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+		Element e = new Element.Builder(numberOfElementsOnSide, 8).build();
 		assertThat(e.toString(), is(" 8 "));
 	}
 

@@ -17,11 +17,6 @@ public class SubstitutableBlockTest {
 	}
 
 	@Test
-	public void testCreateSubstitutableBlock()
-			throws Exception {
-	}
-
-	@Test
 	public void testLockBlockForReading()
 			throws Exception {
 		substitutableBlock.readLock();

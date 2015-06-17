@@ -6,11 +6,10 @@ public class Element {
 
 	public static final Element EMPTY_ELEMENT = new Element(0);
 
-	public static Element[] getPossibleElements(final GameFieldConfiguration configuration) {
-		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+	public static Element[] getPossibleElements(final int numberOfElementsOnSide) {
 		Element[] possibleElements = new Element[numberOfElementsOnSide];
 		for (int i = 0; i < numberOfElementsOnSide; i++) {
-			possibleElements [i] = new Element.Builder(configuration, i + 1).build();
+			possibleElements [i] = new Element.Builder(numberOfElementsOnSide, i + 1).build();
 		}
 		return possibleElements;
 	}
@@ -51,8 +50,7 @@ public class Element {
 
 		private final int value;
 
-		public Builder(final GameFieldConfiguration configuration, final int value) {
-			final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
+		public Builder(final int numberOfElementsOnSide, final int value) {
 			if (value < 1
 					|| value > numberOfElementsOnSide) {
 				throw new IllegalArgumentException(

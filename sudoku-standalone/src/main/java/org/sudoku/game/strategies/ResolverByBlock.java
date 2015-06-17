@@ -1,9 +1,7 @@
 package org.sudoku.game.strategies;
 
-import org.sudoku.game.conf.GameFieldConfiguration;
 import org.sudoku.game.elements.Element;
 import org.sudoku.game.elements.Square;
-import org.sudoku.game.elements.SubstitutableBlock;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,14 +41,16 @@ public class ResolverByBlock
 
 	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
-	private final GameFieldConfiguration configuration;
 	private final Set<Square> horizontal;
 	private final Set<Square> vertical;
 	private final Square center;
 	private final BlockLock readWriteLock;
+	private final int numberOfElementsOnSquareSide;
+	private final int numberOfElementsOnSide;
 
 	public ResolverByBlock(
-			GameFieldConfiguration configuration,
+			final int numberOfElementsOnSquareSide,
+			final int numberOfElementsOnSide,
 			Square up,
 			Lock upReadLock,
 			Square down,
@@ -61,7 +61,6 @@ public class ResolverByBlock
 			Lock leftReadLock,
 			Square right,
 			Lock rightLock) {
-		this.configuration = configuration;
 		this.horizontal = new HashSet<>(2, 1.0f);
 		this.horizontal.add(left);
 		this.horizontal.add(right);
@@ -76,6 +75,8 @@ public class ResolverByBlock
 				leftReadLock,
 				rightLock
 		);
+		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
+		this.numberOfElementsOnSide = numberOfElementsOnSide;
 	}
 
 //	public ResolverByBlock(final SubstitutableBlock[] substitutableBlocks) {
@@ -89,7 +90,7 @@ public class ResolverByBlock
 		Element elementToSubstitute = Element.EMPTY_ELEMENT;
 		readWriteLock.readLock();
 		try {
-			Element[] possibleElements = Element.getPossibleElements(configuration);
+			Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);
 			for (int i = 0; i < possibleElements.length && position == -1; i++) {
 				position = positionToSubstitution(possibleElements[i]);
 				if (position != -1) {
@@ -133,7 +134,7 @@ public class ResolverByBlock
 				(square) -> {
 					if (square.hasElement(element)) {
 						Integer position = square.getElementPosition(element);
-						Integer rowColPosition = position % configuration.getNumberOfElementsOnSquareSide();
+						Integer rowColPosition = position % numberOfElementsOnSquareSide;
 						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}
@@ -147,7 +148,7 @@ public class ResolverByBlock
 				(square) -> {
 					if (square.hasElement(element)) {
 						Integer position = square.getElementPosition(element);
-						Integer rowColPosition = position / configuration.getNumberOfElementsOnSquareSide();
+						Integer rowColPosition = position / numberOfElementsOnSquareSide;
 						positions.addAll(ROW_CLOSED_POSITIONS.get(rowColPosition));
 					}
 				}

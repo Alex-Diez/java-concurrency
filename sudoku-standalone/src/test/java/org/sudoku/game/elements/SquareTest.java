@@ -6,6 +6,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sudoku.ResolveSudokuGameFieldTest.CONFIGURATION;
+import static org.sudoku.ResolveSudokuGameFieldTest.NUMBER_OF_ELEMENTS_ON_SIDE;
 import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
 
 public class SquareTest {
@@ -33,7 +34,7 @@ public class SquareTest {
 	@Test
 	public void testHasElement()
 			throws Exception {
-		final Element e = new Element.Builder(CONFIGURATION, 6).build();
+		final Element e = new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build();
 		square.putElement(e, 2);
 		assertThat(square.hasElement(e), is(true));
 	}
@@ -41,7 +42,7 @@ public class SquareTest {
 	@Test
 	public void testInsertedElementPosition()
 			throws Exception {
-		final Element e = new Element.Builder(CONFIGURATION, 6).build();
+		final Element e = new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build();
 		final int position = 2;
 		square.putElement(e, position);
 		assertThat(square.getElementPosition(e), is(position));
