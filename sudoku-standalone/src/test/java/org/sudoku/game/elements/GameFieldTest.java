@@ -2,7 +2,6 @@ package org.sudoku.game.elements;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.sudoku.game.conf.GameFieldConfiguration;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -11,9 +10,16 @@ import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
 
 public class GameFieldTest {
 
+	private GameField gameField;
+
+	@Before
+	public void setUp()
+			throws Exception {
+		gameField = new GameField.Builder(CONFIGURATION, ELEMENTS).build();
+	}
+
 	@Test
 	public void gameFieldRepresentationTest() {
-		GameField gameField = new GameField.Builder(CONFIGURATION, ELEMENTS).build();
 		String printableGameField =
 				" --- --- --- --- --- --- --- --- --- \n" +
 				"| 8 | 4 |   |   | 5 |   |   |   | 2 |\n" +
@@ -35,5 +41,11 @@ public class GameFieldTest {
 				"| 7 |   |   |   | 8 |   |   | 2 | 9 |\n" +
 				" --- --- --- --- --- --- --- --- --- \n";
 		assertThat(gameField.toString(), is(printableGameField));
+	}
+
+	@Test
+	public void testIsGameFieldFilled()
+			throws Exception {
+		assertThat(gameField.isFilled(), is(false));
 	}
 }
