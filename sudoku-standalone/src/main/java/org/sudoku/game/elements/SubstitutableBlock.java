@@ -1,7 +1,20 @@
 package org.sudoku.game.elements;
 
+import java.util.Set;
+
 public class SubstitutableBlock {
-	public SubstitutableBlock(final GameField gameField, final int columnIndex, final int rowIndex) {
+
+	private final ReadWriteSquare centerSquare;
+	private final Set<ReadOnlySquare> vertical;
+	private final Set<ReadOnlySquare> horizontal;
+
+	SubstitutableBlock(
+			ReadWriteSquare centerSquare,
+			Set<ReadOnlySquare> vertical,
+			Set<ReadOnlySquare> horizontal) {
+		this.centerSquare = centerSquare;
+		this.vertical = vertical;
+		this.horizontal = horizontal;
 	}
 
 	public void readLock() {

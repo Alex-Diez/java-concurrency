@@ -94,4 +94,9 @@ public class ReadOnlySquareTest {
 		final Element e = ELEMENTS[0][0];
 		assertThat(readOnlySquare.getElementPosition(e), is(0));
 	}
+
+	@Test
+	public void testFilledSquare() throws Exception {
+		assertThat(readOnlySquare.isFilled(), is(false));
+	}
 }

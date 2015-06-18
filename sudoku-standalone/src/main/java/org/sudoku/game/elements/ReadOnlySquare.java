@@ -15,4 +15,6 @@ public interface ReadOnlySquare {
 	Collection<Integer> filledPositions();
 
 	int getElementPosition(final Element element);
+
+	boolean isFilled();
 }

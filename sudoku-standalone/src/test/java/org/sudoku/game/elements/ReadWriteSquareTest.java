@@ -114,4 +114,9 @@ public class ReadWriteSquareTest {
 			throws Exception {
 		assertThat(readWriteSquare.containsElement(ELEMENTS[0][0]), is(true));
 	}
+
+	@Test
+	public void testFilledSquare() throws Exception {
+		assertThat(readWriteSquare.isFilled(), is(false));
+	}
 }

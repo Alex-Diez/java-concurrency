@@ -14,6 +14,7 @@ import java.util.Set;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.sudoku.game.elements.SubstitutableBlock;
 
 public class ResolverByBlock
 		implements Runnable {
@@ -40,67 +41,42 @@ public class ResolverByBlock
 
 	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
-	private final Set<ReadOnlySquare> horizontal;
-	private final Set<ReadOnlySquare> vertical;
-	private final ReadWriteSquare center;
-	private final int numberOfElementsOnSquareSide;
-	private final int numberOfElementsOnSide;
+	public ResolverByBlock(final SubstitutableBlock[] substitutableBlocks) {
 
-	public ResolverByBlock(
-			final int numberOfElementsOnSquareSide,
-			final int numberOfElementsOnSide,
-			ReadOnlySquare up,
-			ReadOnlySquare down,
-			ReadWriteSquare center,
-			ReadOnlySquare left,
-			ReadOnlySquare right) {
-		this.horizontal = new HashSet<>(2, 1.0f);
-		this.horizontal.add(left);
-		this.horizontal.add(right);
-		this.vertical = new HashSet<>(2, 1.0f);
-		this.vertical.add(up);
-		this.vertical.add(down);
-		this.center = center;
-		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
-		this.numberOfElementsOnSide = numberOfElementsOnSide;
 	}
-
-//	public ResolverByBlock(final SubstitutableBlock[] substitutableBlocks) {
-//
-//	}
 
 	@Override
 	public void run() {
-		LOG.info("Block before resolution\n{}", center);
-		Integer position = -1;
-		Element elementToSubstitute = Element.EMPTY_ELEMENT;
-		center.lockForRead();
-		try {
-			Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);
-			for (int i = 0; i < possibleElements.length && position == -1; i++) {
-				position = positionToSubstitution(possibleElements[i]);
-				if (position != -1) {
-					elementToSubstitute = possibleElements[i];
-				}
-			}
-		}
-		finally {
-			center.unlockAfterRead();
-		}
-		if(position != -1) {
-			center.lockForWrite();
-			try {
-				int rowIndex = position / numberOfElementsOnSquareSide;
-				int columnIndex = position % numberOfElementsOnSquareSide;
-				center.writeTo(rowIndex, columnIndex, elementToSubstitute);
-			}
-			finally{
-				center.unlockAfterWrite();
-			}
-		}
-		LOG.info("Block after resolution\n{}", center);
+//		LOG.info("Block before resolution\n{}", center);
+//		Integer position = -1;
+//		Element elementToSubstitute = Element.EMPTY_ELEMENT;
+//		center.lockForRead();
+//		try {
+//			Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);
+//			for (int i = 0; i < possibleElements.length && position == -1; i++) {
+//				position = positionToSubstitution(possibleElements[i]);
+//				if (position != -1) {
+//					elementToSubstitute = possibleElements[i];
+//				}
+//			}
+//		}
+//		finally {
+//			center.unlockAfterRead();
+//		}
+//		if(position != -1) {
+//			center.lockForWrite();
+//			try {
+//				int rowIndex = position / numberOfElementsOnSquareSide;
+//				int columnIndex = position % numberOfElementsOnSquareSide;
+//				center.writeTo(rowIndex, columnIndex, elementToSubstitute);
+//			}
+//			finally{
+//				center.unlockAfterWrite();
+//			}
+//		}
+//		LOG.info("Block after resolution\n{}", center);
 	}
-
+/*
 	private Integer positionToSubstitution(Element element) {
 		boolean canBeSearchable = !center.containsElement(element);
 		if(canBeSearchable) {
@@ -142,5 +118,5 @@ public class ResolverByBlock
 				}
 		);
 		return positions;
-	}
+	}*/
 }
