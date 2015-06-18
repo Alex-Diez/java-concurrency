@@ -11,6 +11,7 @@ import static org.hamcrest.CoreMatchers.everyItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isIn;
+import static org.junit.Assert.fail;
 import static org.sudoku.ResolveSudokuGameFieldTest.CONFIGURATION;
 import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
 
@@ -24,9 +25,40 @@ public class ReadOnlySquareTest {
 	}
 
 	@Test
-	public void testReadLockOnSquare() throws Exception {
-		readOnlySquare.lockForRead();
-		readOnlySquare.unlockAfterRead();
+	public void testSquareFreeSquareLockOnReading()
+			throws Exception {
+		Thread t1 = new Thread() {
+			public void run() {
+				try {
+					readOnlySquare.lockForRead();
+					Thread.sleep(2000L);
+				}
+				catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					fail();
+				}
+				finally {
+					readOnlySquare.unlockAfterRead();
+				}
+			}
+		};
+		Thread t2 = new Thread() {
+			public void run() {
+				try {
+					Thread.sleep(1000L);
+					assertThat(readOnlySquare.lockForRead(), is(true));
+				}
+				catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					fail();
+				}
+				finally {
+					readOnlySquare.unlockAfterRead();
+				}
+			}
+		};
+		t1.start();
+		t2.start();
 	}
 
 	@Test

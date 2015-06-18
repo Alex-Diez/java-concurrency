@@ -8,6 +8,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.fail;
 import static org.sudoku.ResolveSudokuGameFieldTest.CONFIGURATION;
 import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
 
@@ -21,9 +22,40 @@ public class ReadWriteSquareTest {
 	}
 
 	@Test
-	public void testReadLockOnSquare() throws Exception {
-		readWriteSquare.lockForRead();
-		readWriteSquare.unlockAfterRead();
+	public void testSquareFreeSquareLockOnReading()
+			throws Exception {
+		Thread t1 = new Thread() {
+			public void run() {
+				try {
+					readWriteSquare.lockForRead();
+					Thread.sleep(2000L);
+				}
+				catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					fail();
+				}
+				finally {
+					readWriteSquare.unlockAfterRead();
+				}
+			}
+		};
+		Thread t2 = new Thread() {
+			public void run() {
+				try {
+					Thread.sleep(1000L);
+					assertThat(readWriteSquare.lockForRead(), is(true));
+				}
+				catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					fail();
+				}
+				finally {
+					readWriteSquare.unlockAfterRead();
+				}
+			}
+		};
+		t1.start();
+		t2.start();
 	}
 
 	@Test
@@ -33,9 +65,40 @@ public class ReadWriteSquareTest {
 	}
 
 	@Test
-	public void testWriteLockOnSquare() throws Exception {
-		readWriteSquare.lockForWrite();
-		readWriteSquare.unlockAfterWrite();
+	public void testSquareExclusiveLockOnWriting()
+			throws Exception {
+		Thread t1 = new Thread() {
+			public void run() {
+				try {
+					readWriteSquare.lockForWrite();
+					Thread.sleep(2000L);
+				}
+				catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					fail();
+				}
+				finally {
+					readWriteSquare.unlockAfterWrite();
+				}
+			}
+		};
+		Thread t2 = new Thread() {
+			public void run() {
+				try {
+					Thread.sleep(1000L);
+					assertThat(readWriteSquare.lockForWrite(), is(false));
+				}
+				catch(InterruptedException e) {
+					Thread.currentThread().interrupt();
+					fail();
+				}
+				finally {
+					readWriteSquare.unlockAfterWrite();
+				}
+			}
+		};
+		t1.start();
+		t2.start();
 	}
 
 	@Test
