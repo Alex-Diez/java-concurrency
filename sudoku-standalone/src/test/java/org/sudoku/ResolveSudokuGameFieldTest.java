@@ -10,6 +10,7 @@ import org.sudoku.game.elements.GameField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class ResolveSudokuGameFieldTest {

@@ -1,7 +1,8 @@
 package org.sudoku.game.strategies;
 
 import org.sudoku.game.elements.Element;
-import org.sudoku.game.elements.Square;
+import org.sudoku.game.elements.ReadOnlySquare;
+import org.sudoku.game.elements.ReadWriteSquare;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,8 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,26 +40,20 @@ public class ResolverByBlock
 
 	private static final Set<Integer> POSSIBLE_POSITIONS = new HashSet<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8));
 
-	private final Set<Square> horizontal;
-	private final Set<Square> vertical;
-	private final Square center;
-	private final BlockLock readWriteLock;
+	private final Set<ReadOnlySquare> horizontal;
+	private final Set<ReadOnlySquare> vertical;
+	private final ReadWriteSquare center;
 	private final int numberOfElementsOnSquareSide;
 	private final int numberOfElementsOnSide;
 
 	public ResolverByBlock(
 			final int numberOfElementsOnSquareSide,
 			final int numberOfElementsOnSide,
-			Square up,
-			Lock upReadLock,
-			Square down,
-			Lock downReadLock,
-			Square center,
-			ReadWriteLock centerReadWriteLock,
-			Square left,
-			Lock leftReadLock,
-			Square right,
-			Lock rightLock) {
+			ReadOnlySquare up,
+			ReadOnlySquare down,
+			ReadWriteSquare center,
+			ReadOnlySquare left,
+			ReadOnlySquare right) {
 		this.horizontal = new HashSet<>(2, 1.0f);
 		this.horizontal.add(left);
 		this.horizontal.add(right);
@@ -68,13 +61,6 @@ public class ResolverByBlock
 		this.vertical.add(up);
 		this.vertical.add(down);
 		this.center = center;
-		this.readWriteLock = new BlockLock(
-				upReadLock,
-				downReadLock,
-				centerReadWriteLock,
-				leftReadLock,
-				rightLock
-		);
 		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
 		this.numberOfElementsOnSide = numberOfElementsOnSide;
 	}
@@ -88,7 +74,7 @@ public class ResolverByBlock
 		LOG.info("Block before resolution\n{}", center);
 		Integer position = -1;
 		Element elementToSubstitute = Element.EMPTY_ELEMENT;
-		readWriteLock.readLock();
+		center.lockForRead();
 		try {
 			Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);
 			for (int i = 0; i < possibleElements.length && position == -1; i++) {
@@ -99,24 +85,24 @@ public class ResolverByBlock
 			}
 		}
 		finally {
-			readWriteLock.readUnlock();
+			center.unlockAfterRead();
 		}
 		if(position != -1) {
-			readWriteLock.writeLock();
+			center.lockForWrite();
 			try {
 				int rowIndex = position / numberOfElementsOnSquareSide;
 				int columnIndex = position % numberOfElementsOnSquareSide;
 				center.writeTo(rowIndex, columnIndex, elementToSubstitute);
 			}
 			finally{
-				readWriteLock.writeUnlock();
+				center.unlockAfterWrite();
 			}
 		}
 		LOG.info("Block after resolution\n{}", center);
 	}
 
 	private Integer positionToSubstitution(Element element) {
-		boolean canBeSearchable = !center.hasElement(element);
+		boolean canBeSearchable = !center.containsElement(element);
 		if(canBeSearchable) {
 			Collection<Integer> substitutionPosition = new ArrayList<>(POSSIBLE_POSITIONS);
 			Collection<Integer> filledPositions = new ArrayList<>(center.filledPositions());
@@ -134,7 +120,7 @@ public class ResolverByBlock
 		Collection<Integer> positions = new ArrayList<>();
 		horizontal.forEach(
 				(square) -> {
-					if (square.hasElement(element)) {
+					if (square.containsElement(element)) {
 						Integer position = square.getElementPosition(element);
 						Integer rowColPosition = position % numberOfElementsOnSquareSide;
 						positions.addAll(COLUMN_CLOSED_POSITIONS.get(rowColPosition));
@@ -148,7 +134,7 @@ public class ResolverByBlock
 		Collection<Integer> positions = new ArrayList<>();
 		vertical.forEach(
 				(square) -> {
-					if (square.hasElement(element)) {
+					if (square.containsElement(element)) {
 						Integer position = square.getElementPosition(element);
 						Integer rowColPosition = position / numberOfElementsOnSquareSide;
 						positions.addAll(ROW_CLOSED_POSITIONS.get(rowColPosition));
@@ -156,89 +142,5 @@ public class ResolverByBlock
 				}
 		);
 		return positions;
-	}
-
-	private static class BlockLock {
-
-		private final Lock upSubSquareLock;
-		private final Lock downSubSquareLock;
-		private final ReadWriteLock centerSubSquareLock;
-		private final Lock leftSubSquareLock;
-		private final Lock rightSubSquareLock;
-
-		public BlockLock(
-				Lock upSubSquareLock,
-				Lock downSubSquareLock,
-				ReadWriteLock centerSubSquareLock,
-				Lock leftSubSquareLock,
-				Lock rightSubSquareLock) {
-			this.upSubSquareLock = upSubSquareLock;
-			this.downSubSquareLock = downSubSquareLock;
-			this.centerSubSquareLock = centerSubSquareLock;
-			this.leftSubSquareLock = leftSubSquareLock;
-			this.rightSubSquareLock = rightSubSquareLock;
-		}
-
-		public void readUnlock() {
-			unlock(
-					upSubSquareLock,
-					downSubSquareLock,
-					centerSubSquareLock.readLock(),
-					leftSubSquareLock,
-					rightSubSquareLock
-			);
-		}
-
-		public boolean readLock() {
-			final boolean locked = lock(
-					upSubSquareLock,
-					downSubSquareLock,
-					centerSubSquareLock.readLock(),
-					leftSubSquareLock,
-					rightSubSquareLock
-			);
-			if (!locked) {
-				readUnlock();
-			}
-			return locked;
-		}
-
-		public void writeUnlock() {
-			unlock(
-					upSubSquareLock,
-					downSubSquareLock,
-					centerSubSquareLock.writeLock(),
-					leftSubSquareLock,
-					rightSubSquareLock
-			);
-		}
-
-		public boolean writeLock() {
-			final boolean locked = lock(
-					upSubSquareLock,
-					downSubSquareLock,
-					centerSubSquareLock.writeLock(),
-					leftSubSquareLock,
-					rightSubSquareLock
-			);
-			if (!locked) {
-				readUnlock();
-			}
-			return locked;
-		}
-
-		private static void unlock(Lock... locks) {
-			for (Lock lock : locks) {
-				lock.unlock();
-			}
-		}
-
-		private static boolean lock(Lock... locks) {
-			boolean result = true;
-			for (Lock lock : locks) {
-				result &= lock.tryLock();
-			}
-			return result;
-		}
 	}
 }

@@ -1,5 +1,7 @@
 package org.sudoku.game.elements;
 
+import java.util.concurrent.locks.ReentrantReadWriteLock;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -16,7 +18,7 @@ public class SquareTest {
 	@Before
 	public void setUp()
 			throws Exception {
-		square = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 0).build();
+		square = new Square.Builder(CONFIGURATION, ELEMENTS, 0, 0, new ReentrantReadWriteLock()).build();
 	}
 
 	@Test
@@ -36,7 +38,7 @@ public class SquareTest {
 			throws Exception {
 		final Element e = new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build();
 		square.writeTo(0, 2, e);
-		assertThat(square.hasElement(e), is(true));
+		assertThat(square.containsElement(e), is(true));
 	}
 
 	@Test

@@ -5,6 +5,7 @@ import org.sudoku.game.conf.GameFieldConfiguration;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
 
 public class Square
 		implements ReadWriteSquare {
@@ -15,21 +16,24 @@ public class Square
 	private final Element[][] matrix;
 	private final Map<Element, Integer> elements;
 	private final int numberOfElementsOnSquareSide;
+	private final ReadWriteLock readWriteLock;
 
 	private Square(
 			final int numberOfElementsOnSquare,
 			final int numberOfElementsOnSquareSide,
 			final Element[][] matrix,
-			final Map<Element, Integer> elements) {
+			final Map<Element, Integer> elements,
+			final ReadWriteLock readWriteLock) {
 		this.matrix = matrix;
 		this.elements = new LinkedHashMap<>(numberOfElementsOnSquare, 1.0f);
 		this.elements.putAll(elements);
 		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
+		this.readWriteLock = readWriteLock;
 	}
 
 	@Override
 	public boolean lockForRead() {
-		return false;
+		return readWriteLock.readLock().tryLock();
 	}
 
 	@Override
@@ -38,8 +42,18 @@ public class Square
 	}
 
 	@Override
+	public void unlockAfterRead() {
+		readWriteLock.readLock().unlock();
+	}
+
+	@Override
+	public boolean containsElement(Element element) {
+		return elements.containsKey(element);
+	}
+
+	@Override
 	public boolean lockForWrite() {
-		return false;
+		return readWriteLock.writeLock().tryLock();
 	}
 
 	@Override
@@ -49,16 +63,17 @@ public class Square
 		matrix[rowIndex][columnIndex] = element;
 	}
 
-	public Integer getElementPosition(Element element) {
+	@Override
+	public void unlockAfterWrite() {
+		readWriteLock.writeLock().unlock();
+	}
+
+	public int getElementPosition(Element element) {
 		return elements.get(element);
 	}
 
 	public boolean isFilled() {
 		return elements.size() == 9;
-	}
-
-	public boolean hasElement(Element element) {
-		return elements.containsKey(element);
 	}
 
 	public Collection<Integer> filledPositions() {
@@ -105,26 +120,29 @@ public class Square
 		private final Element[][] matrix;
 		private final int numberOfElementsOnSide;
 		private final int numberOfElementsOnSquareSide;
+		private final ReadWriteLock readWriteLock;
 
 		public Builder(
 				final GameFieldConfiguration configuration,
 				final Element[][] elements,
+				final int rowIndex,
 				final int columnIndex,
-				final int rowIndex) {
+				final ReadWriteLock readWriteLock) {
+			this.readWriteLock = readWriteLock;
 			this.numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
 			this.numberOfElementsOnSquareSide = configuration.getNumberOfElementsOnSquareSide();
 			isInputElementsEnoughLength(numberOfElementsOnSide, numberOfElementsOnSquareSide, elements);
 			this.elements = new LinkedHashMap<>(numberOfElementsOnSide, 1.0f);
 			this.matrix = new Element[numberOfElementsOnSquareSide][numberOfElementsOnSquareSide];
-			populateMatrix(elements, columnIndex, rowIndex);
-			populateElements(elements, columnIndex, rowIndex);
+			populateMatrix(elements, rowIndex, columnIndex);
+			populateElements(elements, rowIndex, columnIndex);
 		}
 
-		private void populateElements(Element[][] elements, int columnIndex, int rowIndex) {
+		private void populateElements(Element[][] elements, int rowIndex, int columnIndex) {
 			for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
 				for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
-					int columnIndexOffset = calculateColumnIndexOffset(columnIndex, i);
-					int rowIndexOffset = calculateRowIndexOffset(rowIndex, j);
+					int columnIndexOffset = calculateColumnIndexOffset(columnIndex, j);
+					int rowIndexOffset = calculateRowIndexOffset(rowIndex, i);
 					Element e = elements[rowIndexOffset][columnIndexOffset];
 					if (!Element.EMPTY_ELEMENT.equals(e)) {
 						int elementPosition = calculateElementPosition(i, j);
@@ -146,7 +164,7 @@ public class Square
 			return columnIndex * numberOfElementsOnSquareSide + i;
 		}
 
-		private void populateMatrix(Element[][] elements, int columnIndex, int rowIndex) {
+		private void populateMatrix(Element[][] elements, int rowIndex, int columnIndex) {
 			for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
 				System.arraycopy(
 						elements[calculateRowIndexOffset(rowIndex, i)],
@@ -190,7 +208,8 @@ public class Square
 					numberOfElementsOnSide,
 					numberOfElementsOnSquareSide,
 					matrix,
-					elements
+					elements,
+					readWriteLock
 			);
 		}
 	}
