@@ -2,5 +2,7 @@ package org.sudoku.game.strategies;
 
 public interface StrategiesFactory {
 
-	Runnable build(int columnIndex, int rowIndex);
+	Runnable buildBlockResolverOnColumn(final int columnIndex);
+
+	Runnable buildBlockResolverOnRow(final int rowIndex);
 }

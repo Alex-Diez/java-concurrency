@@ -27,6 +27,15 @@ public class GameField
 	}
 
 	@Override
+	public Runnable buildBlockResolverOnColumn(int columnIndex) {
+		return null;
+	}
+
+	@Override
+	public Runnable buildBlockResolverOnRow(int rowIndex) {
+		return null;
+	}
+
 	public Runnable build(final int columnIndex, final int rowIndex) {
 		int upRowIndex = (columnIndex - 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
 		int upColumnIndex = (rowIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;

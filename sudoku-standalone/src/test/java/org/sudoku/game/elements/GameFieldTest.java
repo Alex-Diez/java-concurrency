@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.not;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.sudoku.ResolveSudokuGameFieldTest.CONFIGURATION;
 import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
@@ -46,5 +48,17 @@ public class GameFieldTest {
 	public void testIsGameFieldFilled()
 			throws Exception {
 		assertThat(gameField.isFilled(), is(false));
+	}
+
+	@Test
+	public void testBuildBlockResolverByColumn()
+			throws Exception {
+		assertThat(gameField.buildBlockResolverOnColumn(0), is(not(nullValue())));
+	}
+
+	@Test
+	public void testBuildBlockResolverByRow()
+			throws Exception {
+		assertThat(gameField.buildBlockResolverOnRow(0), is(not(nullValue())));
 	}
 }
