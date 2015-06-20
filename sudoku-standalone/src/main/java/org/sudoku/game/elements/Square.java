@@ -18,6 +18,11 @@ public class Square
 	private final int numberOfElementsOnSquareSide;
 	private final ReadWriteLock readWriteLock;
 
+	private ReadOnlySquare left;
+	private ReadOnlySquare right;
+	private ReadOnlySquare up;
+	private ReadOnlySquare down;
+
 	private Square(
 			final int numberOfElementsOnSquare,
 			final int numberOfElementsOnSquareSide,
@@ -74,6 +79,54 @@ public class Square
 
 	public boolean isFilled() {
 		return elements.size() == 9;
+	}
+
+	@Override
+	public ReadOnlySquare getLeft() {
+		return left;
+	}
+
+	@Override
+	public ReadOnlySquare setLeft(ReadOnlySquare square) {
+		final ReadOnlySquare previous = this.left;
+		this.left = square;
+		return previous;
+	}
+
+	@Override
+	public ReadOnlySquare getRight() {
+		return right;
+	}
+
+	@Override
+	public ReadOnlySquare setRight(ReadWriteSquare square) {
+		final ReadOnlySquare previous = this.right;
+		this.right = square;
+		return previous;
+	}
+
+	@Override
+	public ReadOnlySquare getUp() {
+		return up;
+	}
+
+	@Override
+	public ReadOnlySquare setUp(ReadOnlySquare square) {
+		final ReadOnlySquare previous = this.up;
+		this.up = square;
+		return previous;
+	}
+
+	@Override
+	public ReadOnlySquare getDown() {
+		return down;
+	}
+
+	@Override
+	public ReadOnlySquare setDown(ReadOnlySquare square) {
+		final ReadOnlySquare previous = this.down;
+		this.down = square;
+		return previous;
 	}
 
 	public Collection<Integer> filledPositions() {

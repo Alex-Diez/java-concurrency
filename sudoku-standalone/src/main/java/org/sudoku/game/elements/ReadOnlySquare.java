@@ -17,4 +17,20 @@ public interface ReadOnlySquare {
 	int getElementPosition(final Element element);
 
 	boolean isFilled();
+
+	ReadOnlySquare getLeft();
+
+	ReadOnlySquare setLeft(ReadOnlySquare square);
+
+	ReadOnlySquare getRight();
+
+	ReadOnlySquare setRight(ReadWriteSquare square);
+
+	ReadOnlySquare getUp();
+
+	ReadOnlySquare setUp(ReadOnlySquare square);
+
+	ReadOnlySquare getDown();
+
+	ReadOnlySquare setDown(ReadOnlySquare square);
 }
