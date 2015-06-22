@@ -12,9 +12,7 @@ public interface ReadOnlySquare {
 
 	boolean containsElement(final Element element);
 
-	Collection<Integer> filledPositions();
-
-	int getElementPosition(final Element element);
+	Collection<Position> filledPositions();
 
 	boolean isFilled();
 
@@ -33,4 +31,6 @@ public interface ReadOnlySquare {
 	ReadOnlySquare getLower();
 
 	ReadOnlySquare setLower(ReadOnlySquare square);
+
+	String printableLine(final int lineNumber);
 }

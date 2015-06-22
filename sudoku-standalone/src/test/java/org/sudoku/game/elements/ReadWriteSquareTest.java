@@ -4,6 +4,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.sudoku.game.elements.Element.Builder;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
@@ -11,6 +12,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.fail;
 import static org.sudoku.ResolveSudokuGameFieldTest.CONFIGURATION;
 import static org.sudoku.ResolveSudokuGameFieldTest.ELEMENTS;
+import static org.sudoku.game.elements.Position.STUB;
 
 public class ReadWriteSquareTest {
 
@@ -103,7 +105,7 @@ public class ReadWriteSquareTest {
 
 	@Test
 	public void testWriteElementTo() throws Exception {
-		final Element e = new Element.Builder(9, 6).build();
+		final Element e = new Element.Builder(9, 6, new Position(0, 2)).build();
 		readWriteSquare.writeTo(0, 2, e);
 		assertThat(readWriteSquare.readFrom(0, 2), is(not(ELEMENTS[0][2])));
 		assertThat(readWriteSquare.readFrom(0, 2), is(e));

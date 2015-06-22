@@ -17,6 +17,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.isIn;
 import static org.junit.runners.Parameterized.Parameters;
+import static org.sudoku.game.elements.Position.STUB;
 
 @RunWith(Parameterized.class)
 public class ElementTest {
@@ -40,8 +41,8 @@ public class ElementTest {
 		configuration = new GameFieldConfiguration.Builder(numberOfElements).build();
 		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
 		elements = Stream.iterate(
-				new Element.Builder(numberOfElementsOnSide, 1).build(),
-				element -> new Element.Builder(numberOfElementsOnSide, element.value + 1).build()
+				new Element.Builder(numberOfElementsOnSide, 1, STUB).build(),
+				element -> new Element.Builder(numberOfElementsOnSide, element.value + 1, STUB).build()
 		).limit(configuration.getNumberOfElementsOnSide())
 				.collect(Collectors.toList());
 	}
@@ -49,13 +50,13 @@ public class ElementTest {
 	@Test
 	public void testBuildElementWithAcceptedValue() throws Exception {
 		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
-		new Element.Builder(numberOfElementsOnSide, numberOfElementsOnSide).build();
+		new Element.Builder(numberOfElementsOnSide, numberOfElementsOnSide, STUB).build();
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testBuildElementWithUnacceptedValue() throws Exception {
 		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
-		new Element.Builder(numberOfElementsOnSide, numberOfElementsOnSide + 1).build();
+		new Element.Builder(numberOfElementsOnSide, numberOfElementsOnSide + 1,STUB).build();
 	}
 
 	@Test
@@ -75,7 +76,7 @@ public class ElementTest {
 	@Test
 	public void elementRepresentationTest() {
 		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
-		Element e = new Element.Builder(numberOfElementsOnSide, 8).build();
+		Element e = new Element.Builder(numberOfElementsOnSide, 8, STUB).build();
 		assertThat(e.toString(), is(" 8 "));
 	}
 

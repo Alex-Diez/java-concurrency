@@ -10,15 +10,15 @@ import org.sudoku.game.elements.GameField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import org.junit.Ignore;
 import org.junit.Test;
+
+import static org.sudoku.game.elements.Position.STUB;
 
 public class ResolveSudokuGameFieldTest {
 
 	private static final Logger LOG = LoggerFactory.getLogger(ResolveSudokuGameFieldTest.class);
 
 	@Test
-//	@Ignore
 	public void main()
 			throws Exception {
 		GameField gameField = new GameField.Builder(CONFIGURATION, ELEMENTS).build();
@@ -42,103 +42,103 @@ public class ResolveSudokuGameFieldTest {
 
 	public static final Element[][] ELEMENTS = new Element[][] {
 			{
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2).build()
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2, STUB).build()
 			},
 			{
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9, STUB).build(),
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 3).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build()
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 3, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6, STUB).build()
 			},
 			{
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8, STUB).build(),
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT
 			},
 			{
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8, STUB).build(),
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1, STUB).build(),
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5).build(),
-					Element.EMPTY_ELEMENT,
-					Element.EMPTY_ELEMENT
-			},
-			{
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9).build(),
-					Element.EMPTY_ELEMENT,
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5).build(),
-					Element.EMPTY_ELEMENT,
-					Element.EMPTY_ELEMENT,
-					Element.EMPTY_ELEMENT,
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4).build()
-			},
-			{
-					Element.EMPTY_ELEMENT,
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 3).build(),
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6).build(),
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 7).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1).build(),
-					Element.EMPTY_ELEMENT,
-			},
-			{
-					Element.EMPTY_ELEMENT,
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1).build(),
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 7).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 3).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT
 			},
 			{
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1).build(),
-					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 5, STUB).build(),
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8).build(),
+					Element.EMPTY_ELEMENT,
+					Element.EMPTY_ELEMENT,
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4, STUB).build()
+			},
+			{
+					Element.EMPTY_ELEMENT,
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 3, STUB).build(),
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6, STUB).build(),
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 7, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1, STUB).build(),
+					Element.EMPTY_ELEMENT,
+			},
+			{
+					Element.EMPTY_ELEMENT,
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1, STUB).build(),
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 7, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 3, STUB).build(),
+					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT
 			},
 			{
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 7).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 1, STUB).build(),
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 4, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8, STUB).build(),
+					Element.EMPTY_ELEMENT
+			},
+			{
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 7, STUB).build(),
 					Element.EMPTY_ELEMENT,
 					Element.EMPTY_ELEMENT,
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2).build(),
-					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9).build()
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 8, STUB).build(),
+					Element.EMPTY_ELEMENT,
+					Element.EMPTY_ELEMENT,
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 2, STUB).build(),
+					new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 9, STUB).build()
 			}
 	};
 }

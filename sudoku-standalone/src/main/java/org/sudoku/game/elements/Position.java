@@ -2,7 +2,7 @@ package org.sudoku.game.elements;
 
 public class Position {
 
-	static final Position STUB = new Position(-1, -1);
+	public static final Position STUB = new Position(-1, -1);
 
 	public final int row;
 	public final int column;

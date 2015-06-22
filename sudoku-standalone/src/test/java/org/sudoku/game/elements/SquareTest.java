@@ -41,13 +41,4 @@ public class SquareTest {
 		square.writeTo(0, 2, e);
 		assertThat(square.containsElement(e), is(true));
 	}
-
-	@Test
-	public void testInsertedElementPosition()
-			throws Exception {
-		final Element e = new Element.Builder(NUMBER_OF_ELEMENTS_ON_SIDE, 6, STUB).build();
-		final int position = 2;
-		square.writeTo(0, 2, e);
-		assertThat(square.getElementPosition(e), is(position));
-	}
 }

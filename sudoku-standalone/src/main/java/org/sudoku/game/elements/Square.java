@@ -2,17 +2,16 @@ package org.sudoku.game.elements;
 
 import org.sudoku.game.conf.GameFieldConfiguration;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.concurrent.locks.ReadWriteLock;
 
 public class Square
 		implements ReadWriteSquare {
 
 	private static final String ROW_SEPARATOR = " --- --- --- ";
-	private static final char COLUMN_SEPARATOR = '|';
+	private static final String COLUMN_SEPARATOR = "|";
 
 	private final Element[][] matrix;
 	private final int numberOfElementsOnSquareSide;
@@ -24,10 +23,8 @@ public class Square
 	private ReadOnlySquare down;
 
 	private Square(
-			final int numberOfElementsOnSquare,
 			final int numberOfElementsOnSquareSide,
 			final Element[][] matrix,
-			final Map<Element, Integer> elements,
 			final ReadWriteLock readWriteLock) {
 		this.matrix = matrix;
 		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
@@ -51,7 +48,14 @@ public class Square
 
 	@Override
 	public boolean containsElement(Element element) {
-		return Element.EMPTY_ELEMENT.compareTo(matrix[element.position.row][element.position.column]) != 0;
+		for (Element[] array : matrix) {
+			for (Element e : array) {
+				if (e.compareTo(element) == 0) {
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -61,8 +65,12 @@ public class Square
 
 	@Override
 	public void writeTo(int rowIndex, int columnIndex, Element element) {
-		int position = rowIndex * numberOfElementsOnSquareSide + columnIndex;
-		matrix[rowIndex][columnIndex] = element;
+		final Element e = new Element.Builder(
+				numberOfElementsOnSquareSide * numberOfElementsOnSquareSide,
+				element.value,
+				new Position(rowIndex, columnIndex)
+		).build();
+		matrix[rowIndex][columnIndex] = e;
 	}
 
 	@Override
@@ -70,12 +78,8 @@ public class Square
 		readWriteLock.writeLock().unlock();
 	}
 
-	public int getElementPosition(Element element) {
-		return element.position.column * numberOfElementsOnSquareSide + element.position.row;
-	}
-
 	public boolean isFilled() {
-		return elements.size() == 9;
+		return !containsElement(Element.EMPTY_ELEMENT);
 	}
 
 	@Override
@@ -126,8 +130,30 @@ public class Square
 		return previous;
 	}
 
-	public Collection<Integer> filledPositions() {
-		return elements.values();
+	@Override
+	public String printableLine(int lineNumber) {
+		StringBuilder sb = new StringBuilder();
+		final int lineLength = matrix[lineNumber].length;
+		for (int i = 0; i < lineLength; i++) {
+			final Element e = matrix[lineNumber][i];
+			sb.append(e);
+			if (i != lineLength - 1) {
+				sb.append(COLUMN_SEPARATOR);
+			}
+		}
+		return sb.toString();
+	}
+
+	public Collection<Position> filledPositions() {
+		Collection<Position> result = new ArrayList<>();
+		for (Element[] array : matrix) {
+			for (Element e : array) {
+				if (e.compareTo(Element.EMPTY_ELEMENT) != 0) {
+					result.add(e.position);
+				}
+			}
+		}
+		return result;
 	}
 
 	@Override
@@ -140,7 +166,7 @@ public class Square
 
 	public int calculateMatrixHash() {
 		int matrixHash = 0;
-		for(Element[] array : matrix) {
+		for (Element[] array : matrix) {
 			matrixHash += Arrays.hashCode(array);
 		}
 		return matrixHash;
@@ -154,12 +180,12 @@ public class Square
 		if (object != null
 				&& object.getClass().equals(getClass())) {
 			Square square = (Square) object;
-			for(Element[] innerArray : matrix) {
+			for (Element[] innerArray : matrix) {
 				boolean arraysEquality = false;
-				for(Element[] outerArray : square.matrix) {
+				for (Element[] outerArray : square.matrix) {
 					arraysEquality |= Arrays.equals(innerArray, outerArray);
 				}
-				if(!arraysEquality) {
+				if (!arraysEquality) {
 					return false;
 				}
 			}
@@ -170,21 +196,19 @@ public class Square
 
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder(ROW_SEPARATOR + "\n");
-		final int numberOfElementsOnSquareSide = this.numberOfElementsOnSquareSide;
+		StringBuilder sb = new StringBuilder(ROW_SEPARATOR).append("\n");
 		for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
-			sb.append(COLUMN_SEPARATOR);
-			for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
-				sb.append(matrix[i][j]).append(COLUMN_SEPARATOR);
+			sb.append(COLUMN_SEPARATOR).append(printableLine(i)).append(COLUMN_SEPARATOR).append("\n");
+			if(i != numberOfElementsOnSquareSide - 1) {
+				sb.append(ROW_SEPARATOR).append("\n");
 			}
-			sb.append("\n" + ROW_SEPARATOR + "\n");
 		}
+		sb.append(ROW_SEPARATOR).append("\n");
 		return sb.toString();
 	}
 
 	public static class Builder {
 
-		private final Map<Element, Integer> elements;
 		private final Element[][] matrix;
 		private final int numberOfElementsOnSide;
 		private final int numberOfElementsOnSquareSide;
@@ -196,40 +220,16 @@ public class Square
 				final int rowIndex,
 				final int columnIndex,
 				final ReadWriteLock readWriteLock) {
-			this.readWriteLock = readWriteLock;
 			this.numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
 			this.numberOfElementsOnSquareSide = configuration.getNumberOfElementsOnSquareSide();
 			isInputElementsEnoughLength(numberOfElementsOnSide, numberOfElementsOnSquareSide, elements);
-			this.elements = new LinkedHashMap<>(numberOfElementsOnSide, 1.0f);
 			this.matrix = new Element[numberOfElementsOnSquareSide][numberOfElementsOnSquareSide];
 			populateMatrix(elements, rowIndex, columnIndex);
-			populateElements(elements, rowIndex, columnIndex);
-		}
-
-		private void populateElements(Element[][] elements, int rowIndex, int columnIndex) {
-			for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
-				for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
-					int columnIndexOffset = calculateColumnIndexOffset(columnIndex, j);
-					int rowIndexOffset = calculateRowIndexOffset(rowIndex, i);
-					Element e = elements[rowIndexOffset][columnIndexOffset];
-					if (Element.EMPTY_ELEMENT.compareTo(e) != 0) {
-						int elementPosition = calculateElementPosition(i, j);
-						this.elements.put(e, elementPosition);
-					}
-				}
-			}
-		}
-
-		private int calculateElementPosition(int i, int j) {
-			return numberOfElementsOnSquareSide * i + j;
+			this.readWriteLock = readWriteLock;
 		}
 
 		private int calculateRowIndexOffset(int rowIndex, int j) {
 			return rowIndex * numberOfElementsOnSquareSide + j;
-		}
-
-		private int calculateColumnIndexOffset(int columnIndex, int i) {
-			return columnIndex * numberOfElementsOnSquareSide + i;
 		}
 
 		private void populateMatrix(Element[][] elements, int rowIndex, int columnIndex) {
@@ -273,10 +273,8 @@ public class Square
 
 		public Square build() {
 			return new Square(
-					numberOfElementsOnSide,
 					numberOfElementsOnSquareSide,
 					matrix,
-					elements,
 					readWriteLock
 			);
 		}

@@ -16,7 +16,7 @@ public class Element
 	}
 
 	final int value;
-	final Position position;
+	public final Position position;
 
 	private Element(final int value, final Position position) {
 		this.value = value;
