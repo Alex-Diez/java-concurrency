@@ -14,7 +14,6 @@ public class Square
 	private static final char COLUMN_SEPARATOR = '|';
 
 	private final Element[][] matrix;
-	private final Map<Element, Integer> elements;
 	private final int numberOfElementsOnSquareSide;
 	private final ReadWriteLock readWriteLock;
 
@@ -30,8 +29,6 @@ public class Square
 			final Map<Element, Integer> elements,
 			final ReadWriteLock readWriteLock) {
 		this.matrix = matrix;
-		this.elements = new LinkedHashMap<>(numberOfElementsOnSquare, 1.0f);
-		this.elements.putAll(elements);
 		this.numberOfElementsOnSquareSide = numberOfElementsOnSquareSide;
 		this.readWriteLock = readWriteLock;
 	}
@@ -64,7 +61,6 @@ public class Square
 	@Override
 	public void writeTo(int rowIndex, int columnIndex, Element element) {
 		int position = rowIndex * numberOfElementsOnSquareSide + columnIndex;
-		elements.put(element, position);
 		matrix[rowIndex][columnIndex] = element;
 	}
 
@@ -74,7 +70,7 @@ public class Square
 	}
 
 	public int getElementPosition(Element element) {
-		return elements.get(element);
+		return element.position.column * numberOfElementsOnSquareSide + element.position.row;
 	}
 
 	public boolean isFilled() {
@@ -106,24 +102,24 @@ public class Square
 	}
 
 	@Override
-	public ReadOnlySquare getUp() {
+	public ReadOnlySquare getUpper() {
 		return up;
 	}
 
 	@Override
-	public ReadOnlySquare setUp(ReadOnlySquare square) {
+	public ReadOnlySquare setUpper(ReadOnlySquare square) {
 		final ReadOnlySquare previous = this.up;
 		this.up = square;
 		return previous;
 	}
 
 	@Override
-	public ReadOnlySquare getDown() {
+	public ReadOnlySquare getLower() {
 		return down;
 	}
 
 	@Override
-	public ReadOnlySquare setDown(ReadOnlySquare square) {
+	public ReadOnlySquare setLower(ReadOnlySquare square) {
 		final ReadOnlySquare previous = this.down;
 		this.down = square;
 		return previous;
@@ -167,7 +163,7 @@ public class Square
 		return sb.toString();
 	}
 
-	static class Builder {
+	public static class Builder {
 
 		private final Map<Element, Integer> elements;
 		private final Element[][] matrix;
@@ -197,7 +193,7 @@ public class Square
 					int columnIndexOffset = calculateColumnIndexOffset(columnIndex, j);
 					int rowIndexOffset = calculateRowIndexOffset(rowIndex, i);
 					Element e = elements[rowIndexOffset][columnIndexOffset];
-					if (!Element.EMPTY_ELEMENT.equals(e)) {
+					if (Element.EMPTY_ELEMENT.compareTo(e) != 0) {
 						int elementPosition = calculateElementPosition(i, j);
 						this.elements.put(e, elementPosition);
 					}

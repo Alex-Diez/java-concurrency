@@ -83,7 +83,7 @@ public class ReadOnlySquareTest {
 		final int numberOfElementsOnSquareSide = CONFIGURATION.getNumberOfElementsOnSquareSide();
 		for (int i = 0; i < numberOfElementsOnSquareSide; i++) {
 			for (int j = 0; j < numberOfElementsOnSquareSide; j++) {
-				if (!Element.EMPTY_ELEMENT.equals(ELEMENTS[i][j])) {
+				if (Element.EMPTY_ELEMENT.compareTo(ELEMENTS[i][j]) != 0) {
 					filledPosition.add(i * numberOfElementsOnSquareSide + j);
 				}
 			}
@@ -134,22 +134,22 @@ public class ReadOnlySquareTest {
 	@Test
 	public void testMoveUp() throws Exception {
 		final Square u = new Square.Builder(CONFIGURATION, ELEMENTS, 2, 0, new ReentrantReadWriteLock()).build();
-		readOnlySquare.setUp(u);
-		Assert.assertThat(readOnlySquare.getUp(), Matchers.is(u));
+		readOnlySquare.setUpper(u);
+		Assert.assertThat(readOnlySquare.getUpper(), Matchers.is(u));
 	}
 
 	@Test
 	public void testPreviousUp() throws Exception {
 		final Square u = new Square.Builder(CONFIGURATION, ELEMENTS, 2, 0, new ReentrantReadWriteLock()).build();
-		final ReadOnlySquare previousUp = readOnlySquare.setUp(u);
+		final ReadOnlySquare previousUp = readOnlySquare.setUpper(u);
 		assertThat(previousUp, is(nullValue()));
 	}
 
 	@Test
 	public void testMoveDown() throws Exception {
 		final Square d = new Square.Builder(CONFIGURATION, ELEMENTS, 1, 0, new ReentrantReadWriteLock()).build();
-		readOnlySquare.setDown(d);
-		Assert.assertThat(readOnlySquare.getDown(), Matchers.is(d));
+		readOnlySquare.setLower(d);
+		Assert.assertThat(readOnlySquare.getLower(), Matchers.is(d));
 	}
 
 	@Test

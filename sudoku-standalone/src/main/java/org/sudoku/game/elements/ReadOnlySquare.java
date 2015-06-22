@@ -26,11 +26,11 @@ public interface ReadOnlySquare {
 
 	ReadOnlySquare setRight(ReadWriteSquare square);
 
-	ReadOnlySquare getUp();
+	ReadOnlySquare getUpper();
 
-	ReadOnlySquare setUp(ReadOnlySquare square);
+	ReadOnlySquare setUpper(ReadOnlySquare square);
 
-	ReadOnlySquare getDown();
+	ReadOnlySquare getLower();
 
-	ReadOnlySquare setDown(ReadOnlySquare square);
+	ReadOnlySquare setLower(ReadOnlySquare square);
 }

@@ -51,14 +51,8 @@ public class GameFieldTest {
 	}
 
 	@Test
-	public void testBuildBlockResolverByColumn()
+	public void testBuildBlockResolver()
 			throws Exception {
-		assertThat(gameField.buildBlockResolverOnColumn(0), is(not(nullValue())));
-	}
-
-	@Test
-	public void testBuildBlockResolverByRow()
-			throws Exception {
-		assertThat(gameField.buildBlockResolverOnRow(0), is(not(nullValue())));
+		assertThat(gameField.buildBlockResolver(0, 0), is(not(nullValue())));
 	}
 }

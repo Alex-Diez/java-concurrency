@@ -4,8 +4,6 @@ import org.sudoku.game.conf.GameFieldConfiguration;
 import org.sudoku.game.strategies.ResolverByBlock;
 import org.sudoku.game.strategies.StrategiesFactory;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class GameField
@@ -29,76 +27,15 @@ public class GameField
 	}
 
 	@Override
-	public Runnable buildBlockResolverOnColumn(int columnIndex) {
-		SubstitutableBlock[] data = new SubstitutableBlock[numberOfSquaresOnSide];
-		for(int rowIndex = 0; rowIndex < numberOfSquaresOnSide; rowIndex++) {
-			data[rowIndex] = buildSubstitutableBlock(columnIndex, rowIndex);
-		}
-		return new ResolverByBlock(data);
+	public Runnable buildBlockResolver(final int rowIndex, final int columnIndex) {
+		final ReadWriteSquare square = determinateCenterSquareForSubstitutableBlock(columnIndex, rowIndex);
+		return new ResolverByBlock(square, numberOfElementsOnSide, numberOfElementsOnSquareSide);
 	}
 
-	@Override
-	public Runnable buildBlockResolverOnRow(int rowIndex) {
-		SubstitutableBlock[] data = new SubstitutableBlock[numberOfSquaresOnSide];
-		for(int columnIndex = 0; columnIndex < numberOfSquaresOnSide; columnIndex++) {
-			data[columnIndex] = buildSubstitutableBlock(columnIndex, rowIndex);
-		}
-		return new ResolverByBlock(data);
-	}
-
-	private SubstitutableBlock buildSubstitutableBlock(final int columnIndex, final int rowIndex) {
-		final Set<ReadOnlySquare> vertical = buildVerticalSetOfSquares(columnIndex, rowIndex);
-		final ReadWriteSquare centerSquare = determinateCenterSquareForSubstitutableBlock(columnIndex, rowIndex);
-		final Set<ReadOnlySquare> horizontal = buildHorizontalSetOfSquares(columnIndex, rowIndex);
-		return new SubstitutableBlock(centerSquare, vertical, horizontal);
-	}
-
-	private Set<ReadOnlySquare> buildHorizontalSetOfSquares(int columnIndex, int rowIndex) {
-		final ReadOnlySquare leftSquare = determinateLeftSquareForSubstitutableBlock(columnIndex, rowIndex);
-		final ReadOnlySquare rightSquare = determinateRightSquareForSubstitutableBlock(columnIndex, rowIndex);
-		final Set<ReadOnlySquare> readOnlySquares = new HashSet<>(2, 1.0f);
-		readOnlySquares.add(leftSquare);
-		readOnlySquares.add(rightSquare);
-		return readOnlySquares;
-	}
-
-	private Set<ReadOnlySquare> buildVerticalSetOfSquares(int columnIndex, int rowIndex) {
-		final ReadOnlySquare upSquare = determinateUpSquareForSubstitutableBlock(columnIndex, rowIndex);
-		final ReadOnlySquare downSquare = determinateDownSquareForSubstitutableBlock(columnIndex, rowIndex);
-		final Set<ReadOnlySquare> readOnlySquares = new HashSet<>(2, 1.0f);
-		readOnlySquares.add(upSquare);
-		readOnlySquares.add(downSquare);
-		return readOnlySquares;
-	}
-
-	private ReadOnlySquare determinateRightSquareForSubstitutableBlock(int columnIndex, int rowIndex) {
-		final int rightRowIndex = (columnIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		final int rightColumnIndex = (rowIndex + 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		return squares[rightRowIndex][rightColumnIndex];
-	}
-
-	private ReadOnlySquare determinateLeftSquareForSubstitutableBlock(final int columnIndex, final int rowIndex) {
-		final int leftRowIndex = (columnIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		final int leftColumnIndex = (rowIndex - 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		return squares[leftRowIndex][leftColumnIndex];
-	}
-
-	private ReadWriteSquare determinateCenterSquareForSubstitutableBlock(int columnIndex, int rowIndex) {
-		final int centerRowIndex = (columnIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		final int centerColumnIndex = (rowIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+	private ReadWriteSquare determinateCenterSquareForSubstitutableBlock(final int rowIndex, final int columnIndex) {
+		final int centerRowIndex = (rowIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+		final int centerColumnIndex = (columnIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
 		return squares[centerRowIndex][centerColumnIndex];
-	}
-
-	private ReadOnlySquare determinateDownSquareForSubstitutableBlock(int columnIndex, int rowIndex) {
-		final int downRowIndex = (columnIndex + 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		final int downColumnIndex = (rowIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		return squares[downRowIndex][downColumnIndex];
-	}
-
-	private ReadOnlySquare determinateUpSquareForSubstitutableBlock(int columnIndex, int rowIndex) {
-		final int upRowIndex = (columnIndex - 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		final int upColumnIndex = (rowIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
-		return squares[upRowIndex][upColumnIndex];
 	}
 
 	public boolean isFilled() {
@@ -160,6 +97,59 @@ public class GameField
 			final int numberOfSquaresOnSide = configuration.getNumberOfSquaresOnSide();
 			squares = new ReadWriteSquare[numberOfSquaresOnSide][numberOfSquaresOnSide];
 			populateSquares(configuration, elements, numberOfSquaresOnSide);
+			setAroundSquares(numberOfSquaresOnSide);
+		}
+
+		private void setAroundSquares(final int numberOfSquaresOnSide) {
+			for(int rowIndex = 0; rowIndex < numberOfSquaresOnSide; rowIndex++) {
+				for(int columnIndex = 0; columnIndex < numberOfSquaresOnSide; columnIndex++) {
+					ReadWriteSquare square = squares[rowIndex][columnIndex];
+					setLeftSquareFor(square, rowIndex, columnIndex, numberOfSquaresOnSide);
+					setRightSquareFor(square, rowIndex, columnIndex, numberOfSquaresOnSide);
+					setUpperSquareFor(square, rowIndex, columnIndex, numberOfSquaresOnSide);
+					setLowerSquareFor(square, rowIndex, columnIndex, numberOfSquaresOnSide);
+				}
+			}
+		}
+
+		private void setLowerSquareFor(
+				final ReadWriteSquare square,
+				final int rowIndex,
+				final int columnIndex,
+				final int numberOfSquaresOnSide) {
+			final int lowerRowIndex = (rowIndex + 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			final int lowerColumnIndex = (columnIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			square.setLower(squares[lowerRowIndex][lowerColumnIndex]);
+		}
+
+		private void setUpperSquareFor(
+				final ReadWriteSquare square,
+				final int rowIndex,
+				final int columnIndex,
+				final int numberOfSquaresOnSide) {
+			final int upperRowIndex = (rowIndex - 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			final int upperColumnIndex = (columnIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			square.setUpper(squares[upperRowIndex][upperColumnIndex]);
+		}
+
+		private void setRightSquareFor(
+				final ReadWriteSquare square,
+				final int rowIndex,
+				final int columnIndex,
+				final int numberOfSquaresOnSide) {
+			final int rightRowIndex = (rowIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			final int rightColumnIndex = (columnIndex + 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			square.setRight(squares[rightRowIndex][rightColumnIndex]);
+		}
+
+		private void setLeftSquareFor(
+				final ReadWriteSquare square,
+				final int rowIndex,
+				final int columnIndex,
+				final int numberOfSquaresOnSide) {
+			final int leftRowIndex = (rowIndex + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			final int leftColumnIndex = (columnIndex - 1 + numberOfSquaresOnSide) % numberOfSquaresOnSide;
+			square.setLeft(squares[leftRowIndex][leftColumnIndex]);
 		}
 
 		public void populateSquares(

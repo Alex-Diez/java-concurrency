@@ -18,7 +18,7 @@ public class ResolveSudokuGameFieldTest {
 	private static final Logger LOG = LoggerFactory.getLogger(ResolveSudokuGameFieldTest.class);
 
 	@Test
-	@Ignore
+//	@Ignore
 	public void main()
 			throws Exception {
 		GameField gameField = new GameField.Builder(CONFIGURATION, ELEMENTS).build();
@@ -29,7 +29,8 @@ public class ResolveSudokuGameFieldTest {
 		while (!gameField.isFilled()) {
 			final int number = (iteration - 1) % 9;
 			final int rowIndex = number / numberOfSquaresOnSide;
-			Runnable resolver = gameField.buildBlockResolverOnRow(rowIndex);
+			final int columnIndex = number % numberOfSquaresOnSide;
+			Runnable resolver = gameField.buildBlockResolver(rowIndex, columnIndex);
 			executorService.submit(resolver).get();
 			LOG.info("Game field after {} iteration \n{}", iteration, gameField);
 			iteration++;
