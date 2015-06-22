@@ -2,6 +2,7 @@ package org.sudoku.game.elements;
 
 import org.sudoku.game.conf.GameFieldConfiguration;
 
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -50,7 +51,7 @@ public class Square
 
 	@Override
 	public boolean containsElement(Element element) {
-		return elements.containsKey(element);
+		return Element.EMPTY_ELEMENT.compareTo(matrix[element.position.row][element.position.column]) != 0;
 	}
 
 	@Override
@@ -131,9 +132,18 @@ public class Square
 
 	@Override
 	public int hashCode() {
-		int result = 17;
-		result = 31 * result + elements.hashCode();
+		int matrixHash = calculateMatrixHash();
+		int result = 31;
+		result *= (17 + matrixHash);
 		return result;
+	}
+
+	public int calculateMatrixHash() {
+		int matrixHash = 0;
+		for(Element[] array : matrix) {
+			matrixHash += Arrays.hashCode(array);
+		}
+		return matrixHash;
 	}
 
 	@Override
@@ -144,7 +154,16 @@ public class Square
 		if (object != null
 				&& object.getClass().equals(getClass())) {
 			Square square = (Square) object;
-			return square.elements.equals(elements);
+			for(Element[] innerArray : matrix) {
+				boolean arraysEquality = false;
+				for(Element[] outerArray : square.matrix) {
+					arraysEquality |= Arrays.equals(innerArray, outerArray);
+				}
+				if(!arraysEquality) {
+					return false;
+				}
+			}
+			return true;
 		}
 		return false;
 	}
