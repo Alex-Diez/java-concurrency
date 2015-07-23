@@ -1,9 +1,11 @@
 package org.sudoku.game.elements;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
 import org.sudoku.game.conf.GameFieldConfiguration;
 
 import java.util.Arrays;
@@ -60,6 +62,7 @@ public class ElementTest {
 	}
 
 	@Test
+	@Ignore
 	public void testNumberPossibleElements() throws Exception {
 		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
 		Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);
@@ -67,6 +70,7 @@ public class ElementTest {
 	}
 
 	@Test
+	@Ignore
 	public void testThatPossibleElementsDoesNotHaveDuplicates() throws Exception {
 		final int numberOfElementsOnSide = configuration.getNumberOfElementsOnSide();
 		Element[] possibleElements = Element.getPossibleElements(numberOfElementsOnSide);

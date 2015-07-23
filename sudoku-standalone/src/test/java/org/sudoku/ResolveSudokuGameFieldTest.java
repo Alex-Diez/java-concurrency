@@ -10,6 +10,7 @@ import org.sudoku.game.elements.GameField;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.sudoku.game.elements.Position.STUB;
@@ -19,6 +20,7 @@ public class ResolveSudokuGameFieldTest {
 	private static final Logger LOG = LoggerFactory.getLogger(ResolveSudokuGameFieldTest.class);
 
 	@Test
+	@Ignore
 	public void main()
 			throws Exception {
 		GameField gameField = new GameField.Builder(CONFIGURATION, ELEMENTS).build();

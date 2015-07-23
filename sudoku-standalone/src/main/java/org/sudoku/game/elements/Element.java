@@ -10,7 +10,7 @@ public class Element
 	public static Element[] getPossibleElements(final int numberOfElementsOnSide) {
 		Element[] possibleElements = new Element[numberOfElementsOnSide];
 		for (int i = 0; i < numberOfElementsOnSide; i++) {
-			possibleElements [i] = new Element.Builder(numberOfElementsOnSide, i + 1, STUB).build();
+			possibleElements[i] = new Element.Builder(numberOfElementsOnSide, i + 1, STUB).build();
 		}
 		return possibleElements;
 	}
