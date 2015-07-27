@@ -33,8 +33,8 @@
 		<hamcrest.version>1.3</hamcrest.version>
 		<jmh.version>1.9.3</jmh.version>
 		<jackson.version>1.9.13</jackson.version>
-
 		<mockito-all.version>2.0.2-beta</mockito-all.version>
+		<jcabi-matchers.version>1.3</jcabi-matchers.version>
 	</properties>
 
 	<modules>
@@ -64,6 +64,7 @@
 
 	<dependencyManagement>
 		<dependencies>
+
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
@@ -81,6 +82,20 @@
 				<version>${log4j.version}</version>
 				<scope>runtime</scope>
 			</dependency>
+
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-all</artifactId>
+				<version>${hamcrest.version}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.hamcrest</groupId>
+				<artifactId>hamcrest-library</artifactId>
+				<version>${hamcrest.version}</version>
+				<scope>test</scope>
+			</dependency>
+
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
@@ -105,12 +120,14 @@
 				</exclusions>
 				<scope>test</scope>
 			</dependency>
+
 			<dependency>
-				<groupId>org.hamcrest</groupId>
-				<artifactId>hamcrest-all</artifactId>
-				<version>${hamcrest.version}</version>
+				<groupId>com.jcabi</groupId>
+				<artifactId>jcabi-matchers</artifactId>
+				<version>${jcabi-matchers.version}</version>
 				<scope>test</scope>
 			</dependency>
+
 			<dependency>
 				<groupId>org.openjdk.jmh</groupId>
 				<artifactId>jmh-core</artifactId>
@@ -123,6 +140,7 @@
 				<version>${jmh.version}</version>
 				<scope>test</scope>
 			</dependency>
+
 		</dependencies>
 	</dependencyManagement>
 

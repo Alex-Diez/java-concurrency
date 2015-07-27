@@ -1,6 +1,5 @@
 package com.google.jam;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -13,23 +12,14 @@ public class Round {
 
 	private final BlockingQueue<String> roundTasks;
 
-	public Round(final char roundSign, final String roundComplexity)
+	public Round(final Path pathToRoundFile)
 			throws IOException {
-		final String pathToFile = buildPathToFile(roundSign, roundComplexity);
-		final Path pathToRoundTasks = Paths.get(pathToFile);
-		List<String> allLines;
-		allLines = Files.readAllLines(pathToRoundTasks);
+		List<String> allLines = Files.readAllLines(pathToRoundFile);
 		allLines.remove(0);
 		this.roundTasks = new ArrayBlockingQueue<>(allLines.size(), true, allLines);
 	}
 
-	public String buildPathToFile(final char roundSign, final String roundComplexity) {
-		final String currentDirectory = System.getProperty("user.dir");
-		final String fileSeparator = System.getProperty("file.separator");
-		return currentDirectory + fileSeparator + "files" + fileSeparator + roundSign + '-' + roundComplexity + '-' + "practice.in";
-	}
-
 	public String getNextTask() {
-		return "";
+		return roundTasks.poll();
 	}
 }
