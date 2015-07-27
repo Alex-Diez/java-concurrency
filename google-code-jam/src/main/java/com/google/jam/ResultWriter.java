@@ -17,7 +17,7 @@ public class ResultWriter {
 			throws IOException {
 		for (int i = 0; i < resultToWrite.size(); i++) {
 			int value = resultToWrite.get(i + 1);
-			final String formattedOutput = String.format("Case #%d: %d", i + 1, value);
+			final String formattedOutput = String.format("Case #%d: %d\n", i + 1, value);
 			writer.write(formattedOutput);
 		}
 		writer.flush();
