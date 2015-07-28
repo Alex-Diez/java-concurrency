@@ -3,14 +3,14 @@ package com.google.jam;
 import java.io.IOException;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 
-public class RoundTest {
+public class StandingOvationRoundTest {
 
 	private Round small;
 
@@ -33,5 +33,14 @@ public class RoundTest {
 			throws Exception {
 		final String task = small.getNextTask();
 		assertThat(task, is(notNullValue()));
+	}
+
+	@Test
+	public void testCreateStandingOvationRound()
+			throws Exception {
+		RoundCreator creator = new StandingOvationRoundCreator();
+		Round r = new RoundTaskReader(new RoundPathBuilder("test", 'A', "small", "test").build()).applyCreator(creator);
+		String task = r.getNextTask();
+		assertThat(task, matchesPattern("([0-9]*) ([0-9]*)"));
 	}
 }
