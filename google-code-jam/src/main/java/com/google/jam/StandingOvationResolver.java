@@ -16,20 +16,12 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 public class StandingOvationResolver
 		implements AutoCloseable {
 
-	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
+	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors();
 
 	private final ExecutorService executor;
-	private final SortedMap<Integer, Integer> results;
 
 	public StandingOvationResolver(final boolean parallel) {
-		if (parallel) {
-			this.executor = newFixedThreadPool(NUMBER_OF_THREADS);
-			this.results = new ConcurrentSkipListMap<>();
-		}
-		else {
-			this.executor = newSingleThreadExecutor();
-			this.results = new TreeMap<>();
-		}
+		this.executor = parallel ? newFixedThreadPool(NUMBER_OF_THREADS) : newSingleThreadExecutor();
 	}
 
 	public Map<Integer, Integer> solve(final Round round) {
