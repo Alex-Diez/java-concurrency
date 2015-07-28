@@ -20,7 +20,6 @@ public class StandingOvationResolver
 
 	private final ExecutorService executor;
 	private final SortedMap<Integer, Integer> results;
-	private int counter = 1;
 
 	public StandingOvationResolver(final boolean parallel) {
 		if (parallel) {
@@ -36,8 +35,9 @@ public class StandingOvationResolver
 	public Map<Integer, Integer> solve(final Round round) {
 		Map<Integer, Future<Integer>> asynchronousResults = new HashMap<>();
 		String taskString = round.getNextTask();
+		int taskCounter = 1;
 		while (taskString != null) {
-			final int index = counter++;
+			final int index = taskCounter++;
 			final String task = taskString;
 			Future<Integer> future = executor.submit(
 					() -> {
@@ -49,7 +49,7 @@ public class StandingOvationResolver
 						for (int currentShineLevel = 1; currentShineLevel < audience.length(); currentShineLevel++) {
 							previousCounter = counter;
 							allPeople += value;
-							counter += currentShineLevel - allPeople;
+							counter += currentShineLevel - allPeople > 0 ? currentShineLevel - allPeople : 0;
 							if(previousCounter < counter) {
 								allPeople += counter - previousCounter;
 							}

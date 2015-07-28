@@ -6,7 +6,7 @@ public class StandingOvationRoundCreator
 		implements RoundCreator {
 
 	@Override
-	public Round createRound(List<String> strings)
+	public Round createRound(final List<String> strings)
 			throws WrongRoundFormatException {
 		final int queueLength;
 		try {
