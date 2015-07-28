@@ -1,6 +1,6 @@
 package com.google.jam;
 
-import java.io.IOException;
+import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -12,35 +12,25 @@ import static org.hamcrest.Matchers.notNullValue;
 
 public class StandingOvationRoundTest {
 
-	private Round small;
+	private Round round;
 
 	@Before
 	public void setUp()
 			throws Exception {
-		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'A', "small", "test");
-		small = new Round(pathBuilder.build());
-	}
-
-	@Test(expected = IOException.class)
-	public void testCreateWrongRound_shouldThrowException()
-			throws Exception {
-		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'A', "huge", "test");
-		new Round(pathBuilder.build());
+		round = new Round(4, Arrays.asList("4 11111", "1 09", "5 110011", "0 1"));
 	}
 
 	@Test
 	public void testValidateTaskLine()
 			throws Exception {
-		final String task = small.getNextTask();
+		final String task = round.getNextTask();
 		assertThat(task, is(notNullValue()));
 	}
 
 	@Test
 	public void testCreateStandingOvationRound()
 			throws Exception {
-		RoundCreator creator = new StandingOvationRoundCreator();
-		Round r = new RoundTaskReader(new RoundPathBuilder("test", 'A', "small", "test").build()).applyCreator(creator);
-		String task = r.getNextTask();
-		assertThat(task, matchesPattern("([0-9]*) ([0-9]*)"));
+		String task = round.getNextTask();
+		assertThat(task, matchesPattern("^([0-9]*) ([0-9]*)$"));
 	}
 }

@@ -1,10 +1,11 @@
 package com.google.jam;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.List;
 
 public class RoundTaskReader {
-
 
 	private final Path pathToFile;
 
@@ -14,6 +15,7 @@ public class RoundTaskReader {
 
 	public Round applyCreator(final RoundCreator roundCreator)
 			throws IOException {
-		return new Round(pathToFile);
+		List<String> fileContent = Files.readAllLines(pathToFile);
+		return roundCreator.createRound(fileContent);
 	}
 }

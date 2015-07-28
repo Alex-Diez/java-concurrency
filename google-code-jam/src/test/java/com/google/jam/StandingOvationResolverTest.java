@@ -1,5 +1,6 @@
 package com.google.jam;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
@@ -7,6 +8,7 @@ import java.util.Map;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -53,7 +55,8 @@ public class StandingOvationResolverTest {
 	public void testTaskSolvingProcess()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'A', "small", "test");
-		final Round round = new Round(pathBuilder.build());
+		final RoundCreator creator = new StandingOvationRoundCreator();
+		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
 		final Map<Integer, Integer> resolverResults = resolver.solve(round);
 		assertThat(resolverResults, is(equalTo(results)));
 	}

@@ -3,6 +3,7 @@ package com.google.jam;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import jdk.nashorn.internal.ir.annotations.Ignore;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -26,10 +27,11 @@ public class StandingOvationResolverPerformanceTest {
 	public void setUp()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
-		round = new Round(pathBuilder.build());
+//		round = new Round(pathBuilder.build());
 	}
 
 	@Benchmark
+	@Ignore
 	public Map<Integer, Integer> performanceOfSingleThreadStandingOvationResolverTaskSolvingProcess()
 			throws Exception {
 		final StandingOvationResolver resolver = new StandingOvationResolver(false);
@@ -39,6 +41,7 @@ public class StandingOvationResolverPerformanceTest {
 	}
 
 	@Benchmark
+	@Ignore
 	public Map<Integer, Integer> performanceOfMultiThreadStandingOvationResolverTaskSolvingProcess()
 			throws Exception {
 		final StandingOvationResolver resolver = new StandingOvationResolver(true);
@@ -47,7 +50,7 @@ public class StandingOvationResolverPerformanceTest {
 		return results;
 	}
 
-	public static void main(String[] args) throws RunnerException {
+/*	public static void main(String[] args) throws RunnerException {
 		Options opt = new OptionsBuilder()
 				.include(StandingOvationResolverPerformanceTest.class.getSimpleName())
 				.forks(1)
@@ -55,5 +58,5 @@ public class StandingOvationResolverPerformanceTest {
 				.measurementIterations(5)
 				.build();
 		new Runner(opt).run();
-	}
+	}*/
 }
