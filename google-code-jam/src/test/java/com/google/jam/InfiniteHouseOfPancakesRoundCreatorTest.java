@@ -1,17 +1,15 @@
 package com.google.jam;
 
-import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Suite;
+import org.junit.runners.Suite.SuiteClasses;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-
+@RunWith(Suite.class)
+@SuiteClasses(
+		{
+				InputInfiniteHouseOfPancakesRoundTest.class,
+				InfiniteHouseOfPancakesRoundTaskFormatValidationTest.class
+		}
+)
 public class InfiniteHouseOfPancakesRoundCreatorTest {
-
-	@Test
-	public void testCreateInfiniteHouseOfPancakesRoundCreator()
-			throws Exception {
-		InfiniteHouseOfPancakesRoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
-		assertThat(creator, is(instanceOf(RoundCreator.class)));
-	}
 }

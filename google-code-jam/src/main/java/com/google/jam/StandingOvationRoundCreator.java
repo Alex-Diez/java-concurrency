@@ -16,6 +16,9 @@ public class StandingOvationRoundCreator
 		catch (NumberFormatException e) {
 			throw new WrongRoundFormatException();
 		}
+		if(queueLength != strings.size()) {
+			throw new WrongRoundFormatException();
+		}
 		return new Round(queueLength, strings);
 	}
 }
