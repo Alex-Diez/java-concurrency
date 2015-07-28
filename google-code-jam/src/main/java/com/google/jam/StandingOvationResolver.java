@@ -2,10 +2,8 @@ package com.google.jam;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.TreeMap;
-import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
@@ -23,13 +21,16 @@ public class StandingOvationResolver
 	}
 
 	public Map<Integer, Integer> solve(final Round round) {
-		Map<Integer, Future<Integer>> asynchronousResults = new HashMap<>();
+		final Map<Integer, Integer> asynchronousResults =
+				round.inParallel()
+						? new ConcurrentHashMap<>(round.numberOfTasks())
+						: new HashMap<>(round.numberOfTasks());
 		String taskString = round.getNextTask();
 		int taskCounter = 1;
 		while (taskString != null) {
 			final int index = taskCounter++;
 			final String task = taskString;
-			Future<Integer> future = executor.submit(
+			executor.submit(
 					() -> {
 						int counter = 0;
 						int previousCounter = 0;
@@ -40,30 +41,25 @@ public class StandingOvationResolver
 							previousCounter = counter;
 							allPeople += value;
 							counter += currentShineLevel - allPeople > 0 ? currentShineLevel - allPeople : 0;
-							if(previousCounter < counter) {
+							if (previousCounter < counter) {
 								allPeople += counter - previousCounter;
 							}
 							value = Character.digit(audience.charAt(currentShineLevel), 10);
 						}
-						return counter;
+						asynchronousResults.put(index, counter);
+						System.out.println(
+								"Tread " + Thread.currentThread().getId() + " size - " + asynchronousResults.size()
+						);
 					}
 			);
-			asynchronousResults.put(index, future);
 			taskString = round.getNextTask();
 		}
-		Map<Integer, Integer> results = new TreeMap<>();
-		for(Map.Entry<Integer, Future<Integer>> result : asynchronousResults.entrySet()) {
-			try {
-				results.put(result.getKey(), result.getValue().get());
-			}
-			catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-			catch (ExecutionException e) {
-				e.printStackTrace();
-			}
-		}
-		return results;
+		int size;
+		do {
+			size = asynchronousResults.size();
+			System.out.println("Size - " + size);
+		} while (size < round.numberOfTasks());
+		return asynchronousResults;
 	}
 
 	@Override

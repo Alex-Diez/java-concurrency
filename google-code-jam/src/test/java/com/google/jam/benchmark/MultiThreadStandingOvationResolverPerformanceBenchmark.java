@@ -36,7 +36,7 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 	public void setUp()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
-		final RoundCreator creator = new StandingOvationRoundCreator();
+		final RoundCreator creator = new StandingOvationRoundCreator(true);
 		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
 		resolver = new StandingOvationResolver(true);
 	}

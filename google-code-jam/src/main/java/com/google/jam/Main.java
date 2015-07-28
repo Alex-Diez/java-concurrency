@@ -9,7 +9,7 @@ public class Main {
 	public static void main(String[] args)
 			throws Exception {
 		RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
-		RoundCreator creator = new StandingOvationRoundCreator();
+		RoundCreator creator = new StandingOvationRoundCreator(true);
 		Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
 		StandingOvationResolver resolver = new StandingOvationResolver(true);
 		Map<Integer, Integer> smallResult = resolver.solve(smallRound);

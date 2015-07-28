@@ -5,6 +5,12 @@ import java.util.List;
 public class StandingOvationRoundCreator
 		implements RoundCreator {
 
+	private final boolean parallelism;
+
+	public StandingOvationRoundCreator(final boolean parallelism) {
+		this.parallelism = parallelism;
+	}
+
 	@Override
 	public Round createRound(final List<String> strings)
 			throws WrongRoundFormatException {
@@ -19,6 +25,6 @@ public class StandingOvationRoundCreator
 		if(queueLength != strings.size()) {
 			throw new WrongRoundFormatException();
 		}
-		return new Round(queueLength, strings);
+		return new Round(parallelism, queueLength, strings);
 	}
 }

@@ -19,13 +19,18 @@ public class InputStandingOvationRoundTest {
 
 	@Parameters
 	public static Collection<Object[]> data() {
-		return Arrays.asList(new String[][] {{"g"}, {""}, {"-4"}, {"1"}, {"100"}});
+		return Arrays.asList(new Object[][] {
+						{"g", true}, {"", true}, {"-4", true}, {"1", true}, {"100", true},
+						{"g", false}, {"", false}, {"-4", false}, {"1", false}, {"100", false}
+				});
 	}
 
 	private final String queueLength;
+	private final boolean parallelism;
 
-	public InputStandingOvationRoundTest(String queueLength) {
+	public InputStandingOvationRoundTest(String queueLength, boolean parallelism) {
 		this.queueLength = queueLength;
+		this.parallelism = parallelism;
 	}
 
 	private RoundCreator creator;
@@ -33,7 +38,7 @@ public class InputStandingOvationRoundTest {
 	@Before
 	public void setUp()
 			throws Exception {
-		creator = new StandingOvationRoundCreator();
+		creator = new StandingOvationRoundCreator(parallelism);
 	}
 
 	@Test(expected = WrongRoundFormatException.class)

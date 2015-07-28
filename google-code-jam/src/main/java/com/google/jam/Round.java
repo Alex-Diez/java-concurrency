@@ -1,22 +1,30 @@
 package com.google.jam;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
+import java.util.ArrayDeque;
 import java.util.Collection;
-import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
+import java.util.Queue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Round {
 
-	private final BlockingQueue<String> roundTasks;
+	private final Queue<String> roundTasks;
 
-	public Round(final int queueLength, final Collection<String> tasks) {
-		roundTasks = new ArrayBlockingQueue<>(queueLength, true, tasks);
+	private final boolean parallelism;
+
+	public Round(final boolean parallelism, final int queueLength, final Collection<String> tasks) {
+		this.parallelism = parallelism;
+		roundTasks = parallelism ? new LinkedBlockingQueue<>(tasks) : new ArrayDeque<>(tasks);
+	}
+
+	public boolean inParallel() {
+		return parallelism;
 	}
 
 	public String getNextTask() {
 		return roundTasks.poll();
+	}
+
+	public int numberOfTasks() {
+		return roundTasks.size();
 	}
 }
