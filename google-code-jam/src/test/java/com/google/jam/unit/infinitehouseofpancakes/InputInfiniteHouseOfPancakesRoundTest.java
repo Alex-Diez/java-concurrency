@@ -1,27 +1,28 @@
-package com.google.jam;
+package com.google.jam.unit.infinitehouseofpancakes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.google.jam.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.RoundCreator;
+import com.google.jam.WrongRoundFormatException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
-import static org.junit.runners.Parameterized.Parameters;
-
 @RunWith(Parameterized.class)
-public class InputStandingOvationRoundTest {
+public class InputInfiniteHouseOfPancakesRoundTest {
 
-	@Parameters
+	@Parameterized.Parameters
 	public static Collection<Object[]> data() {
 		return Arrays.asList(new String[][] {{"g"}, {""}, {"-4"}, {"1"}, {"100"}});
 	}
 
 	private final String queueLength;
 
-	public InputStandingOvationRoundTest(String queueLength) {
+	public InputInfiniteHouseOfPancakesRoundTest(String queueLength) {
 		this.queueLength = queueLength;
 	}
 
@@ -30,7 +31,7 @@ public class InputStandingOvationRoundTest {
 	@Before
 	public void setUp()
 			throws Exception {
-		creator = new StandingOvationRoundCreator();
+		creator = new InfiniteHouseOfPancakesRoundCreator();
 	}
 
 	@Test(expected = WrongRoundFormatException.class)

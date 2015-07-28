@@ -2,9 +2,7 @@ package com.google.jam;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.SortedMap;
 import java.util.TreeMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -16,7 +14,7 @@ import static java.util.concurrent.Executors.newSingleThreadExecutor;
 public class StandingOvationResolver
 		implements AutoCloseable {
 
-	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors();
+	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
 
 	private final ExecutorService executor;
 

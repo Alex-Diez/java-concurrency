@@ -1,10 +1,11 @@
-package com.google.jam;
+package com.google.jam.unit.standingovation;
 
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.google.jam.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;

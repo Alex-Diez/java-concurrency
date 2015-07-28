@@ -1,4 +1,4 @@
-package com.google.jam;
+package com.google.jam.unit.infinitehouseofpancakes;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

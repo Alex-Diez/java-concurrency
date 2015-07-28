@@ -1,8 +1,11 @@
-package com.google.jam;
+package com.google.jam.unit.standingovation;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.google.jam.Round;
+import com.google.jam.RoundCreator;
+import com.google.jam.StandingOvationRoundCreator;
 import org.junit.Before;
 import org.junit.Test;
 

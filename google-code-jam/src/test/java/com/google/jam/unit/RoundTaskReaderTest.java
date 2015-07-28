@@ -1,5 +1,7 @@
-package com.google.jam;
+package com.google.jam.unit;
 
+import com.google.jam.RoundPathBuilder;
+import com.google.jam.RoundTaskReader;
 import org.junit.Before;
 import org.junit.Test;
 

@@ -1,4 +1,4 @@
-package com.google.jam;
+package com.google.jam.unit;
 
 import java.io.BufferedReader;
 import java.io.PipedReader;
@@ -6,6 +6,7 @@ import java.io.PipedWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.jam.ResultWriter;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.equalTo;

@@ -1,8 +1,11 @@
-package com.google.jam;
+package com.google.jam.benchmark;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
+import com.google.jam.Round;
+import com.google.jam.RoundCreator;
+import com.google.jam.RoundPathBuilder;
+import com.google.jam.RoundTaskReader;
+import com.google.jam.StandingOvationResolver;
+import com.google.jam.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -14,10 +17,9 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
-import org.openjdk.jmh.runner.Runner;
-import org.openjdk.jmh.runner.RunnerException;
-import org.openjdk.jmh.runner.options.Options;
-import org.openjdk.jmh.runner.options.OptionsBuilder;
+
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -25,11 +27,10 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Warmup(iterations = 5)
 @Measurement(iterations = 5)
 @Fork(1)
-public class StandingOvationResolverPerformanceTest {
+public class SingleThreadStandingOvationResolverPerformanceBenchmark {
 
 	private Round round;
 	private StandingOvationResolver resolver;
-	private StandingOvationResolver resolverParallel;
 
 	@Setup
 	public void setUp()
@@ -37,7 +38,6 @@ public class StandingOvationResolverPerformanceTest {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
 		final RoundCreator creator = new StandingOvationRoundCreator();
 		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		resolverParallel = new StandingOvationResolver(true);
 		resolver = new StandingOvationResolver(false);
 	}
 
@@ -45,25 +45,11 @@ public class StandingOvationResolverPerformanceTest {
 	public void tearDown()
 			throws Exception {
 		resolver.close();
-		resolverParallel.close();
 	}
 
 	@Benchmark
-	public Map<Integer, Integer> performanceOfSingleThreadStandingOvationResolverTaskSolvingProcess()
+	public Map<Integer, Integer> performanceOfTaskSolvingProcess()
 			throws Exception {
 		return resolver.solve(round);
-	}
-
-	@Benchmark
-	public Map<Integer, Integer> performanceOfMultiThreadStandingOvationResolverTaskSolvingProcess()
-			throws Exception {
-		return resolverParallel.solve(round);
-	}
-
-	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder()
-				.include(StandingOvationResolverPerformanceTest.class.getSimpleName())
-				.build();
-		new Runner(opt).run();
 	}
 }

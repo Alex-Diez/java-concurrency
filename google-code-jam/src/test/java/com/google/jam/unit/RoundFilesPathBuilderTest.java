@@ -1,7 +1,8 @@
-package com.google.jam;
+package com.google.jam.unit;
 
 import java.nio.file.Path;
 
+import com.google.jam.RoundPathBuilder;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;

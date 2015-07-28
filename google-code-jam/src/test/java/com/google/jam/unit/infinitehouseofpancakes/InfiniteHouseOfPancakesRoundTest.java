@@ -1,8 +1,9 @@
-package com.google.jam;
+package com.google.jam.unit.infinitehouseofpancakes;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.google.jam.Round;
 import org.junit.Test;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
