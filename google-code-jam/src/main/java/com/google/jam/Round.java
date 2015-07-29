@@ -1,6 +1,5 @@
 package com.google.jam;
 
-import java.util.ArrayDeque;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.Queue;
