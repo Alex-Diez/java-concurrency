@@ -1,11 +1,12 @@
-package com.google.jam.benchmark;
+package com.google.jam.benchmark.standingovation.singlethread;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.StandingOvationResolver;
-import com.google.jam.StandingOvationRoundCreator;
+import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationResolver;
+import com.google.jam.standingovation.StandingOvationResolver;
+import com.google.jam.standingovation.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -22,7 +23,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @State(Scope.Thread)
-@BenchmarkMode(Mode.AverageTime)
+@BenchmarkMode(Mode.Throughput)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
 @Warmup(iterations = 5)
 @Measurement(iterations = 5)
@@ -38,7 +39,7 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
 		final RoundCreator creator = new StandingOvationRoundCreator(false);
 		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		resolver = new StandingOvationResolver(false);
+		resolver = new SingleThreadStandingOvationResolver();
 	}
 
 	@TearDown

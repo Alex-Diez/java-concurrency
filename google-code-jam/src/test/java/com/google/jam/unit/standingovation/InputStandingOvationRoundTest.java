@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.jam.RoundCreator;
-import com.google.jam.StandingOvationRoundCreator;
+import com.google.jam.standingovation.StandingOvationRoundCreator;
 import com.google.jam.WrongRoundFormatException;
 import org.junit.Before;
 import org.junit.Test;

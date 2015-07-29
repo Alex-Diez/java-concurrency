@@ -1,8 +1,12 @@
-package com.google.jam;
+package com.google.jam.infinitehouseofpancakes;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
+import com.google.jam.Round;
+import com.google.jam.RoundCreator;
+import com.google.jam.WrongRoundFormatException;
 
 public class InfiniteHouseOfPancakesRoundCreator
 		implements RoundCreator {

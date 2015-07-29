@@ -1,30 +1,28 @@
-package com.google.jam;
+package com.google.jam.standingovation.multithread;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
+import com.google.jam.Round;
+import com.google.jam.standingovation.StandingOvationResolver;
+
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
-import static java.util.concurrent.Executors.newSingleThreadExecutor;
 
-public class StandingOvationResolver
-		implements AutoCloseable {
+public class MultiThreadStandingOvationResolver
+		implements StandingOvationResolver {
 
 	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
 
 	private final ExecutorService executor;
 
-	public StandingOvationResolver(final boolean parallel) {
-		this.executor = parallel ? newFixedThreadPool(NUMBER_OF_THREADS) : newSingleThreadExecutor();
+	public MultiThreadStandingOvationResolver() {
+		this.executor = newFixedThreadPool(NUMBER_OF_THREADS);
 	}
 
 	public Map<Integer, Integer> solve(final Round round) {
-		final Map<Integer, Integer> asynchronousResults =
-				round.inParallel()
-						? new ConcurrentHashMap<>(round.numberOfTasks())
-						: new HashMap<>(round.numberOfTasks());
+		final Map<Integer, Integer> asynchronousResults = new ConcurrentHashMap<>(round.numberOfTasks(), 1.0f);
 		String taskString = round.getNextTask();
 		int taskCounter = 1;
 		while (taskString != null) {
@@ -47,18 +45,10 @@ public class StandingOvationResolver
 							value = Character.digit(audience.charAt(currentShineLevel), 10);
 						}
 						asynchronousResults.put(index, counter);
-						System.out.println(
-								"Tread " + Thread.currentThread().getId() + " size - " + asynchronousResults.size()
-						);
 					}
 			);
 			taskString = round.getNextTask();
 		}
-		int size;
-		do {
-			size = asynchronousResults.size();
-			System.out.println("Size - " + size);
-		} while (size < round.numberOfTasks());
 		return asynchronousResults;
 	}
 

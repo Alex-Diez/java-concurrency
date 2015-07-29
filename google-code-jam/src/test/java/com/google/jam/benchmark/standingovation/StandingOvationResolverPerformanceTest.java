@@ -1,5 +1,7 @@
-package com.google.jam.benchmark;
+package com.google.jam.benchmark.standingovation;
 
+import com.google.jam.benchmark.standingovation.multithread.MultiThreadStandingOvationResolverPerformanceBenchmark;
+import com.google.jam.benchmark.standingovation.singlethread.SingleThreadStandingOvationResolverPerformanceBenchmark;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;

@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
-import com.google.jam.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.RoundCreator;
 import com.google.jam.WrongRoundFormatException;
 import org.junit.Before;

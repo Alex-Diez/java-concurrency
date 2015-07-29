@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
-import com.google.jam.StandingOvationRoundCreator;
+import com.google.jam.standingovation.StandingOvationRoundCreator;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
