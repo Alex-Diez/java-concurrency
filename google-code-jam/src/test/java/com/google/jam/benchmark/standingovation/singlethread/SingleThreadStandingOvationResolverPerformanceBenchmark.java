@@ -3,9 +3,10 @@ package com.google.jam.benchmark.standingovation.singlethread;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
+import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationResolver;
-import com.google.jam.standingovation.StandingOvationResolver;
+import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationResolverRound;
+import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -31,7 +32,7 @@ import java.util.concurrent.TimeUnit;
 public class SingleThreadStandingOvationResolverPerformanceBenchmark {
 
 	private Round round;
-	private StandingOvationResolver resolver;
+	private RoundResolver resolver;
 
 	@Setup
 	public void setUp()
@@ -39,13 +40,7 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
 		final RoundCreator creator = new StandingOvationRoundCreator(false);
 		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		resolver = new SingleThreadStandingOvationResolver();
-	}
-
-	@TearDown
-	public void tearDown()
-			throws Exception {
-		resolver.close();
+		resolver = new SingleThreadStandingOvationResolverRound();
 	}
 
 	@Benchmark

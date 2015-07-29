@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.google.jam.Round;
-import com.google.jam.standingovation.StandingOvationResolver;
+import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 
-public class SingleThreadStandingOvationResolver
-		extends StandingOvationResolver {
+public class SingleThreadStandingOvationResolverRound
+		extends AbstractStandingOvationRoundResolver {
 
 	@Override
 	protected void runCalculation(Map<Integer, Integer> results, int index, String task) {
@@ -17,10 +17,5 @@ public class SingleThreadStandingOvationResolver
 	@Override
 	protected Map<Integer, Integer> buildCollectionOfResults(Round round) {
 		return new HashMap<>(round.numberOfTasks(), 1.0f);
-	}
-
-	@Override
-	public void close()
-			throws Exception {
 	}
 }

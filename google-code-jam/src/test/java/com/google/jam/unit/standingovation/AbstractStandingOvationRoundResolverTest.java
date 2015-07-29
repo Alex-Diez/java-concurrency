@@ -1,42 +1,28 @@
-package com.google.jam.unit.standingovation.multithread;
+package com.google.jam.unit.standingovation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.google.jam.standingovation.multithread.MultiThreadStandingOvationResolver;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
+import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.standingovation.StandingOvationResolver;
-import com.google.jam.standingovation.StandingOvationRoundCreator;
 
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.number.OrderingComparison.lessThanOrEqualTo;
 
-public class MultiThreadStandingOvationResolverTest {
-
-	private RoundCreator creator;
-	private StandingOvationResolver resolver;
-
-	@Before
-	public void setUp()
-			throws Exception {
-		resolver = new MultiThreadStandingOvationResolver();
-		creator = new StandingOvationRoundCreator(true);
-	}
+public abstract class AbstractStandingOvationRoundResolverTest {
 
 	@Test
 	public void testTaskSolvingProcess()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'A', "small", "test");
-		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		final Map<Integer, Integer> resolverResults = resolver.solve(round);
+		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
+		final Map<Integer, Integer> resolverResults = getResolver().solve(round);
 		Map<Integer, Integer> results = new LinkedHashMap<>();
 		results.put(1, 0);
 		results.put(2, 1);
@@ -49,8 +35,8 @@ public class MultiThreadStandingOvationResolverTest {
 	public void testNoNegativeValueInSmallRoundSolution()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
-		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		final Map<Integer, Integer> resolverResults = resolver.solve(round);
+		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
+		final Map<Integer, Integer> resolverResults = getResolver().solve(round);
 		for (Map.Entry<Integer, Integer> result : resolverResults.entrySet()) {
 			assertThat("Negative value on " + result.getKey() + " line", 0, lessThanOrEqualTo(result.getValue()));
 		}
@@ -60,16 +46,14 @@ public class MultiThreadStandingOvationResolverTest {
 	public void testNoNegativeValueInLargeRoundSolution()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
-		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		final Map<Integer, Integer> resolverResults = resolver.solve(round);
+		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
+		final Map<Integer, Integer> resolverResults = getResolver().solve(round);
 		for (Map.Entry<Integer, Integer> result : resolverResults.entrySet()) {
 			assertThat("Negative value on " + result.getKey() + " line", 0, lessThanOrEqualTo(result.getValue()));
 		}
 	}
 
-	@After
-	public void tearDown()
-			throws Exception {
-		resolver.close();
-	}
+	protected abstract RoundResolver getResolver();
+
+	protected abstract RoundCreator getCreator();
 }

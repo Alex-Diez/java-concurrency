@@ -4,20 +4,22 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 
+import com.google.jam.MultiThreadRoundResolver;
 import com.google.jam.Round;
-import com.google.jam.standingovation.StandingOvationResolver;
+import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
-public class MultiThreadStandingOvationResolver
-		extends StandingOvationResolver {
+public class MultiThreadStandingOvationRoundResolver
+		extends AbstractStandingOvationRoundResolver
+		implements MultiThreadRoundResolver {
 
 	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
 
 	private final ExecutorService executor;
 
-	public MultiThreadStandingOvationResolver() {
+	public MultiThreadStandingOvationRoundResolver() {
 		this.executor = newFixedThreadPool(NUMBER_OF_THREADS);
 	}
 
@@ -31,8 +33,7 @@ public class MultiThreadStandingOvationResolver
 	}
 
 	@Override
-	public void close()
-			throws Exception {
+	public void shutdownThreadPool() {
 		executor.shutdown();
 	}
 }

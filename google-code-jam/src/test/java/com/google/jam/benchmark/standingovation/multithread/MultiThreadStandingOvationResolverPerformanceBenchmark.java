@@ -1,11 +1,11 @@
 package com.google.jam.benchmark.standingovation.multithread;
 
-import com.google.jam.standingovation.multithread.MultiThreadStandingOvationResolver;
+import com.google.jam.MultiThreadRoundResolver;
+import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.standingovation.StandingOvationResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -30,7 +30,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(1)
 public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 
-	private StandingOvationResolver resolver;
+	private MultiThreadRoundResolver resolver;
 	private Round round;
 
 	@Setup
@@ -39,13 +39,13 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
 		final RoundCreator creator = new StandingOvationRoundCreator(true);
 		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		resolver = new MultiThreadStandingOvationResolver();
+		resolver = new MultiThreadStandingOvationRoundResolver();
 	}
 
 	@TearDown
 	public void tearDown()
 			throws Exception {
-		resolver.close();
+		resolver.shutdownThreadPool();
 	}
 
 	@Benchmark

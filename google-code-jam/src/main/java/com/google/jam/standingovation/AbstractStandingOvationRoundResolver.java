@@ -3,10 +3,12 @@ package com.google.jam.standingovation;
 import java.util.Map;
 
 import com.google.jam.Round;
+import com.google.jam.RoundResolver;
 
-public abstract class StandingOvationResolver
-		implements AutoCloseable {
+public abstract class AbstractStandingOvationRoundResolver
+		implements RoundResolver {
 
+	@Override
 	public Map<Integer, Integer> solve(final Round round) {
 		final Map<Integer, Integer> results = buildCollectionOfResults(round);
 		String taskString = round.getNextTask();
@@ -24,7 +26,7 @@ public abstract class StandingOvationResolver
 
 	protected void doCalculation(final Map<Integer, Integer> results, final int index, final String task) {
 		int counter = 0;
-		int previousCounter = 0;
+		int previousCounter;
 		int allPeople = 0;
 		final String audience = task.split("\\s+")[1];
 		int value = Character.digit(audience.charAt(0), 10);

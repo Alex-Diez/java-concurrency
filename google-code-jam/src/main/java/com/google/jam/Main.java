@@ -4,9 +4,9 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.util.Map;
 
-import com.google.jam.standingovation.StandingOvationResolver;
+import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
-import com.google.jam.standingovation.multithread.MultiThreadStandingOvationResolver;
+import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 
 public class Main {
 
@@ -15,7 +15,7 @@ public class Main {
 		RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
 		RoundCreator creator = new StandingOvationRoundCreator(true);
 		Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-		StandingOvationResolver resolver = new MultiThreadStandingOvationResolver();
+		AbstractStandingOvationRoundResolver resolver = new MultiThreadStandingOvationRoundResolver();
 		Map<Integer, Integer> smallResult = resolver.solve(smallRound);
 		ResultWriter smallResultWriter = new ResultWriter(smallResult);
 		BufferedWriter smallWriter = new BufferedWriter(new FileWriter("small"));
