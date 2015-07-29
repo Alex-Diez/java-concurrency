@@ -35,7 +35,7 @@ public class InfiniteHouseOfPancakesRoundTest {
 	@Test
 	public void testCreateStandingOvationRound()
 			throws Exception {
-		final Round r = new Round(parallelism, 3, new ArrayList<>(Arrays.asList("1\n3","4\n1 2 1 2","1\n4")));
+		final Round r = new Round(parallelism, new ArrayList<>(Arrays.asList("1\n3","4\n1 2 1 2","1\n4")));
 		final String task = r.getNextTask();
 		assertThat(task, matchesPattern("^([0-9])\\n(([0-9] )*([0-9]))"));
 	}

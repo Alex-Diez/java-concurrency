@@ -28,6 +28,6 @@ public class InfiniteHouseOfPancakesRoundCreator
 		for (int i = 0; i < strings.size() - 1; i += 2) {
 			tasks.add(strings.get(i) + '\n' + strings.get(i + 1));
 		}
-		return new Round(false, queueLength, tasks);
+		return new Round(false, tasks);
 	}
 }

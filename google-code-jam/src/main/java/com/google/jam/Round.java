@@ -10,7 +10,7 @@ public class Round {
 
 	private final Queue<String> roundTasks;
 
-	public Round(final boolean parallelism, final int queueLength, final Collection<String> tasks) {
+	public Round(final boolean parallelism, final Collection<String> tasks) {
 		roundTasks = parallelism ? new LinkedBlockingQueue<>(tasks) : new LinkedList<>(tasks);
 	}
 

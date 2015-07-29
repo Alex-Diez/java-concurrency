@@ -4,7 +4,6 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.jam.Round;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -35,7 +34,7 @@ public class StandingOvationRoundTest {
 	@Test
 	public void testCreateStandingOvationRound()
 			throws Exception {
-		final Round round = new Round(parallelism, 4, Arrays.asList("4 11111", "1 09", "5 110011", "0 1"));
+		final Round round = new Round(parallelism, Arrays.asList("4 11111", "1 09", "5 110011", "0 1"));
 		final String task = round.getNextTask();
 		assertThat(task, matchesPattern("^([0-9]*) ([0-9]*)$"));
 	}

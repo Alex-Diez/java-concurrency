@@ -29,6 +29,6 @@ public class StandingOvationRoundCreator
 		if(queueLength != strings.size()) {
 			throw new WrongRoundFormatException();
 		}
-		return new Round(parallelism, queueLength, strings);
+		return new Round(parallelism, strings);
 	}
 }
