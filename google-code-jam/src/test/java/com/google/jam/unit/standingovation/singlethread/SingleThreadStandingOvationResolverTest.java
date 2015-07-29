@@ -2,7 +2,7 @@ package com.google.jam.unit.standingovation.singlethread;
 
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundResolver;
-import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationResolverRound;
+import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import com.google.jam.unit.standingovation.AbstractStandingOvationRoundResolverTest;
 
@@ -17,7 +17,7 @@ public class SingleThreadStandingOvationResolverTest
 	@Before
 	public void setUp()
 			throws Exception {
-		resolver = new SingleThreadStandingOvationResolverRound();
+		resolver = new SingleThreadStandingOvationRoundResolver();
 		creator = new StandingOvationRoundCreator(false);
 	}
 

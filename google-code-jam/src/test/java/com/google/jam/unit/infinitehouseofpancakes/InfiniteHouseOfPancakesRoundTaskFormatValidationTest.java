@@ -18,6 +18,6 @@ public class InfiniteHouseOfPancakesRoundTaskFormatValidationTest {
 		InfiniteHouseOfPancakesRoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
 		Round round = creator.createRound(new ArrayList<>(Arrays.asList("3", "1", "3", "4", "1 2 1 2", "1", "4")));
 		String task = round.getNextTask();
-		assertThat(task, matchesPattern("^([0-9])\\n(([0-9] )*([0-9]))"));
+		assertThat(task, matchesPattern("^([0-9]) (([0-9] )*([0-9]))"));
 	}
 }

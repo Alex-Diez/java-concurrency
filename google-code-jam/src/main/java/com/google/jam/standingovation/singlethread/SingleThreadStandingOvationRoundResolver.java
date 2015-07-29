@@ -6,7 +6,7 @@ import java.util.Map;
 import com.google.jam.Round;
 import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 
-public class SingleThreadStandingOvationResolverRound
+public class SingleThreadStandingOvationRoundResolver
 		extends AbstractStandingOvationRoundResolver {
 
 	@Override
@@ -17,5 +17,9 @@ public class SingleThreadStandingOvationResolverRound
 	@Override
 	protected Map<Integer, Integer> buildCollectionOfResults(Round round) {
 		return new HashMap<>(round.numberOfTasks(), 1.0f);
+	}
+
+	@Override
+	protected void timeOut() {
 	}
 }

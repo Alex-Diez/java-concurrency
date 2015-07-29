@@ -1,30 +1,41 @@
 package com.google.jam;
 
 import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
-import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
+import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
-import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
+import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
 
 public class Main {
 
 	public static void main(String[] args)
 			throws Exception {
-		RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
-		RoundCreator creator = new StandingOvationRoundCreator(true);
+		RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'B', "small", "practice");
+		RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
 		Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-		AbstractStandingOvationRoundResolver resolver = new MultiThreadStandingOvationRoundResolver();
+		RoundResolver resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
 		Map<Integer, Integer> smallResult = resolver.solve(smallRound);
 		ResultWriter smallResultWriter = new ResultWriter(smallResult);
-		BufferedWriter smallWriter = new BufferedWriter(new FileWriter("small"));
+		Path pathToSmall = Paths.get("small");
+		if (Files.exists(pathToSmall)) {
+			Files.delete(pathToSmall);
+		}
+		BufferedWriter smallWriter = Files.newBufferedWriter(pathToSmall);
 		smallResultWriter.writeTo(smallWriter);
-		RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
+		RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'B', "large", "practice");
 		Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
 		Map<Integer, Integer> largeResult = resolver.solve(largeRound);
 		ResultWriter largeResultWriter = new ResultWriter(largeResult);
-		BufferedWriter largeWriter = new BufferedWriter(new FileWriter("large"));
+		Path pathToLarge = Paths.get("large");
+		if (Files.exists(pathToLarge)) {
+			Files.delete(pathToLarge);
+		}
+		BufferedWriter largeWriter = Files.newBufferedWriter(pathToLarge);
 		largeResultWriter.writeTo(largeWriter);
 		System.exit(0);
 	}

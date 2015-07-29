@@ -19,8 +19,11 @@ public abstract class AbstractStandingOvationRoundResolver
 			runCalculation(results, index, task);
 			taskString = round.getNextTask();
 		}
+		timeOut();
 		return results;
 	}
+
+	protected abstract void timeOut();
 
 	protected abstract void runCalculation(final Map<Integer, Integer> results, final int index, final String task);
 

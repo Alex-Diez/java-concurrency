@@ -36,4 +36,14 @@ public class MultiThreadStandingOvationRoundResolver
 	public void shutdownThreadPool() {
 		executor.shutdown();
 	}
+
+	@Override
+	protected void timeOut() {
+		try {
+			Thread.sleep((long)(1.0 / (NUMBER_OF_THREADS-1) * 90));
+		}
+		catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+	}
 }
