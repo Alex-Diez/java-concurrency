@@ -25,8 +25,9 @@ public class Main {
 		if (Files.exists(pathToSmall)) {
 			Files.delete(pathToSmall);
 		}
-		BufferedWriter smallWriter = Files.newBufferedWriter(pathToSmall);
-		smallResultWriter.writeTo(smallWriter);
+		try (BufferedWriter smallWriter = Files.newBufferedWriter(pathToSmall)) {
+			smallResultWriter.writeTo(smallWriter);
+		}
 		RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'B', "large", "practice");
 		Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
 		Map<Integer, Integer> largeResult = resolver.solve(largeRound);
@@ -35,8 +36,9 @@ public class Main {
 		if (Files.exists(pathToLarge)) {
 			Files.delete(pathToLarge);
 		}
-		BufferedWriter largeWriter = Files.newBufferedWriter(pathToLarge);
-		largeResultWriter.writeTo(largeWriter);
+		try (BufferedWriter largeWriter = Files.newBufferedWriter(pathToLarge)) {
+			largeResultWriter.writeTo(largeWriter);
+		}
 		System.exit(0);
 	}
 }
