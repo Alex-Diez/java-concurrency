@@ -3,6 +3,7 @@ package com.google.jam.standingovation.multithread;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.google.jam.MultiThreadRoundResolver;
 import com.google.jam.Round;
@@ -18,14 +19,15 @@ public class MultiThreadStandingOvationRoundResolver
 	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
 
 	private final ExecutorService executor;
+	private final AtomicInteger indexCounter = new AtomicInteger(1);
 
 	public MultiThreadStandingOvationRoundResolver() {
 		this.executor = newFixedThreadPool(NUMBER_OF_THREADS);
 	}
 
 	@Override
-	protected void runCalculation(final Map<Integer, Integer> results, final int index, final String task) {
-		executor.execute(() -> doCalculation(results, index, task));
+	public void shutdownThreadPool() {
+		executor.shutdown();
 	}
 
 	protected Map<Integer, Integer> buildCollectionOfResults(Round round) {
@@ -33,8 +35,20 @@ public class MultiThreadStandingOvationRoundResolver
 	}
 
 	@Override
-	public void shutdownThreadPool() {
-		executor.shutdown();
+	protected void resetTaskCounter() {
+		indexCounter.set(1);
+	}
+
+	@Override
+	protected void runCalculation(final Map<Integer, Integer> results, final Round round) {
+		executor.execute(() -> {
+					int index = indexCounter.getAndIncrement();
+					String task = round.getNextTask();
+					if(task != null) {
+						doCalculation(results, index, task);
+					}
+				}
+		);
 	}
 
 	@Override

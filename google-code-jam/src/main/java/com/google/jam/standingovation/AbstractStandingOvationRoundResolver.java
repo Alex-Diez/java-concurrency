@@ -11,21 +11,21 @@ public abstract class AbstractStandingOvationRoundResolver
 	@Override
 	public Map<Integer, Integer> solve(final Round round) {
 		final Map<Integer, Integer> results = buildCollectionOfResults(round);
-		String taskString = round.getNextTask();
-		int taskCounter = 1;
-		while (taskString != null) {
-			final int index = taskCounter++;
-			final String task = taskString;
-			runCalculation(results, index, task);
-			taskString = round.getNextTask();
+		resetTaskCounter();
+		while (round.hasNextTask()) {
+			runCalculation(results, round);
 		}
 		timeOut();
 		return results;
 	}
 
-	protected abstract void timeOut();
+	protected abstract Map<Integer, Integer> buildCollectionOfResults(Round round);
 
-	protected abstract void runCalculation(final Map<Integer, Integer> results, final int index, final String task);
+	protected abstract void resetTaskCounter();
+
+	protected abstract void runCalculation(final Map<Integer, Integer> results, final Round round);
+
+	protected abstract void timeOut();
 
 	protected void doCalculation(final Map<Integer, Integer> results, final int index, final String task) {
 		int counter = 0;
@@ -44,6 +44,4 @@ public abstract class AbstractStandingOvationRoundResolver
 		}
 		results.put(index, counter);
 	}
-
-	protected abstract Map<Integer, Integer> buildCollectionOfResults(Round round);
 }
