@@ -2,7 +2,9 @@ package com.google.jam.infinitehouseofpancakes;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
@@ -24,9 +26,9 @@ public class InfiniteHouseOfPancakesRoundCreator
 		if (queueLength != strings.size() / 2) {
 			throw new WrongRoundFormatException();
 		}
-		Collection<String> tasks = new ArrayList<>(strings.size() / 2);
+		Map<Integer, String> tasks = new HashMap<>(strings.size() / 2);
 		for (int i = 0; i < strings.size() - 1; i += 2) {
-			tasks.add(strings.get(i) + ' ' + strings.get(i + 1));
+			tasks.put(i+1, strings.get(i) + ' ' + strings.get(i + 1));
 		}
 		return new Round(false, tasks);
 	}

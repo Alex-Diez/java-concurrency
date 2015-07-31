@@ -17,7 +17,7 @@ public class InfiniteHouseOfPancakesRoundTaskFormatValidationTest {
 			throws Exception {
 		InfiniteHouseOfPancakesRoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
 		Round round = creator.createRound(new ArrayList<>(Arrays.asList("3", "1", "3", "4", "1 2 1 2", "1", "4")));
-		String task = round.getNextTask();
+		String task = round.getNextTask().getValue();
 		assertThat(task, matchesPattern("^([0-9]) (([0-9] )*([0-9]))"));
 	}
 }

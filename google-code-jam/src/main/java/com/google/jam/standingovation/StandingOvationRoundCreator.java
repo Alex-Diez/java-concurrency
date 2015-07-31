@@ -2,7 +2,11 @@ package com.google.jam.standingovation;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
@@ -31,6 +35,10 @@ public class StandingOvationRoundCreator
 		if(queueLength != strings.size()) {
 			throw new WrongRoundFormatException();
 		}
-		return new Round(parallelism, strings);
+		Map<Integer, String> tasks = new HashMap<>(strings.size());
+		for (int i = 0; i < strings.size(); i++) {
+			tasks.put(i+1, strings.get(i));
+		}
+		return new Round(parallelism, tasks);
 	}
 }

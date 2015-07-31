@@ -10,16 +10,9 @@ import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 public class SingleThreadStandingOvationRoundResolver
 		extends AbstractStandingOvationRoundResolver {
 
-	private int indexCounter = 1;
-
 	@Override
 	protected Map<Integer, Integer> buildCollectionOfResults(final Round round) {
 		return new HashMap<>(round.numberOfTasks(), 1.0f);
-	}
-
-	@Override
-	protected void resetTaskCounter() {
-		indexCounter = 1;
 	}
 
 	@Override
@@ -27,10 +20,9 @@ public class SingleThreadStandingOvationRoundResolver
 			final Map<Integer, Integer> results,
 			final Round round,
 			final Function<String, Integer> algorithm) {
-		doCalculation(results, indexCounter++, round.getNextTask(), algorithm);
-	}
-
-	@Override
-	protected void timeOut() {
+		final Map.Entry<Integer, String> task = round.getNextTask();
+		final int index = task.getKey();
+		final String data = task.getValue();
+		doCalculation(results, index, data, algorithm);
 	}
 }

@@ -12,24 +12,18 @@ public abstract class AbstractStandingOvationRoundResolver
 	@Override
 	public Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm) {
 		final Map<Integer, Integer> results = buildCollectionOfResults(round);
-		resetTaskCounter();
 		while (round.hasNextTask()) {
 			runCalculation(results, round, algorithm);
 		}
-		timeOut();
 		return results;
 	}
 
 	protected abstract Map<Integer, Integer> buildCollectionOfResults(Round round);
 
-	protected abstract void resetTaskCounter();
-
 	protected abstract void runCalculation(
 			final Map<Integer, Integer> results,
 			final Round round,
 			final Function<String, Integer> algorithm);
-
-	protected abstract void timeOut();
 
 	protected void doCalculation(
 			final Map<Integer, Integer> results,

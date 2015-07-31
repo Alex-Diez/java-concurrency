@@ -20,7 +20,6 @@ public class MultiThreadStandingOvationRoundResolver
 	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
 
 	private final ExecutorService executor;
-	private final AtomicInteger indexCounter = new AtomicInteger(1);
 
 	public MultiThreadStandingOvationRoundResolver() {
 		this.executor = newFixedThreadPool(NUMBER_OF_THREADS);
@@ -36,33 +35,19 @@ public class MultiThreadStandingOvationRoundResolver
 	}
 
 	@Override
-	protected void resetTaskCounter() {
-		indexCounter.set(1);
-	}
-
-	@Override
 	protected void runCalculation(
 			final Map<Integer, Integer> results,
 			final Round round,
 			final Function<String, Integer> algorithm) {
 		executor.execute(
 				() -> {
-					int index = indexCounter.getAndIncrement();
-					String task = round.getNextTask();
+					final Map.Entry<Integer, String> task = round.getNextTask();
 					if (task != null) {
-						doCalculation(results, index, task, algorithm);
+						final int index = task.getKey();
+						final String data = task.getValue();
+						doCalculation(results, index, data, algorithm);
 					}
 				}
 		);
-	}
-
-	@Override
-	protected void timeOut() {
-		try {
-			Thread.sleep((long) (1.0 / (NUMBER_OF_THREADS - 1) * 90));
-		}
-		catch (InterruptedException e) {
-			e.printStackTrace();
-		}
 	}
 }

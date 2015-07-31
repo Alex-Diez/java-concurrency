@@ -16,11 +16,10 @@ public class SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce
 	@Override
 	public Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm) {
 		final Map<Integer, Integer> results = new HashMap<>(round.numberOfTasks());
-		String task = round.getNextTask();
-		int taskCounter = 1;
+		Map.Entry<Integer, String> task = round.getNextTask();
 		while (task != null) {
-			final int index = taskCounter++;
-			int[] valuesOfPancakes = convertRoundTaskToNumbers(task);
+			final int index = task.getKey();
+			int[] valuesOfPancakes = convertRoundTaskToNumbers(task.getValue());
 			Arrays.sort(valuesOfPancakes);
 			int max = valuesOfPancakes[valuesOfPancakes.length - 1];
 			if (max < MIN_NUMBER_TO_DIVIDE) {

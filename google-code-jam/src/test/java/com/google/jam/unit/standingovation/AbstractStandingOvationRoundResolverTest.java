@@ -59,6 +59,7 @@ public abstract class AbstractStandingOvationRoundResolverTest {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
 		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
 		final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);
+		assertThat(100, is(resolverResults.size()));
 		final Map<Integer, Integer> results = buildResultForSmallTasksSize();
 		assertThat(resolverResults, is(results));
 	}
@@ -69,6 +70,7 @@ public abstract class AbstractStandingOvationRoundResolverTest {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
 		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
 		final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);
+		assertThat(100, is(resolverResults.size()));
 		final Map<Integer, Integer> results = buildResultForLargeTasksSize();
 		assertThat(resolverResults, is(results));
 	}
