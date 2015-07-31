@@ -40,23 +40,21 @@ public abstract class AbstractStandingOvationRoundResolver
 		results.put(index, counter);
 	}
 
-	public static final class BackwardCountingAlgorithm
+	public static final class StandingOvationContestAnalysisAlgorithm
 			implements Function<String, Integer> {
 
 		@Override
 		public Integer apply(String task) {
 			final String[] array = task.split("\\s+");
-			final int last = Integer.parseInt(array[0]);
+			final int shineMaxLevel = Integer.parseInt(array[0]);
 			final String audience = array[1];
-			int value = last;
-			for (int currentShineLevel = last - 1; currentShineLevel > -1; currentShineLevel--) {
-				final int currentValue = Character.digit(audience.charAt(currentShineLevel), 10);
-				value -= currentValue;
-				if (value < 0) {
-					value = currentShineLevel;
-				}
+			int temp = 0;
+			int value = 0;
+			for (int currentShineLevel = 0; currentShineLevel < shineMaxLevel + 1; currentShineLevel++) {
+				value = Math.max(value, currentShineLevel - temp);
+				temp += audience.charAt(currentShineLevel) - '0';
 			}
-			return value > -1 ? value : 0;
+			return value;
 		}
 	}
 
@@ -69,17 +67,26 @@ public abstract class AbstractStandingOvationRoundResolver
 			int previousCounter;
 			int allPeople = 0;
 			final String audience = task.split("\\s+")[1];
-			int value = Character.digit(audience.charAt(0), 10);
+			int value = retrieveIntFromChar(audience, 0);
 			for (int currentShineLevel = 1; currentShineLevel < audience.length(); currentShineLevel++) {
 				previousCounter = counter;
 				allPeople += value;
-				counter += currentShineLevel - allPeople > 0 ? currentShineLevel - allPeople : 0;
+				final int needNewPeople = needNewPeople(allPeople, currentShineLevel);
+				counter += needNewPeople > 0 ? needNewPeople : 0;
 				if (previousCounter < counter) {
 					allPeople += counter - previousCounter;
 				}
-				value = Character.digit(audience.charAt(currentShineLevel), 10);
+				value = retrieveIntFromChar(audience, currentShineLevel);
 			}
 			return counter;
+		}
+
+		private int retrieveIntFromChar(String audience, int currentShineLevel) {
+			return audience.charAt(currentShineLevel) - '0';
+		}
+
+		private int needNewPeople(final int allPeople, final int currentShineLevel) {
+			return currentShineLevel - allPeople;
 		}
 	}
 }

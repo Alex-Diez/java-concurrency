@@ -1,6 +1,10 @@
 package com.google.jam.benchmark.standingovation.multithread;
 
 import com.google.jam.MultiThreadRoundResolver;
+import com.google.jam.ResultWriter;
+import com.google.jam.RoundResolver;
+import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
 import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import com.google.jam.Round;
@@ -21,6 +25,10 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
 
+import java.io.BufferedWriter;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -33,7 +41,7 @@ import java.util.function.Function;
 @Fork(1)
 public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 
-	@Param({"forward", "backward"})
+	@Param({"forward", "StandingOvationContestAnalysis"})
 	private String algorithmType;
 
 	private MultiThreadRoundResolver resolver;
@@ -49,7 +57,7 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 		resolver = new MultiThreadStandingOvationRoundResolver();
 		algorithm = algorithmType.equals("forward")
 				? new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm()
-				: new AbstractStandingOvationRoundResolver.BackwardCountingAlgorithm();
+				: new AbstractStandingOvationRoundResolver.StandingOvationContestAnalysisAlgorithm();
 	}
 
 	@TearDown
@@ -61,6 +69,22 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 	@Benchmark
 	public Map<Integer, Integer> performanceOfTaskSolvingProcess()
 			throws Exception {
-		return resolver.solve(round, algorithm);
+		Map<Integer, Integer> result = resolver.solve(round, algorithm);
+		assert result.size() == 100;
+		return result;
+	}
+
+	@Benchmark
+	public Map<Integer, Integer> performanceOfWholeProcess()
+			throws Exception {
+		RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
+		RoundCreator creator = new StandingOvationRoundCreator(true);
+		Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
+		RoundResolver resolver = new MultiThreadStandingOvationRoundResolver();
+		Map<Integer, Integer> smallResult = resolver.solve(smallRound, new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm());
+		ResultWriter smallResultWriter = new ResultWriter(smallResult);
+		RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
+		Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
+		return resolver.solve(largeRound, new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm());
 	}
 }

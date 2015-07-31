@@ -1,11 +1,13 @@
 package com.google.jam.benchmark.standingovation.singlethread;
 
+import com.google.jam.ResultWriter;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
+import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -32,7 +34,7 @@ import java.util.function.Function;
 @Fork(1)
 public class SingleThreadStandingOvationResolverPerformanceBenchmark {
 
-	@Param({"forward", "backward"})
+	@Param({"forward", "StandingOvationContestAnalysis"})
 	private String algorithmType;
 
 	private Round round;
@@ -48,12 +50,28 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
 		resolver = new SingleThreadStandingOvationRoundResolver();
 		algorithm = algorithmType.equals("forward")
 				? new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm()
-				: new AbstractStandingOvationRoundResolver.BackwardCountingAlgorithm();
+				: new AbstractStandingOvationRoundResolver.StandingOvationContestAnalysisAlgorithm();
 	}
 
 	@Benchmark
 	public Map<Integer, Integer> performanceOfTaskSolvingProcess()
 			throws Exception {
-		return resolver.solve(round, algorithm);
+		Map<Integer, Integer> result = resolver.solve(round, algorithm);
+		assert result.size() == 100;
+		return result;
+	}
+
+	@Benchmark
+	public Map<Integer, Integer> performanceOfWholeProcess()
+			throws Exception {
+		RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
+		RoundCreator creator = new StandingOvationRoundCreator(false);
+		Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
+		RoundResolver resolver = new SingleThreadStandingOvationRoundResolver();
+		Map<Integer, Integer> smallResult = resolver.solve(smallRound, new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm());
+		ResultWriter smallResultWriter = new ResultWriter(smallResult);
+		RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
+		Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
+		return resolver.solve(largeRound, new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm());
 	}
 }

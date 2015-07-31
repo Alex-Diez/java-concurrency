@@ -28,7 +28,7 @@ public abstract class AbstractStandingOvationRoundResolverTest {
 		return Arrays.asList(
 				new Object[][] {
 						{new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm()},
-						{new AbstractStandingOvationRoundResolver.BackwardCountingAlgorithm()}
+						{new AbstractStandingOvationRoundResolver.StandingOvationContestAnalysisAlgorithm()}
 				}
 		);
 	}

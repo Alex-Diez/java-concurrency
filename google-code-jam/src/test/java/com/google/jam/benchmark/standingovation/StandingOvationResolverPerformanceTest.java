@@ -13,7 +13,7 @@ public class StandingOvationResolverPerformanceTest {
 		Options opt = new OptionsBuilder()
 				.include(SingleThreadStandingOvationResolverPerformanceBenchmark.class.getSimpleName())
 				.include(MultiThreadStandingOvationResolverPerformanceBenchmark.class.getSimpleName())
-				.param("args", "forward", "backward")
+				.param("args", "forward", "StandingOvationContestAnalysis")
 				.build();
 		new Runner(opt).run();
 	}
