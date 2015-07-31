@@ -81,12 +81,10 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 		RoundCreator creator = new StandingOvationRoundCreator(true);
 		Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
 		MultiThreadRoundResolver resolver = new MultiThreadStandingOvationRoundResolver();
-		Map<Integer, Integer> smallResult = resolver.solve(smallRound, algorithm);
-		assert smallResult.size() == 100;
+		resolver.solve(smallRound, algorithm);
 		RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
 		Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
-		Map<Integer, Integer> largeResult =  resolver.solve(largeRound, algorithm);
-		assert largeResult.size() == 100;
+		Map<Integer, Integer> largeResult = resolver.solve(largeRound, algorithm);
 		resolver.shutdownThreadPool();
 		return largeResult;
 	}
