@@ -1,11 +1,9 @@
 package com.google.jam.infinitehouseofpancakes.singlethread;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.jam.Round;
 import com.google.jam.RoundResolver;
@@ -16,7 +14,7 @@ public class SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce
 	public static final int MIN_NUMBER_TO_DIVIDE = 3;
 
 	@Override
-	public Map<Integer, Integer> solve(final Round round) {
+	public Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm) {
 		final Map<Integer, Integer> results = new HashMap<>(round.numberOfTasks());
 		String task = round.getNextTask();
 		int taskCounter = 1;

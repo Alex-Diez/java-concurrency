@@ -1,5 +1,7 @@
 package com.google.jam.unit.standingovation.multithread;
 
+import java.util.function.Function;
+
 import com.google.jam.MultiThreadRoundResolver;
 import com.google.jam.RoundResolver;
 import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
@@ -15,6 +17,10 @@ public class MultiThreadStandingOvationRoundResolverTest
 
 	private RoundCreator creator;
 	private MultiThreadRoundResolver resolver;
+
+	public MultiThreadStandingOvationRoundResolverTest(Function<String, Integer> algorithm) {
+		super(algorithm);
+	}
 
 	@Before
 	public void setUp()

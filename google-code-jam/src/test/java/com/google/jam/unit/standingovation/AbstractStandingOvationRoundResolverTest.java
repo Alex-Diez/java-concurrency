@@ -1,30 +1,51 @@
 package com.google.jam.unit.standingovation;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
+import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.number.OrderingComparison.lessThanOrEqualTo;
 
+@RunWith(Parameterized.class)
 public abstract class AbstractStandingOvationRoundResolverTest {
+
+	@Parameterized.Parameters
+	public static Collection<Object[]> data() {
+		return Arrays.asList(
+				new Object[][] {
+						{new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm()},
+						{new AbstractStandingOvationRoundResolver.BackwardCountingAlgorithm()}
+				}
+		);
+	}
+
+	private final Function<String, Integer> algorithm;
+
+	public AbstractStandingOvationRoundResolverTest(final Function<String, Integer> algorithm) {
+		this.algorithm = algorithm;
+	}
 
 	@Test
 	public void testTaskSolvingProcess()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'A', "small", "test");
 		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
-		final Map<Integer, Integer> resolverResults = getResolver().solve(round);
-		Map<Integer, Integer> results = new LinkedHashMap<>();
+		final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);
+		Map<Integer, Integer> results = new HashMap<>();
 		results.put(1, 0);
 		results.put(2, 1);
 		results.put(3, 2);
@@ -33,21 +54,21 @@ public abstract class AbstractStandingOvationRoundResolverTest {
 	}
 
 	@Test
-	public void testNoNegativeValueInSmallRoundSolution()
+	public void testSmallTaskSolvingProcess()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
 		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
-		final Map<Integer, Integer> resolverResults = getResolver().solve(round);
+		final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);
 		final Map<Integer, Integer> results = buildResultForSmallTasksSize();
 		assertThat(resolverResults, is(results));
 	}
 
 	@Test
-	public void testNoNegativeValueInLargeRoundSolution()
+	public void testLargeTaskSolvingProcess()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
 		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(getCreator());
-		final Map<Integer, Integer> resolverResults = getResolver().solve(round);
+		final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);
 		final Map<Integer, Integer> results = buildResultForLargeTasksSize();
 		assertThat(resolverResults, is(results));
 	}

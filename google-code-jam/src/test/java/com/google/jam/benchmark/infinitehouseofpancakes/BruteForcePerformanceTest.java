@@ -52,7 +52,7 @@ public class BruteForcePerformanceTest {
 	@Benchmark
 	public Map<Integer, Integer> performanceOfTaskSolvingProcess()
 			throws Exception {
-		return resolver.solve(round);
+		return resolver.solve(round, (task) -> null);
 	}
 
 	public static void main(String[] args) throws RunnerException {

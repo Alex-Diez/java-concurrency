@@ -1,5 +1,7 @@
 package com.google.jam.unit.standingovation.singlethread;
 
+import java.util.function.Function;
+
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundResolver;
 import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
@@ -13,6 +15,10 @@ public class SingleThreadStandingOvationResolverTest
 
 	private RoundCreator creator;
 	private RoundResolver resolver;
+
+	public SingleThreadStandingOvationResolverTest(Function<String, Integer> algorithm) {
+		super(algorithm);
+	}
 
 	@Before
 	public void setUp()

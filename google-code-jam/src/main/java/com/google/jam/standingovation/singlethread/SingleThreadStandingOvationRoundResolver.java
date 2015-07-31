@@ -2,6 +2,7 @@ package com.google.jam.standingovation.singlethread;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.jam.Round;
 import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
@@ -22,8 +23,11 @@ public class SingleThreadStandingOvationRoundResolver
 	}
 
 	@Override
-	protected void runCalculation(final Map<Integer, Integer> results, final Round round) {
-		doCalculation(results, indexCounter++, round.getNextTask());
+	protected void runCalculation(
+			final Map<Integer, Integer> results,
+			final Round round,
+			final Function<String, Integer> algorithm) {
+		doCalculation(results, indexCounter++, round.getNextTask(), algorithm);
 	}
 
 	@Override

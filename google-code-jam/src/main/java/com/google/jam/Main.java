@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
+import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
 
@@ -19,7 +20,7 @@ public class Main {
 		RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
 		Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
 		RoundResolver resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
-		Map<Integer, Integer> smallResult = resolver.solve(smallRound);
+		Map<Integer, Integer> smallResult = resolver.solve(smallRound, new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm());
 		ResultWriter smallResultWriter = new ResultWriter(smallResult);
 		Path pathToSmall = Paths.get("small");
 		if (Files.exists(pathToSmall)) {
@@ -30,7 +31,7 @@ public class Main {
 		}
 		RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'B', "large", "practice");
 		Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
-		Map<Integer, Integer> largeResult = resolver.solve(largeRound);
+		Map<Integer, Integer> largeResult = resolver.solve(largeRound, new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm());
 		ResultWriter largeResultWriter = new ResultWriter(largeResult);
 		Path pathToLarge = Paths.get("large");
 		if (Files.exists(pathToLarge)) {

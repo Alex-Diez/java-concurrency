@@ -2,6 +2,7 @@ package com.google.jam.unit.infinitehouseofpancakes.singlethread;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
@@ -35,7 +36,7 @@ public class SingleThreadInputInfiniteHouseOfPancakesRoundResolverTest {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'B', "small", "test");
 		final RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
 		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		Map<Integer, Integer> resolverResults = resolver.solve(round);
+		Map<Integer, Integer> resolverResults = resolver.solve(round, (task) -> null);
 		Map<Integer, Integer> results = new LinkedHashMap<>();
 		results.put(1, 3);
 		results.put(2, 2);

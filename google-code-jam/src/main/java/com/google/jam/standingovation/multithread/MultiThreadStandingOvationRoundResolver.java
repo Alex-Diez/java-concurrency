@@ -4,6 +4,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Function;
 
 import com.google.jam.MultiThreadRoundResolver;
 import com.google.jam.Round;
@@ -40,12 +41,16 @@ public class MultiThreadStandingOvationRoundResolver
 	}
 
 	@Override
-	protected void runCalculation(final Map<Integer, Integer> results, final Round round) {
-		executor.execute(() -> {
+	protected void runCalculation(
+			final Map<Integer, Integer> results,
+			final Round round,
+			final Function<String, Integer> algorithm) {
+		executor.execute(
+				() -> {
 					int index = indexCounter.getAndIncrement();
 					String task = round.getNextTask();
-					if(task != null) {
-						doCalculation(results, index, task);
+					if (task != null) {
+						doCalculation(results, index, task, algorithm);
 					}
 				}
 		);
@@ -54,7 +59,7 @@ public class MultiThreadStandingOvationRoundResolver
 	@Override
 	protected void timeOut() {
 		try {
-			Thread.sleep((long)(1.0 / (NUMBER_OF_THREADS-1) * 90));
+			Thread.sleep((long) (1.0 / (NUMBER_OF_THREADS - 1) * 90));
 		}
 		catch (InterruptedException e) {
 			e.printStackTrace();
