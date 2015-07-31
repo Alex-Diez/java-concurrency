@@ -12,6 +12,7 @@ import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreato
 import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -28,6 +29,7 @@ public class SingleThreadInputInfiniteHouseOfPancakesRoundResolverTest {
 	}
 
 	@Test
+	@Ignore
 	public void testTaskSolvingProcess()
 			throws Exception {
 		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'B', "small", "test");
@@ -38,6 +40,7 @@ public class SingleThreadInputInfiniteHouseOfPancakesRoundResolverTest {
 		results.put(1, 3);
 		results.put(2, 2);
 		results.put(3, 3);
+		results.put(4, 7);
 		assertThat(resolverResults, is(results));
 	}
 }
