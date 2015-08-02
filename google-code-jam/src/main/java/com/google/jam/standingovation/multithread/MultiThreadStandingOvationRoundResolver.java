@@ -17,7 +17,7 @@ public class MultiThreadStandingOvationRoundResolver
 		extends AbstractStandingOvationRoundResolver
 		implements MultiThreadRoundResolver {
 
-	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
+	private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() / 4;
 
 	private final ExecutorService executor;
 
