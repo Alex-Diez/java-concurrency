@@ -1,6 +1,5 @@
 package com.google.jam.unit.infinitehouseofpancakes;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.google.jam.Round;

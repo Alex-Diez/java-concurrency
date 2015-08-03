@@ -7,7 +7,6 @@ import com.google.jam.RoundResolver;
 import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import com.google.jam.RoundCreator;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
-import com.google.jam.unit.standingovation.AbstractStandingOvationRoundResolverTest;
 
 import org.junit.After;
 import org.junit.Before;

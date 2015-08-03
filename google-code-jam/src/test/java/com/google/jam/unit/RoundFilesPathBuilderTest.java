@@ -10,7 +10,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class RoundFilesPathBuilderTest {
 
-	public static final String PATH_TO_TEST_FILE = "src/test/files/A-small-test.in";
+	private static final String PATH_TO_TEST_FILE = "src/test/files/A-small-test.in";
 
 	@Test
 	public void testBuildTestPath()

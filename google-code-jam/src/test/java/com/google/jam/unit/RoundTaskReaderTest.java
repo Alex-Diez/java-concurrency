@@ -5,10 +5,6 @@ import com.google.jam.RoundTaskReader;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
-
 public class RoundTaskReaderTest {
 
 	private RoundTaskReader roundTaskReader;

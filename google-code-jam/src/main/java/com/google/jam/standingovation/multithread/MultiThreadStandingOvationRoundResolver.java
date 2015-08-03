@@ -3,7 +3,6 @@ package com.google.jam.standingovation.multithread;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
 
 import com.google.jam.MultiThreadRoundResolver;

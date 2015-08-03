@@ -1,13 +1,11 @@
 package com.google.jam.benchmark.standingovation.singlethread;
 
-import com.google.jam.ResultWriter;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
-import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;

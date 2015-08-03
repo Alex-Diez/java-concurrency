@@ -9,8 +9,6 @@ import java.util.Map;
 import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
 import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
-import com.google.jam.standingovation.StandingOvationRoundCreator;
-import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
 
 public class Main {
 

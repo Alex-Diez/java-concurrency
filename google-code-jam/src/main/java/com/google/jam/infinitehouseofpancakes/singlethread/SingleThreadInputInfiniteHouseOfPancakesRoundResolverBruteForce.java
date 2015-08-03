@@ -11,7 +11,7 @@ import com.google.jam.RoundResolver;
 public class SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce
 		implements RoundResolver {
 
-	public static final int MIN_NUMBER_TO_DIVIDE = 3;
+	private static final int MIN_NUMBER_TO_DIVIDE = 3;
 
 	@Override
 	public Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm) {

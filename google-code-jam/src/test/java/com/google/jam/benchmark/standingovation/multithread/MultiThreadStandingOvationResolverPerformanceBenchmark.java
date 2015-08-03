@@ -1,10 +1,6 @@
 package com.google.jam.benchmark.standingovation.multithread;
 
 import com.google.jam.MultiThreadRoundResolver;
-import com.google.jam.ResultWriter;
-import com.google.jam.RoundResolver;
-import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
-import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
 import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import com.google.jam.Round;
@@ -25,10 +21,6 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
 
-import java.io.BufferedWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;

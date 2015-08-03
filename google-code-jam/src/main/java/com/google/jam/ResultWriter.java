@@ -16,7 +16,7 @@ public class ResultWriter {
 	public void writeTo(final Writer writer)
 			throws IOException {
 		for (Map.Entry<Integer, Integer> entry : resultToWrite.entrySet()) {
-			final String formattedOutput = String.format("Case #%d: %d\n", entry.getKey(), entry.getValue());
+			final String formattedOutput = String.format("Case #%d: %d%n", entry.getKey(), entry.getValue());
 			writer.write(formattedOutput);
 		}
 		writer.flush();

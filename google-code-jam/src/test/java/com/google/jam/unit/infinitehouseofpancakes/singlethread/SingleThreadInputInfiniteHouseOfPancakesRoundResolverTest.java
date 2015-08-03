@@ -2,7 +2,6 @@ package com.google.jam.unit.infinitehouseofpancakes.singlethread;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Function;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
