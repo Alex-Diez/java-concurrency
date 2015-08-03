@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import com.google.jam.Round;
@@ -32,13 +33,13 @@ public class StandingOvationRoundCreator
 		catch (NumberFormatException e) {
 			throw new WrongRoundFormatException();
 		}
-		if(queueLength != strings.size()) {
+		if (queueLength != strings.size()) {
 			throw new WrongRoundFormatException();
 		}
-		Map<Integer, String> tasks = new HashMap<>(strings.size());
-		for (int i = 0; i < strings.size(); i++) {
-			tasks.put(i+1, strings.get(i));
-		}
+		final IntStream temp = IntStream.range(0, queueLength);
+		final IntStream stream = parallelism ? temp.parallel() : temp;
+		final Map<Integer, String> tasks = new HashMap<>(strings.size());
+		stream.forEach((index) -> tasks.put(index + 1, strings.get(index)));
 		return new Round(parallelism, tasks);
 	}
 }

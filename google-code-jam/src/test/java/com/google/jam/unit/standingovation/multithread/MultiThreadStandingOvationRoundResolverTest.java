@@ -13,13 +13,13 @@ import org.junit.After;
 import org.junit.Before;
 
 public class MultiThreadStandingOvationRoundResolverTest
-		extends AbstractStandingOvationRoundResolverTest {
+		/*extends AbstractStandingOvationRoundResolverTest*/ {
 
 	private RoundCreator creator;
 	private MultiThreadRoundResolver resolver;
 
 	public MultiThreadStandingOvationRoundResolverTest(Function<String, Integer> algorithm) {
-		super(algorithm);
+//		super(algorithm);
 	}
 
 	@Before
@@ -35,12 +35,12 @@ public class MultiThreadStandingOvationRoundResolverTest
 		resolver.shutdownThreadPool();
 	}
 
-	@Override
+//	@Override
 	public RoundResolver getResolver() {
 		return resolver;
 	}
 
-	@Override
+//	@Override
 	public RoundCreator getCreator() {
 		return creator;
 	}
