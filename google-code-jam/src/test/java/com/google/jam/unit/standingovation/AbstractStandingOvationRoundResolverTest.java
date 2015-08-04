@@ -11,7 +11,8 @@ import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
+import com.google.jam.algorithms.standingovation.ForwardCountingAlgorithm;
+import com.google.jam.algorithms.standingovation.StandingOvationContestAnalysisAlgorithm;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,8 +28,8 @@ public abstract class AbstractStandingOvationRoundResolverTest {
 	public static Collection<Object[]> data() {
 		return Arrays.asList(
 				new Object[][] {
-						{new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm()},
-						{new AbstractStandingOvationRoundResolver.StandingOvationContestAnalysisAlgorithm()}
+						{new ForwardCountingAlgorithm()},
+						{new StandingOvationContestAnalysisAlgorithm()}
 				}
 		);
 	}

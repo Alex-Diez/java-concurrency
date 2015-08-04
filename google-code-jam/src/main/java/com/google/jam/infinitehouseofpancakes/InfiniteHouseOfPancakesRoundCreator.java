@@ -25,8 +25,9 @@ public class InfiniteHouseOfPancakesRoundCreator
 			throw new WrongRoundFormatException();
 		}
 		Map<Integer, String> tasks = new HashMap<>(strings.size() / 2);
-		for (int i = 0; i < strings.size() - 1; i += 2) {
-			tasks.put(i+1, strings.get(i) + ' ' + strings.get(i + 1));
+		int counter = 1;
+		for (int i = 0; i < strings.size(); i+=2) {
+			tasks.put(counter++, strings.get(i) + ' ' + strings.get(i + 1));
 		}
 		return new Round(false, tasks);
 	}

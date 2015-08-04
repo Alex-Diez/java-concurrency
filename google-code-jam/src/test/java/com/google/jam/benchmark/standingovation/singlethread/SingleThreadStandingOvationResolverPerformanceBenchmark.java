@@ -5,7 +5,8 @@ import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
+import com.google.jam.algorithms.standingovation.ForwardCountingAlgorithm;
+import com.google.jam.algorithms.standingovation.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.standingovation.singlethread.SingleThreadStandingOvationRoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -47,8 +48,8 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
 		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
 		resolver = new SingleThreadStandingOvationRoundResolver();
 		algorithm = algorithmType.equals("forward")
-				? new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm()
-				: new AbstractStandingOvationRoundResolver.StandingOvationContestAnalysisAlgorithm();
+				? new ForwardCountingAlgorithm()
+				: new StandingOvationContestAnalysisAlgorithm();
 	}
 
 	@Benchmark

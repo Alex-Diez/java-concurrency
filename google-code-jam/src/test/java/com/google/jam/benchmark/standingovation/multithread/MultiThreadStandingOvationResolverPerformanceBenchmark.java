@@ -1,7 +1,8 @@
 package com.google.jam.benchmark.standingovation.multithread;
 
 import com.google.jam.MultiThreadRoundResolver;
-import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
+import com.google.jam.algorithms.standingovation.ForwardCountingAlgorithm;
+import com.google.jam.algorithms.standingovation.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
@@ -48,8 +49,8 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
 		resolver = new MultiThreadStandingOvationRoundResolver();
 		algorithm = algorithmType.equals("forward")
-				? new AbstractStandingOvationRoundResolver.ForwardCountingAlgorithm()
-				: new AbstractStandingOvationRoundResolver.StandingOvationContestAnalysisAlgorithm();
+				? new ForwardCountingAlgorithm()
+				: new StandingOvationContestAnalysisAlgorithm();
 	}
 
 	@TearDown
