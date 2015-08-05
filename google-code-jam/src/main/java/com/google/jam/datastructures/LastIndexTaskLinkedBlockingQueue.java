@@ -3,7 +3,6 @@ package com.google.jam.datastructures;
 import java.util.AbstractQueue;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
 
 public class LastIndexTaskLinkedBlockingQueue<I, E>
@@ -62,15 +61,13 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	@Override
 	public void put(E e)
 			throws InterruptedException {
-		if (e == null) {
-			throw new NullPointerException();
-		}
+		offer(e);
 	}
 
 	@Override
 	public boolean offer(E e, long timeout, TimeUnit unit)
 			throws InterruptedException {
-		return false;
+		return offer(e);
 	}
 
 	@Override
@@ -87,7 +84,7 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	@Override
 	public E poll(long timeout, TimeUnit unit)
 			throws InterruptedException {
-		return null;
+		return poll();
 	}
 
 	@Override
@@ -96,13 +93,23 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	}
 
 	@Override
-	public int drainTo(Collection<? super E> c) {
+	public int drainTo(Collection<? super E> collection) {
 		return 0;
 	}
 
 	@Override
-	public int drainTo(Collection<? super E> c, int maxElements) {
-		return 0;
+	public int drainTo(Collection<? super E> collection, int maxElements) {
+		if (collection == null) {
+			throw new NullPointerException();
+		}
+		final int numberElementToDrain = maxElements > size ? size : maxElements;
+		int i = 0;
+		while (i < numberElementToDrain) {
+			E element = poll();
+			collection.add(element);
+			i++;
+		}
+		return i;
 	}
 
 	@Override
@@ -110,6 +117,7 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 		if (head != null) {
 			E element = head.value;
 			head = head.next;
+			size--;
 			return element;
 		}
 		return null;
@@ -117,6 +125,9 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 
 	@Override
 	public E peek() {
+		if (head != null) {
+			return head.value;
+		}
 		return null;
 	}
 
