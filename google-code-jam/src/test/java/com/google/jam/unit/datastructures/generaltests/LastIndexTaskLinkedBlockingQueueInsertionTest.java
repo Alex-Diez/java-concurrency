@@ -2,9 +2,9 @@ package com.google.jam.unit.datastructures.generaltests;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.BlockingQueue;
 
 import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -17,8 +17,8 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
 
 	private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
 
-	private BlockingQueue<Integer> empty;
-	private BlockingQueue<Integer> full;
+	private LastIndexTaskQueue<Integer, Integer> empty;
+	private LastIndexTaskQueue<Integer, Integer> full;
 
 	@Before
 	public void setUp()

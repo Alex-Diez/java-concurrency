@@ -4,6 +4,9 @@ import java.util.AbstractQueue;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class LastIndexTaskLinkedBlockingQueue<I, E>
 		extends AbstractQueue<E>
@@ -20,18 +23,24 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 
 	}
 
-	private int size;
 	private Node<E> tail;
 	private Node<E> head;
 
+	private final AtomicInteger size;
+	private final Lock addLock;
+	private final Lock removeLock;
+
 	public LastIndexTaskLinkedBlockingQueue(Collection<E> collection) {
+		this();
 		for (E element : collection) {
 			add(element);
 		}
 	}
 
 	public LastIndexTaskLinkedBlockingQueue() {
-
+		addLock = new ReentrantLock();
+		removeLock = new ReentrantLock();
+		size = new AtomicInteger(0);
 	}
 
 	@Override
@@ -45,17 +54,23 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 			throw new NullPointerException();
 		}
 		Node<E> node = new Node<>(e);
-		if (tail == null
-				&& head == null) {
-			tail = node;
-			head = node;
+		addLock.lock();
+		try {
+			if (tail == null
+					&& head == null) {
+				tail = node;
+				head = node;
+			}
+			if (tail != null) {
+				tail.next = node;
+				tail = node;
+			}
+			size.getAndIncrement();
+			return true;
 		}
-		if (tail != null) {
-			tail.next = node;
-			tail = node;
+		finally {
+			addLock.unlock();
 		}
-		size++;
-		return true;
 	}
 
 	@Override
@@ -102,7 +117,8 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 		if (collection == null) {
 			throw new NullPointerException();
 		}
-		final int numberElementToDrain = maxElements > size ? size : maxElements;
+		final int queueSize = size.get();
+		final int numberElementToDrain = maxElements > queueSize ? queueSize : maxElements;
 		int i = 0;
 		while (i < numberElementToDrain) {
 			E element = poll();
@@ -115,10 +131,16 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	@Override
 	public E poll() {
 		if (head != null) {
-			E element = head.value;
-			head = head.next;
-			size--;
-			return element;
+			removeLock.lock();
+			try {
+				E element = head.value;
+				head = head.next;
+				size.getAndDecrement();
+				return element;
+			}
+			finally {
+				removeLock.unlock();
+			}
 		}
 		return null;
 	}
@@ -133,7 +155,7 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 
 	@Override
 	public int size() {
-		return size;
+		return size.get();
 	}
 
 	@Override
