@@ -5,7 +5,6 @@ import java.util.Arrays;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
-import com.google.jam.WrongRoundFormatException;
 import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
 
 import org.junit.Before;
@@ -16,33 +15,33 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InputInfiniteHouseOfPancakesRoundTaskFormatValidation {
 
-	private RoundCreator creator;
+    private RoundCreator creator;
 
-	@Before
-	public void setUp()
-			throws Exception {
-		creator = new InfiniteHouseOfPancakesRoundCreator();
-	}
+    @Before
+    public void setUp()
+            throws Exception {
+        creator = new InfiniteHouseOfPancakesRoundCreator();
+    }
 
-	@Test
-	public void testWrongStandingOvationRoundFormat_shouldThrowException()
-			throws Exception {
-		final Round round = creator.createRound(
-				new ArrayList<>(
-						Arrays.asList(
-								"4",
-								"1",
-								"3",
-								"4",
-								"1 2 1 2",
-								"1",
-								"4",
-								"5",
-								"4 8 7 8 3"
-						)
-				)
-		);
-		String task = round.getNextTask().getValue();
-		assertThat(task, matchesPattern("^([0-9]*)( [0-9]*)$"));
-	}
+    @Test
+    public void testWrongStandingOvationRoundFormat_shouldThrowException()
+            throws Exception {
+        final Round round = creator.createRound(
+                new ArrayList<>(
+                        Arrays.asList(
+                                "4",
+                                "1",
+                                "3",
+                                "4",
+                                "1 2 1 2",
+                                "1",
+                                "4",
+                                "5",
+                                "4 8 7 8 3"
+                        )
+                )
+        );
+        String task = round.getNextTask().getValue();
+        assertThat(task, matchesPattern("^([0-9]*)( [0-9]*)$"));
+    }
 }

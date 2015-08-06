@@ -7,15 +7,15 @@ import java.util.List;
 
 public class RoundTaskReader {
 
-	private final Path pathToFile;
+    private final Path pathToFile;
 
-	public RoundTaskReader(final Path pathToFile) {
-		this.pathToFile = pathToFile;
-	}
+    public RoundTaskReader(final Path pathToFile) {
+        this.pathToFile = pathToFile;
+    }
 
-	public Round applyCreator(final RoundCreator roundCreator)
-			throws IOException {
-		List<String> fileContent = Files.readAllLines(pathToFile);
-		return roundCreator.createRound(fileContent);
-	}
+    public Round applyCreator(final RoundCreator roundCreator)
+            throws IOException {
+        List<String> fileContent = Files.readAllLines(pathToFile);
+        return roundCreator.createRound(fileContent);
+    }
 }

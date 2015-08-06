@@ -5,8 +5,9 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.jam.RoundCreator;
-import com.google.jam.standingovation.StandingOvationRoundCreator;
 import com.google.jam.WrongRoundFormatException;
+import com.google.jam.standingovation.StandingOvationRoundCreator;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,33 +18,33 @@ import static org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class InputStandingOvationRoundTest {
 
-	@Parameters
-	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] {
-						{"g", true}, {"", true}, {"-4", true}, {"1", true}, {"100", true},
-						{"g", false}, {"", false}, {"-4", false}, {"1", false}, {"100", false}
-				});
-	}
+    private final String queueLength;
+    private final boolean parallelism;
+    private RoundCreator creator;
 
-	private final String queueLength;
-	private final boolean parallelism;
+    public InputStandingOvationRoundTest(String queueLength, boolean parallelism) {
+        this.queueLength = queueLength;
+        this.parallelism = parallelism;
+    }
 
-	public InputStandingOvationRoundTest(String queueLength, boolean parallelism) {
-		this.queueLength = queueLength;
-		this.parallelism = parallelism;
-	}
+    @Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(
+                new Object[][] {
+                        {"g", true}, {"", true}, {"-4", true}, {"1", true}, {"100", true},
+                        {"g", false}, {"", false}, {"-4", false}, {"1", false}, {"100", false}
+                });
+    }
 
-	private RoundCreator creator;
+    @Before
+    public void setUp()
+            throws Exception {
+        creator = new StandingOvationRoundCreator(parallelism);
+    }
 
-	@Before
-	public void setUp()
-			throws Exception {
-		creator = new StandingOvationRoundCreator(parallelism);
-	}
-
-	@Test(expected = WrongRoundFormatException.class)
-	public void testWrongStandingOvationRoundFormat_shouldThrowException()
-			throws Exception {
-		creator.createRound(new ArrayList<>(Arrays.asList(queueLength, "4 11111", "1 09", "5 110011", "0 1")));
-	}
+    @Test(expected = WrongRoundFormatException.class)
+    public void testWrongStandingOvationRoundFormat_shouldThrowException()
+            throws Exception {
+        creator.createRound(new ArrayList<>(Arrays.asList(queueLength, "4 11111", "1 09", "5 110011", "0 1")));
+    }
 }

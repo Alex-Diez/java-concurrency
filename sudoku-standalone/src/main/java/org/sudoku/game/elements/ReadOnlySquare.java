@@ -4,33 +4,33 @@ import java.util.Collection;
 
 public interface ReadOnlySquare {
 
-	boolean lockForRead();
+    boolean lockForRead();
 
-	Element readFrom(final int rowIndex, final int columnIndex);
+    Element readFrom(final int rowIndex, final int columnIndex);
 
-	void unlockAfterRead();
+    void unlockAfterRead();
 
-	boolean containsElement(final Element element);
+    boolean containsElement(final Element element);
 
-	Collection<Position> filledPositions();
+    Collection<Position> filledPositions();
 
-	boolean isFilled();
+    boolean isFilled();
 
-	ReadOnlySquare getLeft();
+    ReadOnlySquare getLeft();
 
-	ReadOnlySquare setLeft(ReadOnlySquare square);
+    ReadOnlySquare setLeft(ReadOnlySquare square);
 
-	ReadOnlySquare getRight();
+    ReadOnlySquare getRight();
 
-	ReadOnlySquare setRight(ReadWriteSquare square);
+    ReadOnlySquare setRight(ReadWriteSquare square);
 
-	ReadOnlySquare getUpper();
+    ReadOnlySquare getUpper();
 
-	ReadOnlySquare setUpper(ReadOnlySquare square);
+    ReadOnlySquare setUpper(ReadOnlySquare square);
 
-	ReadOnlySquare getLower();
+    ReadOnlySquare getLower();
 
-	ReadOnlySquare setLower(ReadOnlySquare square);
+    ReadOnlySquare setLower(ReadOnlySquare square);
 
-	String printableLine(final int lineNumber);
+    String printableLine(final int lineNumber);
 }

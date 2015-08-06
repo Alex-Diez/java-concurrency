@@ -3,18 +3,18 @@ package org.sudoku.slave;
 import org.sudoku.elements.Square;
 
 public class SlaveSudokuResolversManager
-		implements Runnable {
+        implements Runnable {
 
-	private final SlaveNetworkManager networkManager;
-	private Square squareToResolve;
+    private final SlaveNetworkManager networkManager;
+    private Square squareToResolve;
 
-	public SlaveSudokuResolversManager(SlaveNetworkManager networkManager) {
-		this.networkManager = networkManager;
+    public SlaveSudokuResolversManager(SlaveNetworkManager networkManager) {
+        this.networkManager = networkManager;
 
-	}
+    }
 
-	@Override
-	public void run() {
+    @Override
+    public void run() {
 
-	}
+    }
 }

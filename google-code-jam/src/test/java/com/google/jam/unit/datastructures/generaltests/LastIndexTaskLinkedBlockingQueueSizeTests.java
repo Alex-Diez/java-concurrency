@@ -14,35 +14,35 @@ import static org.hamcrest.Matchers.is;
 
 public class LastIndexTaskLinkedBlockingQueueSizeTests {
 
-	private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
+    private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
 
-	private LastIndexTaskQueue<Integer> empty;
-	private LastIndexTaskQueue<Integer> full;
+    private LastIndexTaskQueue<Integer> empty;
+    private LastIndexTaskQueue<Integer> full;
 
-	@Before
-	public void setUp()
-			throws Exception {
-		full = new LastIndexTaskLinkedBlockingQueue<>(DATA);
-		empty = new LastIndexTaskLinkedBlockingQueue<>();
-	}
+    @Before
+    public void setUp()
+            throws Exception {
+        full = new LastIndexTaskLinkedBlockingQueue<>(DATA);
+        empty = new LastIndexTaskLinkedBlockingQueue<>();
+    }
 
-	@Test
-	public void testSizeOfFullQueue()
-			throws Exception {
-		assertThat(false, is(full.isEmpty()));
-		assertThat(full.size(), is(DATA.size()));
-	}
+    @Test
+    public void testSizeOfFullQueue()
+            throws Exception {
+        assertThat(false, is(full.isEmpty()));
+        assertThat(full.size(), is(DATA.size()));
+    }
 
-	@Test
-	public void testSizeOfEmptyQueue()
-			throws Exception {
-		assertThat(true, is(empty.isEmpty()));
-		assertThat(empty.size(), is(0));
-	}
+    @Test
+    public void testSizeOfEmptyQueue()
+            throws Exception {
+        assertThat(true, is(empty.isEmpty()));
+        assertThat(empty.size(), is(0));
+    }
 
-	@Test
-	public void testRemainingCapacity()
-			throws Exception {
-		assertThat(empty.remainingCapacity(), is(Integer.MAX_VALUE));
-	}
+    @Test
+    public void testRemainingCapacity()
+            throws Exception {
+        assertThat(empty.remainingCapacity(), is(Integer.MAX_VALUE));
+    }
 }

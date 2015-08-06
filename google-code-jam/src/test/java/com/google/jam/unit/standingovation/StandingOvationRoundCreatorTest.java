@@ -6,10 +6,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses(
-		{
-				InputStandingOvationRoundTest.class,
-				StandingOvationRoundTaskFormatValidation.class
-		}
+        {
+                InputStandingOvationRoundTest.class,
+                StandingOvationRoundTaskFormatValidation.class
+        }
 )
 public class StandingOvationRoundCreatorTest {
 }

@@ -6,10 +6,10 @@ import org.junit.Before;
 
 public abstract class AbstractJsonSerializationDeserializationTest {
 
-	protected ObjectMapper mapper;
+    protected ObjectMapper mapper;
 
-	@Before
-	public void setUp() {
-		mapper = new ObjectMapper();
-	}
+    @Before
+    public void setUp() {
+        mapper = new ObjectMapper();
+    }
 }

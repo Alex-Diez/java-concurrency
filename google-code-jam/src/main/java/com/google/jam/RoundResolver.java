@@ -5,5 +5,5 @@ import java.util.function.Function;
 
 public interface RoundResolver {
 
-	Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm);
+    Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm);
 }

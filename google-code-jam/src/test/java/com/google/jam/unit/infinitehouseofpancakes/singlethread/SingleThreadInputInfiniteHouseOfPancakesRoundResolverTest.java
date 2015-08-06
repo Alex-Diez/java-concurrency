@@ -20,26 +20,28 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class SingleThreadInputInfiniteHouseOfPancakesRoundResolverTest {
 
-	private RoundResolver resolver;
+    private RoundResolver resolver;
 
-	@Before
-	public void setUp()
-			throws Exception {
-		resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
-	}
+    @Before
+    public void setUp()
+            throws Exception {
+        resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
+    }
 
-	@Test
-	public void testTaskSolvingProcess()
-			throws Exception {
-		final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'B', "small", "test");
-		final RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
-		final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		Map<Integer, Integer> resolverResults = resolver.solve(round, new InputInfiniteHouseOfPancakesContestAnalysisAlgorithm());
-		Map<Integer, Integer> results = new LinkedHashMap<>();
-		results.put(1, 3);
-		results.put(2, 2);
-		results.put(3, 3);
-		results.put(4, 7);
-		assertThat(resolverResults, is(results));
-	}
+    @Test
+    public void testTaskSolvingProcess()
+            throws Exception {
+        final RoundPathBuilder pathBuilder = new RoundPathBuilder("test", 'B', "small", "test");
+        final RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
+        final Round round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
+        Map<Integer, Integer> resolverResults = resolver.solve(
+                round,
+                new InputInfiniteHouseOfPancakesContestAnalysisAlgorithm());
+        Map<Integer, Integer> results = new LinkedHashMap<>();
+        results.put(1, 3);
+        results.put(2, 2);
+        results.put(3, 3);
+        results.put(4, 7);
+        assertThat(resolverResults, is(results));
+    }
 }

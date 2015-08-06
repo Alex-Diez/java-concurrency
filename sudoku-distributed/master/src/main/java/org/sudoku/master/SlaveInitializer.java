@@ -6,7 +6,10 @@ import org.sudoku.spi.net.NetworkManager;
 
 public class SlaveInitializer {
 
-	public NodeConfiguration initializeSlave(final int slaveIndex, final GameField gameField, final NetworkManager networkManager) {
-		return null;
-	}
+    public NodeConfiguration initializeSlave(
+            final int slaveIndex,
+            final GameField gameField,
+            final NetworkManager networkManager) {
+        return null;
+    }
 }

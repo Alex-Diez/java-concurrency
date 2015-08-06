@@ -1,11 +1,11 @@
 package org.sudoku.game.elements;
 
 public interface ReadWriteSquare
-		extends ReadOnlySquare {
+        extends ReadOnlySquare {
 
-	boolean lockForWrite();
+    boolean lockForWrite();
 
-	void writeTo(final int rowIndex, final int columnIndex, final Element element);
+    void writeTo(final int rowIndex, final int columnIndex, final Element element);
 
-	void unlockAfterWrite();
+    void unlockAfterWrite();
 }

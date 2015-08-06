@@ -3,8 +3,9 @@ package com.google.jam.unit.infinitehouseofpancakes;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.Round;
+import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
+
 import org.junit.Test;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
@@ -12,12 +13,12 @@ import static org.hamcrest.MatcherAssert.assertThat;
 
 public class InfiniteHouseOfPancakesRoundTaskFormatValidationTest {
 
-	@Test
-	public void testValidateInfiniteHouseOfPancakesRound()
-			throws Exception {
-		InfiniteHouseOfPancakesRoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
-		Round round = creator.createRound(new ArrayList<>(Arrays.asList("3", "1", "3", "4", "1 2 1 2", "1", "4")));
-		String task = round.getNextTask().getValue();
-		assertThat(task, matchesPattern("^([0-9]) (([0-9] )*([0-9]))"));
-	}
+    @Test
+    public void testValidateInfiniteHouseOfPancakesRound()
+            throws Exception {
+        InfiniteHouseOfPancakesRoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
+        Round round = creator.createRound(new ArrayList<>(Arrays.asList("3", "1", "3", "4", "1 2 1 2", "1", "4")));
+        String task = round.getNextTask().getValue();
+        assertThat(task, matchesPattern("^([0-9]) (([0-9] )*([0-9]))"));
+    }
 }

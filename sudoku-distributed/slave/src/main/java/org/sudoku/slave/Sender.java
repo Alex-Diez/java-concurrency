@@ -9,28 +9,28 @@ import org.sudoku.spi.net.NetworkManager;
 
 public class Sender {
 
-	private final NetworkManager networkManager;
-	private final ObjectMapper objectMapper;
+    private final NetworkManager networkManager;
+    private final ObjectMapper objectMapper;
 
-	public Sender(NetworkManager networkManager) {
-		this.networkManager = networkManager;
-		this.objectMapper = new ObjectMapper();
-	}
+    public Sender(NetworkManager networkManager) {
+        this.networkManager = networkManager;
+        this.objectMapper = new ObjectMapper();
+    }
 
-	public void sendData(Square square)
-			throws IOException {
-		final String data = prepareToSend(square);
-		networkManager.writeToNetwork(data);
-	}
+    public void sendData(Square square)
+            throws IOException {
+        final String data = prepareToSend(square);
+        networkManager.writeToNetwork(data);
+    }
 
-	public void sendStatus(SlaveStatus status)
-			throws IOException {
-		final String data = prepareToSend(status);
-		networkManager.writeToNetwork(data);
-	}
+    public void sendStatus(SlaveStatus status)
+            throws IOException {
+        final String data = prepareToSend(status);
+        networkManager.writeToNetwork(data);
+    }
 
-	private String prepareToSend(Object value)
-			throws IOException {
-		return objectMapper.writeValueAsString(value);
-	}
+    private String prepareToSend(Object value)
+            throws IOException {
+        return objectMapper.writeValueAsString(value);
+    }
 }

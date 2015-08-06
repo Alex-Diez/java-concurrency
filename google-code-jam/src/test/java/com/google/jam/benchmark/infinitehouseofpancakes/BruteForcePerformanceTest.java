@@ -33,29 +33,30 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @Fork(1)
 public class BruteForcePerformanceTest {
 
-	private Round round;
-	private RoundResolver resolver;
+    private Round round;
+    private RoundResolver resolver;
 
-	@Setup
-	public void setUp()
-			throws Exception {
-		final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'B', "large", "practice");
-		final RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
-		round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-		resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
-	}
+    public static void main(String[] args)
+            throws RunnerException {
+        Options opt = new OptionsBuilder()
+                .include(BruteForcePerformanceTest.class.getSimpleName())
+                .build();
+        new Runner(opt).run();
+    }
 
-	@Benchmark
-	public Map<Integer, Integer> performanceOfTaskSolvingProcess()
-			throws Exception {
-		return resolver.solve(round, (task) -> null);
-	}
+    @Setup
+    public void setUp()
+            throws Exception {
+        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'B', "large", "practice");
+        final RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
+        round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
+        resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
+    }
 
-	public static void main(String[] args) throws RunnerException {
-		Options opt = new OptionsBuilder()
-				.include(BruteForcePerformanceTest.class.getSimpleName())
-				.build();
-		new Runner(opt).run();
-	}
+    @Benchmark
+    public Map<Integer, Integer> performanceOfTaskSolvingProcess()
+            throws Exception {
+        return resolver.solve(round, (task) -> null);
+    }
 
 }

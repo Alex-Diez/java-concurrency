@@ -2,7 +2,7 @@ package org.sudoku.conf;
 
 public interface NodeConfiguration {
 
-	String getHost();
+    String getHost();
 
-	int getControllerPort();
+    int getControllerPort();
 }

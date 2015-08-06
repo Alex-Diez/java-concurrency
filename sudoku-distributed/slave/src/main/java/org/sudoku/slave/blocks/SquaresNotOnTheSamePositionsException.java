@@ -1,13 +1,13 @@
 package org.sudoku.slave.blocks;
 
 public class SquaresNotOnTheSamePositionsException
-		extends RuntimeException {
+        extends RuntimeException {
 
-	public SquaresNotOnTheSamePositionsException(String message) {
-		super(message);
-	}
+    public SquaresNotOnTheSamePositionsException(String message) {
+        super(message);
+    }
 
-	public SquaresNotOnTheSamePositionsException(Throwable cause) {
-		super(cause);
-	}
+    public SquaresNotOnTheSamePositionsException(Throwable cause) {
+        super(cause);
+    }
 }

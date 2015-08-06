@@ -6,10 +6,10 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses(
-		{
-				InputInfiniteHouseOfPancakesRoundTest.class,
-				InfiniteHouseOfPancakesRoundTaskFormatValidationTest.class
-		}
+        {
+                InputInfiniteHouseOfPancakesRoundTest.class,
+                InfiniteHouseOfPancakesRoundTaskFormatValidationTest.class
+        }
 )
 public class InfiniteHouseOfPancakesRoundCreatorTest {
 }

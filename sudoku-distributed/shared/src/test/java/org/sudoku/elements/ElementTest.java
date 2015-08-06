@@ -17,24 +17,24 @@ import static org.junit.runners.Parameterized.Parameters;
 @RunWith(Parameterized.class)
 public class ElementTest {
 
-	@Parameters
-	public static Collection configuration() {
-		return new GameFieldSizeDataProvider(3).provideData();
-	}
+    private final GameFieldConfiguration configuration;
 
-	private final GameFieldConfiguration configuration;
+    public ElementTest(final int numberOfElements) {
+        this.configuration = new GameFieldConfiguration.Builder(numberOfElements).build();
+    }
 
-	public ElementTest(final int numberOfElements) {
-		this.configuration = new GameFieldConfiguration.Builder(numberOfElements).build();
-	}
+    @Parameters
+    public static Collection configuration() {
+        return new GameFieldSizeDataProvider(3).provideData();
+    }
 
-	@Test
-	public void buildElementTest() {
-		assertThat(new Element.Builder(configuration, 1).build(), is(notNullValue()));
-	}
+    @Test
+    public void buildElementTest() {
+        assertThat(new Element.Builder(configuration, 1).build(), is(notNullValue()));
+    }
 
-	@Test(expected = IllegalElementNumberException.class)
-	public void buildInvalidElement() {
-		new Element.Builder(configuration, configuration.getNumberOfElements()).build();
-	}
+    @Test(expected = IllegalElementNumberException.class)
+    public void buildInvalidElement() {
+        new Element.Builder(configuration, configuration.getNumberOfElements()).build();
+    }
 }

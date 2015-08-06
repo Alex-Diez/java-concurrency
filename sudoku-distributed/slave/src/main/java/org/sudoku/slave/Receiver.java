@@ -9,23 +9,23 @@ import org.sudoku.spi.net.NetworkManager;
 
 public class Receiver {
 
-	private final NetworkManager networkManager;
-	private final ObjectMapper objectMapper;
+    private final NetworkManager networkManager;
+    private final ObjectMapper objectMapper;
 
-	public Receiver(NetworkManager networkManager) {
-		this.networkManager = networkManager;
-		this.objectMapper = new ObjectMapper();
-	}
+    public Receiver(NetworkManager networkManager) {
+        this.networkManager = networkManager;
+        this.objectMapper = new ObjectMapper();
+    }
 
-	public Square receiveSquare()
-			throws IOException {
-		final String square = networkManager.readFromNetwork();
-		return objectMapper.readValue(square, Square.class);
-	}
+    public Square receiveSquare()
+            throws IOException {
+        final String square = networkManager.readFromNetwork();
+        return objectMapper.readValue(square, Square.class);
+    }
 
-	public SquareLocation receiveSquareLocation()
-			throws IOException {
-		final String squareLocation = networkManager.readFromNetwork();
-		return objectMapper.readValue(squareLocation, SquareLocation.class);
-	}
+    public SquareLocation receiveSquareLocation()
+            throws IOException {
+        final String squareLocation = networkManager.readFromNetwork();
+        return objectMapper.readValue(squareLocation, SquareLocation.class);
+    }
 }

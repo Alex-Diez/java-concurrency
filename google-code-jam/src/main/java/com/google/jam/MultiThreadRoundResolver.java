@@ -1,7 +1,7 @@
 package com.google.jam;
 
 public interface MultiThreadRoundResolver
-		extends RoundResolver {
+        extends RoundResolver {
 
-	void shutdownThreadPool();
+    void shutdownThreadPool();
 }
