@@ -8,9 +8,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class LastIndexTaskLinkedBlockingQueue<I, E>
+public class LastIndexTaskLinkedBlockingQueue<E>
 		extends AbstractQueue<E>
-		implements LastIndexTaskQueue<I, E> {
+		implements LastIndexTaskQueue<E> {
 
 	private static class Node<E> {
 
@@ -27,8 +27,8 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	private Node<E> head;
 
 	private final AtomicInteger size;
-	private final Lock addLock;
-	private final Lock removeLock;
+	private final ReentrantLock addLock;
+	private final ReentrantLock removeLock;
 
 	public LastIndexTaskLinkedBlockingQueue(Collection<E> collection) {
 		this();
@@ -40,12 +40,12 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	public LastIndexTaskLinkedBlockingQueue() {
 		addLock = new ReentrantLock();
 		removeLock = new ReentrantLock();
-		size = new AtomicInteger(0);
+		size = new AtomicInteger();
 	}
 
 	@Override
-	public I getLastRetrievedTaskIndex() {
-		return null;
+	public int getLastRetrievedTaskIndex() {
+		return 0;
 	}
 
 	@Override
@@ -54,7 +54,8 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 			throw new NullPointerException();
 		}
 		Node<E> node = new Node<>(e);
-		addLock.lock();
+		final ReentrantLock lock = addLock;
+		lock.lock();
 		try {
 			if (tail == null
 					&& head == null) {
@@ -69,7 +70,7 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 			return true;
 		}
 		finally {
-			addLock.unlock();
+			lock.unlock();
 		}
 	}
 
@@ -131,7 +132,8 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	@Override
 	public E poll() {
 		if (head != null) {
-			removeLock.lock();
+			final ReentrantLock lock = addLock;
+			lock.lock();
 			try {
 				E element = head.value;
 				head = head.next;
@@ -139,7 +141,7 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 				return element;
 			}
 			finally {
-				removeLock.unlock();
+				lock.unlock();
 			}
 		}
 		return null;
@@ -174,5 +176,20 @@ public class LastIndexTaskLinkedBlockingQueue<I, E>
 	@Override
 	public Iterator<E> iterator() {
 		return null;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder("[ ");
+		for (Node<E> node = head; node != null; node = node.next) {
+			if(node != tail) {
+				sb.append(node.value).append(", ");
+			}
+			else {
+				sb.append(node.value);
+			}
+		}
+		sb.append(" ]");
+		return sb.toString();
 	}
 }

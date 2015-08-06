@@ -2,8 +2,8 @@ package com.google.jam.datastructures;
 
 import java.util.concurrent.BlockingQueue;
 
-public interface LastIndexTaskQueue<I, E>
+public interface LastIndexTaskQueue<E>
 		extends BlockingQueue<E> {
 
-	I getLastRetrievedTaskIndex();
+	int getLastRetrievedTaskIndex();
 }

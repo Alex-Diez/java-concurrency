@@ -17,8 +17,8 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
 
 	private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
 
-	private LastIndexTaskQueue<Integer, Integer> empty;
-	private LastIndexTaskQueue<Integer, Integer> full;
+	private LastIndexTaskQueue<Integer> empty;
+	private LastIndexTaskQueue<Integer> full;
 
 	@Before
 	public void setUp()
