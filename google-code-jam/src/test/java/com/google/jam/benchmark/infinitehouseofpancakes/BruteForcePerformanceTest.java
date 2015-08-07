@@ -9,7 +9,7 @@ import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundResolver;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
-import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
+import com.google.jam.solvers.SingleThreadRoundResolver;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -50,7 +50,7 @@ public class BruteForcePerformanceTest {
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'B', "large", "practice");
         final RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
         round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-        resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
+        resolver = new SingleThreadRoundResolver();
     }
 
     @Benchmark

@@ -14,6 +14,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -24,7 +25,7 @@ import static org.junit.Assert.assertThat;
 import static org.junit.Assert.fail;
 
 @RunWith(Parameterized.class)
-public class LastIndexTaskLinkedBlockingQueueConcurrentSizeTest {
+public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
 
     private static final List<Integer> DATA = Arrays.asList(
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -34,16 +35,22 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentSizeTest {
 
     private static final int COEFFICIENT = 10000;
     private static final int NUMBER_OF_READ = 10;
+
+    @Parameters
+    public static Collection<Object[]> data() {
+        return new ConcurrencyTestCaseFactory().createNumberOfThreadForTestCases(10);
+    }
+
     private final int numberOfReaders;
     private final int numberOfWriters;
     private final CyclicBarrier writerBarrier;
     private final CyclicBarrier readerBarrier;
     private final List<Future<Integer>> writeFutures;
     private final List<Future<Integer>> readFutures;
-    private final ExecutorService executor;
-    private volatile BlockingQueue<Integer> queue;
 
-    public LastIndexTaskLinkedBlockingQueueConcurrentSizeTest(final int numberOfThreads, final int numberOfReaders) {
+    private final ExecutorService executor;
+
+    public LastIndexTaskLinkedBlockingQueueConcurrentTest(final int numberOfThreads, final int numberOfReaders) {
         this.numberOfReaders = numberOfReaders;
         this.numberOfWriters = numberOfThreads - numberOfReaders;
         writerBarrier = new CyclicBarrier(numberOfWriters);
@@ -53,10 +60,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentSizeTest {
         executor = Executors.newFixedThreadPool(numberOfReaders + numberOfWriters);
     }
 
-    @Parameters
-    public static Collection<Object[]> data() {
-        return new ConcurrencyTestCaseFactory().createNumberOfThreadForTestCases(10);
-    }
+    private volatile BlockingQueue<Integer> queue;
 
     @Before
     public void setUp()
@@ -65,6 +69,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentSizeTest {
     }
 
     @Test
+    @Ignore
     public void testQueueSizeInConcurrentEnvironment()
             throws Exception {
         for (int i = 0; i < numberOfWriters; i++) {
@@ -137,6 +142,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentSizeTest {
     }
 
     @Test
+    @Ignore
     public void testQueueSizeInAsynchronousConcurrentEnvironment()
             throws Exception {
         for (int i = 0; i < numberOfWriters; i++) {

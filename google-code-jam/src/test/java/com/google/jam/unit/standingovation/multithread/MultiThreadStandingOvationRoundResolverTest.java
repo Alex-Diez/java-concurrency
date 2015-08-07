@@ -7,18 +7,19 @@ import com.google.jam.RoundCreator;
 import com.google.jam.RoundResolver;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
+import com.google.jam.unit.standingovation.AbstractStandingOvationRoundResolverTest;
 
 import org.junit.After;
 import org.junit.Before;
 
 public class MultiThreadStandingOvationRoundResolverTest
-        /*extends AbstractStandingOvationRoundResolverTest*/ {
+        extends AbstractStandingOvationRoundResolverTest {
 
     private RoundCreator creator;
     private MultiThreadRoundResolver resolver;
 
     public MultiThreadStandingOvationRoundResolverTest(Function<String, Integer> algorithm) {
-//		super(algorithm);
+		super(algorithm);
     }
 
     @Before
@@ -34,12 +35,12 @@ public class MultiThreadStandingOvationRoundResolverTest
         resolver.shutdownThreadPool();
     }
 
-    //	@Override
+    @Override
     public RoundResolver getResolver() {
         return resolver;
     }
 
-    //	@Override
+    @Override
     public RoundCreator getCreator() {
         return creator;
     }

@@ -9,8 +9,8 @@ import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.algorithms.standingovation.ForwardCountingAlgorithm;
-import com.google.jam.algorithms.standingovation.StandingOvationContestAnalysisAlgorithm;
+import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
+import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
 import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -38,18 +38,23 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
     private String algorithmType;
 
     private MultiThreadRoundResolver resolver;
-    private Round round;
+    private Round largeRound;
+    private Round smallRound;
     private Function<String, Integer> algorithm;
+    private Map<Integer, Integer> largeResult;
+    private Map<Integer, Integer> smallResult;
 
     @Setup
     public void setUp()
             throws Exception {
-        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
         final RoundCreator creator = new StandingOvationRoundCreator(true);
-        round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
+        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
+        largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
+        final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
+        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
         resolver = new MultiThreadStandingOvationRoundResolver();
         algorithm = algorithmType.equals("forward")
-                ? new ForwardCountingAlgorithm()
+                ? new StandingOvationForwardCountingAlgorithm()
                 : new StandingOvationContestAnalysisAlgorithm();
     }
 
@@ -57,28 +62,19 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
     public void tearDown()
             throws Exception {
         resolver.shutdownThreadPool();
+        assert largeResult.size() == 100;
+        assert smallResult.size() == 100;
     }
 
     @Benchmark
-    public Map<Integer, Integer> performanceOfTaskSolvingProcess()
+    public void performanceOfTaskSolvingProcess()
             throws Exception {
-        Map<Integer, Integer> result = resolver.solve(round, algorithm);
-        assert result.size() == 100;
-        return result;
+        largeResult = resolver.solve(largeRound, algorithm);
     }
 
     @Benchmark
-    public Map<Integer, Integer> performanceOfWholeProcess()
+    public void performanceOfSmallTaskSolvingProcess()
             throws Exception {
-        RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
-        RoundCreator creator = new StandingOvationRoundCreator(true);
-        Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-        MultiThreadRoundResolver resolver = new MultiThreadStandingOvationRoundResolver();
-        resolver.solve(smallRound, algorithm);
-        RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
-        Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
-        Map<Integer, Integer> largeResult = resolver.solve(largeRound, algorithm);
-        resolver.shutdownThreadPool();
-        return largeResult;
+        smallResult = resolver.solve(smallRound, algorithm);
     }
 }

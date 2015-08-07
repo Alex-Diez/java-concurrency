@@ -1,8 +1,8 @@
-package com.google.jam.algorithms.standingovation;
+package com.google.jam.algorithms;
 
 import java.util.function.Function;
 
-public final class ForwardCountingAlgorithm
+public final class StandingOvationForwardCountingAlgorithm
         implements Function<String, Integer> {
 
     @Override

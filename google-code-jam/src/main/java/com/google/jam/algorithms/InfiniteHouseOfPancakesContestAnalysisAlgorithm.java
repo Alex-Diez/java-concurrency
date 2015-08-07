@@ -1,8 +1,8 @@
-package com.google.jam.algorithms.infinitehouseofpancakes;
+package com.google.jam.algorithms;
 
 import java.util.function.Function;
 
-public final class InputInfiniteHouseOfPancakesContestAnalysisAlgorithm
+public final class InfiniteHouseOfPancakesContestAnalysisAlgorithm
         implements Function<String, Integer> {
 
     @Override

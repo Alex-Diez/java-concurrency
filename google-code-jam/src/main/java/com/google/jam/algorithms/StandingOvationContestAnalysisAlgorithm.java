@@ -1,4 +1,4 @@
-package com.google.jam.algorithms.standingovation;
+package com.google.jam.algorithms;
 
 import java.util.function.Function;
 

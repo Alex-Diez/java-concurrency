@@ -14,8 +14,11 @@ public class LastIndexTaskLinkedBlockingQueue<E>
     private final AtomicInteger size;
     private final ReentrantLock addLock;
     private final ReentrantLock removeLock;
+    private final ThreadLocal<Integer> lastThreadTask;
+
     private Node<E> tail;
     private Node<E> head;
+
     public LastIndexTaskLinkedBlockingQueue(Collection<E> collection) {
         this();
         for (E element : collection) {
@@ -27,11 +30,18 @@ public class LastIndexTaskLinkedBlockingQueue<E>
         addLock = new ReentrantLock();
         removeLock = new ReentrantLock();
         size = new AtomicInteger();
+        lastThreadTask = new ThreadLocal<Integer>() {
+
+            @Override
+            protected Integer initialValue() {
+                return -1;
+            }
+        };
     }
 
     @Override
     public int getLastRetrievedTaskIndex() {
-        return 0;
+        return lastThreadTask.get();
     }
 
     @Override
@@ -123,7 +133,8 @@ public class LastIndexTaskLinkedBlockingQueue<E>
             try {
                 E element = head.value;
                 head = head.next;
-                size.getAndDecrement();
+                int index = size.getAndDecrement();
+                lastThreadTask.set(index);
                 return element;
             }
             finally {

@@ -1,14 +1,13 @@
-package com.google.jam.standingovation.singlethread;
+package com.google.jam.solvers;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
 import com.google.jam.Round;
-import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 
-public class SingleThreadStandingOvationRoundResolver
-        extends AbstractStandingOvationRoundResolver {
+public class SingleThreadRoundResolver
+        extends AbstractRoundResolver {
 
     @Override
     protected Map<Integer, Integer> buildCollectionOfResults(final Round round) {

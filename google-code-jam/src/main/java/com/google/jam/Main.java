@@ -6,9 +6,9 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 
-import com.google.jam.algorithms.infinitehouseofpancakes.InputInfiniteHouseOfPancakesContestAnalysisAlgorithm;
+import com.google.jam.algorithms.InfiniteHouseOfPancakesContestAnalysisAlgorithm;
 import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
-import com.google.jam.infinitehouseofpancakes.singlethread.SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce;
+import com.google.jam.solvers.SingleThreadRoundResolver;
 
 public class Main {
 
@@ -17,10 +17,10 @@ public class Main {
         RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'B', "small", "practice");
         RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
         Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-        RoundResolver resolver = new SingleThreadInputInfiniteHouseOfPancakesRoundResolverBruteForce();
+        RoundResolver resolver = new SingleThreadRoundResolver();
         Map<Integer, Integer> smallResult = resolver.solve(
                 smallRound,
-                new InputInfiniteHouseOfPancakesContestAnalysisAlgorithm());
+                new InfiniteHouseOfPancakesContestAnalysisAlgorithm());
         ResultWriter smallResultWriter = new ResultWriter(smallResult);
         Path pathToSmall = Paths.get("small");
         if (Files.exists(pathToSmall)) {
@@ -33,7 +33,7 @@ public class Main {
         Round largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
         Map<Integer, Integer> largeResult = resolver.solve(
                 largeRound,
-                new InputInfiniteHouseOfPancakesContestAnalysisAlgorithm());
+                new InfiniteHouseOfPancakesContestAnalysisAlgorithm());
         ResultWriter largeResultWriter = new ResultWriter(largeResult);
         Path pathToLarge = Paths.get("large");
         if (Files.exists(pathToLarge)) {
