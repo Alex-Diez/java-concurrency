@@ -1,30 +1,26 @@
-package com.google.jam.standingovation.multithread;
+package com.google.jam.solvers;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.function.Function;
 
-import com.google.jam.MultiThreadRoundResolver;
 import com.google.jam.Round;
-import com.google.jam.standingovation.AbstractStandingOvationRoundResolver;
 
 import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
-public class MultiThreadStandingOvationRoundResolver
-        extends AbstractStandingOvationRoundResolver
-        implements MultiThreadRoundResolver {
+public class MultiThreadRoundResolver
+        extends AbstractRoundResolver {
 
     private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
 
     private final ExecutorService executor;
 
-    public MultiThreadStandingOvationRoundResolver() {
+    public MultiThreadRoundResolver() {
         this.executor = newFixedThreadPool(NUMBER_OF_THREADS);
     }
 
-    @Override
     public void shutdownThreadPool() {
         executor.shutdown();
     }

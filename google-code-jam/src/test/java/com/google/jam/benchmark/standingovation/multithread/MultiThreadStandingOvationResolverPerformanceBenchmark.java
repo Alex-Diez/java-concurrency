@@ -4,7 +4,6 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
-import com.google.jam.MultiThreadRoundResolver;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
@@ -12,7 +11,7 @@ import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.standingovation.StandingOvationRoundCreator;
-import com.google.jam.standingovation.multithread.MultiThreadStandingOvationRoundResolver;
+import com.google.jam.solvers.MultiThreadRoundResolver;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;
@@ -52,7 +51,7 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
         largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
         smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-        resolver = new MultiThreadStandingOvationRoundResolver();
+        resolver = new MultiThreadRoundResolver();
         algorithm = algorithmType.equals("forward")
                 ? new StandingOvationForwardCountingAlgorithm()
                 : new StandingOvationContestAnalysisAlgorithm();

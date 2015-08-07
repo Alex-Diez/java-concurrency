@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
-import com.google.jam.RoundResolver;
+import com.google.jam.solvers.RoundResolver;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.solvers.SingleThreadRoundResolver;

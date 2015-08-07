@@ -2,17 +2,16 @@ package com.google.jam.unit.solvers;
 
 import java.util.function.Function;
 
+import com.google.jam.solvers.MultiThreadRoundResolver;
 import com.google.jam.solvers.RoundResolver;
-import com.google.jam.solvers.SingleThreadRoundResolver;
 
+import org.junit.After;
 import org.junit.Before;
 
-public class SingleThreadRoundResolversTest
+public class MultiThreadRoundResolversTest
         extends AbstractRoundResolversTest {
 
-    private RoundResolver resolver;
-
-    public SingleThreadRoundResolversTest(
+    public MultiThreadRoundResolversTest(
             Function<String, Integer> algorithm,
             char roundLetter,
             String smokeTestLocation,
@@ -38,16 +37,24 @@ public class SingleThreadRoundResolversTest
                 largeRoundType);
     }
 
+    private MultiThreadRoundResolver resolver;
+
     @Override
     @Before
     public void setUp()
             throws Exception {
         super.setUp();
-        resolver = new SingleThreadRoundResolver();
+        resolver = new MultiThreadRoundResolver();
     }
 
     @Override
     protected RoundResolver getResolver() {
         return resolver;
+    }
+
+    @After
+    public void tearDown()
+            throws Exception {
+        resolver.shutdownThreadPool();
     }
 }

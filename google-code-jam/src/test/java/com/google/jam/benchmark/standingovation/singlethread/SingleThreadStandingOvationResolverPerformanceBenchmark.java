@@ -7,7 +7,7 @@ import java.util.function.Function;
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
-import com.google.jam.RoundResolver;
+import com.google.jam.solvers.RoundResolver;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
