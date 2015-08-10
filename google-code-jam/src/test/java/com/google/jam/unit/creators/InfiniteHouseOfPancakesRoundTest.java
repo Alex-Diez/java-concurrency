@@ -1,4 +1,4 @@
-package com.google.jam.unit.infinitehouseofpancakes;
+package com.google.jam.unit.creators;
 
 import java.util.Arrays;
 

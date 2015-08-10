@@ -10,7 +10,9 @@ import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
-import com.google.jam.standingovation.StandingOvationRoundCreator;
+import com.google.jam.creators.StandingOvationRoundCreator;
+import com.google.jam.experiments.CPUNumberOfThreadFunction;
+import com.google.jam.experiments.DoubleCPUNumberOfThreadFunction;
 import com.google.jam.solvers.MultiThreadRoundResolver;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -35,6 +37,8 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
 
     @Param({"forward", "StandingOvationContestAnalysis"})
     private String algorithmType;
+    @Param({"Double", "Current"})
+    private String numberOfThreadFunctionType;
 
     private MultiThreadRoundResolver resolver;
     private Round largeRound;
@@ -51,7 +55,10 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
         largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
         smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-        resolver = new MultiThreadRoundResolver();
+        Function<Void, Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
+                ? new DoubleCPUNumberOfThreadFunction()
+                : new CPUNumberOfThreadFunction();
+        resolver = new MultiThreadRoundResolver(numberOfThreadFunction);
         algorithm = algorithmType.equals("forward")
                 ? new StandingOvationForwardCountingAlgorithm()
                 : new StandingOvationContestAnalysisAlgorithm();

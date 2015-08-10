@@ -12,7 +12,7 @@ import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.solvers.SingleThreadRoundResolver;
-import com.google.jam.standingovation.StandingOvationRoundCreator;
+import com.google.jam.creators.StandingOvationRoundCreator;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Fork;

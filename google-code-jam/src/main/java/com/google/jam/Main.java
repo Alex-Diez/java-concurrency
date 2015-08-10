@@ -7,7 +7,7 @@ import java.nio.file.Paths;
 import java.util.Map;
 
 import com.google.jam.algorithms.InfiniteHouseOfPancakesContestAnalysisAlgorithm;
-import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.solvers.SingleThreadRoundResolver;
 

@@ -1,7 +1,5 @@
 package com.google.jam.unit.solvers;
 
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -9,48 +7,15 @@ import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.algorithms.InfiniteHouseOfPancakesContestAnalysisAlgorithm;
-import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
-import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.solvers.RoundResolver;
 
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-@RunWith(Parameterized.class)
 public abstract class AbstractRoundResolversTest {
-
-    @Parameters
-    public static Collection<Object[]> data() {
-        return Arrays.asList(
-                new Object[][] {
-                        {
-                                new InfiniteHouseOfPancakesContestAnalysisAlgorithm(), 'B',
-                                "test", "small", "test",
-                                "main", "small", "practice",
-                                "main", "large", "practice"
-                        },
-                        {
-                                new StandingOvationContestAnalysisAlgorithm(), 'A',
-                                "test", "small", "test",
-                                "main", "small", "practice",
-                                "main", "large", "practice"
-                        },
-                        {
-                                new StandingOvationForwardCountingAlgorithm(), 'A',
-                                "test", "small", "test",
-                                "main", "small", "practice",
-                                "main", "large", "practice"
-                        }
-                }
-        );
-    }
 
     private final Function<String, Integer> algorithm;
     private final String smokeTestLocation;

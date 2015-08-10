@@ -1,4 +1,4 @@
-package com.google.jam.infinitehouseofpancakes;
+package com.google.jam.creators;
 
 import java.util.HashMap;
 import java.util.List;

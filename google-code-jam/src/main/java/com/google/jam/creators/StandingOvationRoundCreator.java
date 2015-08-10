@@ -1,4 +1,4 @@
-package com.google.jam.standingovation;
+package com.google.jam.creators;
 
 import java.util.HashMap;
 import java.util.List;

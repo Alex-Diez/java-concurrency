@@ -1,4 +1,4 @@
-package com.google.jam.unit.standingovation;
+package com.google.jam.unit.creators;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

@@ -1,8 +1,8 @@
 package com.google.jam.unit.solvers;
 
 import com.google.jam.RoundCreator;
-import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
-import com.google.jam.standingovation.StandingOvationRoundCreator;
+import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.creators.StandingOvationRoundCreator;
 
 public class RoundCreatorProvider {
     public RoundCreator buildRoundCreator(final char roundLetter) {

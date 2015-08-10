@@ -1,10 +1,10 @@
-package com.google.jam.unit.infinitehouseofpancakes;
+package com.google.jam.unit.creators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.google.jam.Round;
-import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
 
 import org.junit.Test;
 

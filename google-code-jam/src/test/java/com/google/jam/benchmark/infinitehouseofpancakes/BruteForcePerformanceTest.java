@@ -8,7 +8,7 @@ import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.infinitehouseofpancakes.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.solvers.SingleThreadRoundResolver;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;

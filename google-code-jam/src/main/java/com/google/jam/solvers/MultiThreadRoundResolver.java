@@ -7,18 +7,15 @@ import java.util.function.Function;
 
 import com.google.jam.Round;
 
-import static java.lang.Runtime.getRuntime;
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class MultiThreadRoundResolver
         extends AbstractRoundResolver {
 
-    private static final int NUMBER_OF_THREADS = getRuntime().availableProcessors() * 2;
-
     private final ExecutorService executor;
 
-    public MultiThreadRoundResolver() {
-        this.executor = newFixedThreadPool(NUMBER_OF_THREADS);
+    public MultiThreadRoundResolver(Function<Void, Integer> numberOfThreadFunction) {
+        this.executor = newFixedThreadPool(numberOfThreadFunction.apply(null));
     }
 
     public void shutdownThreadPool() {

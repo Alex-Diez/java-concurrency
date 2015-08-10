@@ -1,4 +1,4 @@
-package com.google.jam.unit.standingovation;
+package com.google.jam.unit.creators;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -6,7 +6,7 @@ import java.util.Collection;
 
 import com.google.jam.RoundCreator;
 import com.google.jam.WrongRoundFormatException;
-import com.google.jam.standingovation.StandingOvationRoundCreator;
+import com.google.jam.creators.StandingOvationRoundCreator;
 
 import org.junit.Before;
 import org.junit.Test;
