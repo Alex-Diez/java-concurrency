@@ -1,6 +1,6 @@
 package com.google.jam.unit.solvers;
 
-public class TestDataProviderFactory {
+class TestDataProviderFactory {
 
     public TestDataProvider createDataProvider(final char roundLetter) {
         switch (roundLetter) {

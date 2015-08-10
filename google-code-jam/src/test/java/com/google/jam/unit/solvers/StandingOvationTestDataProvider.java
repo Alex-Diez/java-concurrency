@@ -3,7 +3,7 @@ package com.google.jam.unit.solvers;
 import java.util.HashMap;
 import java.util.Map;
 
-public class StandingOvationTestDataProvider
+class StandingOvationTestDataProvider
         implements TestDataProvider {
 
     @Override

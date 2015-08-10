@@ -3,7 +3,7 @@ package com.google.jam.unit.datastructures.concurrency;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class ConcurrencyTestCaseFactory {
+class ConcurrencyTestCaseFactory {
 
     public static final Object[][] DATA = new Object[][] {
             {3, 2},

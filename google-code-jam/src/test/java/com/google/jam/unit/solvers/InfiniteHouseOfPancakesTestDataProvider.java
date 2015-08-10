@@ -3,7 +3,7 @@ package com.google.jam.unit.solvers;
 import java.util.HashMap;
 import java.util.Map;
 
-public class InfiniteHouseOfPancakesTestDataProvider
+class InfiniteHouseOfPancakesTestDataProvider
         implements TestDataProvider {
 
     @Override

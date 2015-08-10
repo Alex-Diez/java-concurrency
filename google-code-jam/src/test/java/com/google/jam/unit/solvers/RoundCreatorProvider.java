@@ -4,7 +4,7 @@ import com.google.jam.RoundCreator;
 import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.creators.StandingOvationRoundCreator;
 
-public class RoundCreatorProvider {
+class RoundCreatorProvider {
     public RoundCreator buildRoundCreator(final char roundLetter) {
         switch (roundLetter) {
             case 'A':

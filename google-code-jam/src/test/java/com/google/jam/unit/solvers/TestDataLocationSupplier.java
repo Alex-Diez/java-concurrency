@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
-public class TestDataLocationSupplier
+class TestDataLocationSupplier
         implements Supplier<Iterator<String[]>> {
 
     @Override

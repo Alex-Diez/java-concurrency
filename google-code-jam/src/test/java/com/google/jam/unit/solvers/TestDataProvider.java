@@ -2,7 +2,7 @@ package com.google.jam.unit.solvers;
 
 import java.util.Map;
 
-public interface TestDataProvider {
+interface TestDataProvider {
 
     Map<Integer, Integer> provideSmallSetOfTestData();
 

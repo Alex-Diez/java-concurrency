@@ -8,7 +8,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class NumberOfThreadFunctionSupplier
+class NumberOfThreadFunctionSupplier
         implements Supplier<Iterator<Function<Void, Integer>>> {
 
     @Override

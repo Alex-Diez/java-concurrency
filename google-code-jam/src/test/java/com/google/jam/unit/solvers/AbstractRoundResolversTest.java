@@ -15,7 +15,7 @@ import org.junit.Test;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public abstract class AbstractRoundResolversTest {
+abstract class AbstractRoundResolversTest {
 
     private final Function<String, Integer> algorithm;
     private final String smokeTestLocation;

@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-public class AlgorithmSupplier
+class AlgorithmSupplier
         implements Supplier<Iterator<Function<String, Integer>>> {
 
     @Override
