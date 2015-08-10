@@ -21,12 +21,16 @@ public class StandingOvationRoundTest
     public void testCreateStandingOvationRound()
             throws Exception {
         final Round round = new Round(
-                parallelism, createMapFromList(
-                Arrays.asList(
-                        "4 11111",
-                        "1 09",
-                        "5 110011",
-                        "0 1")));
+                parallelism,
+                createMapFromList(
+                        Arrays.asList(
+                                "4 11111",
+                                "1 09",
+                                "5 110011",
+                                "0 1"
+                        )
+                )
+        );
         final String task = round.getNextTask().getValue();
         assertThat(task, matchesPattern("^([0-9]*) ([0-9]*)$"));
     }
