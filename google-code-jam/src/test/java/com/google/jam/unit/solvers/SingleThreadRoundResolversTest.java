@@ -34,26 +34,8 @@ public class SingleThreadRoundResolversTest
             char roundLetter,
             String smokeTestLocation,
             String smokeTestComplexity,
-            String smokeTestRoundType,
-            String smallLocation,
-            String smallComplexity,
-            String smallRoundType,
-            String largeLocation,
-            String largeComplexity,
-            String largeRoundType) {
-        super(
-                algorithm,
-                roundLetter,
-                smokeTestLocation,
-                smokeTestComplexity,
-                smokeTestRoundType,
-                smallLocation,
-                smallComplexity,
-                smallRoundType,
-                largeLocation,
-                largeComplexity,
-                largeRoundType
-        );
+            String roundType) {
+        super(algorithm, roundLetter, smokeTestLocation, smokeTestComplexity, roundType);
     }
 
     @Override
@@ -72,16 +54,16 @@ public class SingleThreadRoundResolversTest
     private static class DataProvider {
 
         public Collection<Object[]> provide(
-                final Supplier<Iterator<Function<String, Integer>>> algorithmSupplier,
+                final AlgorithmSupplier algorithmSupplier,
                 final Supplier<Iterator<Character>> roundLetterSupplier,
                 final Supplier<Iterator<String[]>> testDataLocationSupplier) {
             Collection<Object[]> collection = new ArrayList<>();
-            Iterator<Function<String, Integer>> algorithmIterator = algorithmSupplier.get();
-            while (algorithmIterator.hasNext()) {
-                Function<String, Integer> algorithm = algorithmIterator.next();
-                Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
-                while (roundLetterIterator.hasNext()) {
-                    Character roundLetter = roundLetterIterator.next();
+            Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
+            while (roundLetterIterator.hasNext()) {
+                Character roundLetter = roundLetterIterator.next();
+                Iterator<Function<String, Integer>> algorithmIterator = algorithmSupplier.get(roundLetter);
+                while (algorithmIterator.hasNext()) {
+                    Function<String, Integer> algorithm = algorithmIterator.next();
                     Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
                     while (testDataLocationIterator.hasNext()) {
                         String[] testDataLocation = testDataLocationIterator.next();
@@ -91,13 +73,7 @@ public class SingleThreadRoundResolversTest
                                         roundLetter,
                                         testDataLocation[0],
                                         testDataLocation[1],
-                                        testDataLocation[2],
-                                        testDataLocation[3],
-                                        testDataLocation[4],
-                                        testDataLocation[5],
-                                        testDataLocation[6],
-                                        testDataLocation[7],
-                                        testDataLocation[8]
+                                        testDataLocation[2]
                                 }
                         );
                     }

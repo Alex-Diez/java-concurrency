@@ -11,7 +11,9 @@ class TestDataLocationSupplier
     public Iterator<String[]> get() {
         return Arrays.asList(
                 new String[][] {
-                        {"test", "small", "test", "main", "small", "practice", "main", "large", "practice"}
+                        {"test", "small", "test"},
+                        {"main", "small", "practice"},
+                        {"main", "large", "practice"}
                 }
         ).iterator();
     }

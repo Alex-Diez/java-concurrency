@@ -1,18 +1,11 @@
 package com.google.jam.unit.solvers;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import com.google.jam.Round;
-import com.google.jam.RoundCreator;
-import com.google.jam.RoundPathBuilder;
-import com.google.jam.RoundTaskReader;
-import com.google.jam.experiments.CPUNumberOfThreadFunction;
-import com.google.jam.experiments.DoubleCPUNumberOfThreadFunction;
 import com.google.jam.solvers.MultiThreadRoundResolver;
 import com.google.jam.solvers.RoundResolver;
 
@@ -41,29 +34,11 @@ public class MultiThreadRoundResolversTest
     public MultiThreadRoundResolversTest(
             final Function<String, Integer> algorithm,
             final char roundLetter,
-            final String smokeTestLocation,
-            final String smokeTestComplexity,
-            final String smokeTestRoundType,
-            final String smallLocation,
-            final String smallComplexity,
-            final String smallRoundType,
-            final String largeLocation,
-            final String largeComplexity,
-            final String largeRoundType,
+            final String location,
+            final String complexity,
+            final String roundType,
             final Function<Void, Integer> numberOfThreadFunction) {
-        super(
-                algorithm,
-                roundLetter,
-                smokeTestLocation,
-                smokeTestComplexity,
-                smokeTestRoundType,
-                smallLocation,
-                smallComplexity,
-                smallRoundType,
-                largeLocation,
-                largeComplexity,
-                largeRoundType
-        );
+        super(algorithm, roundLetter, location, complexity, roundType);
         this.numberOfThreadFunction = numberOfThreadFunction;
     }
 
@@ -91,17 +66,17 @@ public class MultiThreadRoundResolversTest
     private static class DataProvider {
 
         public Collection<Object[]> provide(
-                final Supplier<Iterator<Function<String, Integer>>> algorithmSupplier,
+                final AlgorithmSupplier algorithmSupplier,
                 final Supplier<Iterator<Character>> roundLetterSupplier,
                 final Supplier<Iterator<String[]>> testDataLocationSupplier,
                 final Supplier<Iterator<Function<Void, Integer>>> numberOfThreadFunctionSupplier) {
             Collection<Object[]> collection = new ArrayList<>();
-            Iterator<Function<String, Integer>> algorithmIterator = algorithmSupplier.get();
-            while (algorithmIterator.hasNext()) {
-                Function<String, Integer> algorithm = algorithmIterator.next();
-                Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
-                while (roundLetterIterator.hasNext()) {
-                    Character roundLetter = roundLetterIterator.next();
+            Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
+            while (roundLetterIterator.hasNext()) {
+                Character roundLetter = roundLetterIterator.next();
+                Iterator<Function<String, Integer>> algorithmIterator = algorithmSupplier.get(roundLetter);
+                while (algorithmIterator.hasNext()) {
+                    Function<String, Integer> algorithm = algorithmIterator.next();
                     Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
                     while (testDataLocationIterator.hasNext()) {
                         String[] testDataLocation = testDataLocationIterator.next();
@@ -116,12 +91,6 @@ public class MultiThreadRoundResolversTest
                                             testDataLocation[0],
                                             testDataLocation[1],
                                             testDataLocation[2],
-                                            testDataLocation[3],
-                                            testDataLocation[4],
-                                            testDataLocation[5],
-                                            testDataLocation[6],
-                                            testDataLocation[7],
-                                            testDataLocation[8],
                                             numberOfThreadFunction
                                     }
                             );
