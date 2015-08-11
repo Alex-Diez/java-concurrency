@@ -1,6 +1,8 @@
 package com.google.jam.unit;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.jam.Round;
 import com.google.jam.RoundCreator;
@@ -26,13 +28,8 @@ public class RoundTaskReaderTest {
         roundTaskReader.applyCreator(
                 new RoundCreator() {
                     @Override
-                    public Round createRound(List<String> strings) {
-                        return null;
-                    }
-
-                    @Override
-                    public Round createRoundForMultiThreadEnvironment(List<String> strings) {
-                        return null;
+                    protected Map<Integer, String> getIntegerStringMap(List<String> strings) {
+                        return new HashMap<>();
                     }
                 }
         );
