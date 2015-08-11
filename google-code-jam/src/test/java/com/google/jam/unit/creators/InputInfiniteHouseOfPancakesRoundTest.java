@@ -15,6 +15,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import static com.jcabi.matchers.RegexMatchers.matchesPattern;
+import static org.hamcrest.MatcherAssert.assertThat;
+
 @RunWith(Parameterized.class)
 public class InputInfiniteHouseOfPancakesRoundTest {
 
@@ -37,9 +40,9 @@ public class InputInfiniteHouseOfPancakesRoundTest {
     }
 
     @Test(expected = WrongRoundFormatException.class)
-    public void testWrongStandingOvationRoundFormat_shouldThrowException()
+    public void testWrongInputInfiniteHouseOfPancakesRoundFormat_shouldThrowException()
             throws Exception {
-        final Round round = creator.createRound(
+        creator.createRound(
                 new ArrayList<>(
                         Arrays.asList(
                                 queueLength,
@@ -54,5 +57,27 @@ public class InputInfiniteHouseOfPancakesRoundTest {
                         )
                 )
         );
+    }
+
+    @Test
+    public void testInputInfiniteHouseOfPancakesRoundFormat()
+            throws Exception {
+        final Round round = creator.createRound(
+                new ArrayList<>(
+                        Arrays.asList(
+                                "4",
+                                "1",
+                                "3",
+                                "4",
+                                "1 2 1 2",
+                                "1",
+                                "4",
+                                "5",
+                                "4 8 7 8 3"
+                        )
+                )
+        );
+        String task = round.getNextTask().getValue();
+        assertThat(task, matchesPattern("^([0-9]*)( [0-9]*)$"));
     }
 }

@@ -1,9 +1,9 @@
-package com.google.jam.unit.creators;
+package com.google.jam.unit.rounds;
 
 import java.util.Arrays;
 
 import com.google.jam.Round;
-import com.google.jam.unit.AbstractRoundTest;
+import com.google.jam.unit.rounds.AbstractRoundTest;
 
 import org.junit.Test;
 

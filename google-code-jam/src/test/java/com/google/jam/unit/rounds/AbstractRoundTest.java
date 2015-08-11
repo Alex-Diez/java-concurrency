@@ -1,4 +1,4 @@
-package com.google.jam.unit;
+package com.google.jam.unit.rounds;
 
 import java.util.Arrays;
 import java.util.Collection;
