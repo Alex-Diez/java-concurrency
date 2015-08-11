@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 
+import com.google.jam.Round;
 import com.google.jam.RoundCreator;
 import com.google.jam.WrongRoundFormatException;
 import com.google.jam.creators.StandingOvationRoundCreator;
@@ -13,38 +14,50 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
+import static com.jcabi.matchers.RegexMatchers.matchesPattern;
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
-public class InputStandingOvationRoundTest {
+public class InputStandingOvationRoundCreatorTest {
 
     private final String queueLength;
-    private final boolean parallelism;
     private RoundCreator creator;
 
-    public InputStandingOvationRoundTest(String queueLength, boolean parallelism) {
+    public InputStandingOvationRoundCreatorTest(String queueLength) {
         this.queueLength = queueLength;
-        this.parallelism = parallelism;
     }
 
     @Parameters
     public static Collection<Object[]> data() {
         return Arrays.asList(
                 new Object[][] {
-                        {"g", true}, {"", true}, {"-4", true}, {"1", true}, {"100", true},
-                        {"g", false}, {"", false}, {"-4", false}, {"1", false}, {"100", false}
-                });
+                        {"g"}, {""}, {"-4"}, {"1"}, {"100"},
+                }
+        );
     }
 
     @Before
     public void setUp()
             throws Exception {
-        creator = new StandingOvationRoundCreator(parallelism);
+        creator = new StandingOvationRoundCreator();
     }
 
     @Test(expected = WrongRoundFormatException.class)
     public void testWrongStandingOvationRoundFormat_shouldThrowException()
             throws Exception {
         creator.createRound(new ArrayList<>(Arrays.asList(queueLength, "4 11111", "1 09", "5 110011", "0 1")));
+    }
+
+    @Test
+    public void testValidateStandingOvationRound()
+            throws Exception {
+        final Round round = creator.createRound(
+                new ArrayList<>(Arrays.asList("4", "4 11111", "1 09", "5 110011", "0 1"))
+        );
+        while (round.hasNextTask()) {
+            String task = round.getNextTask().getValue();
+            assertThat(task, matchesPattern("^([0-9]*) ([0-9]*)$"));
+        }
     }
 }

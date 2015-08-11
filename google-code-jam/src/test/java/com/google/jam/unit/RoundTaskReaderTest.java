@@ -1,5 +1,9 @@
 package com.google.jam.unit;
 
+import java.util.List;
+
+import com.google.jam.Round;
+import com.google.jam.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 
@@ -19,6 +23,18 @@ public class RoundTaskReaderTest {
     @Test
     public void testApplyRoundCreator()
             throws Exception {
-        roundTaskReader.applyCreator((strings) -> null);
+        roundTaskReader.applyCreator(
+                new RoundCreator() {
+                    @Override
+                    public Round createRound(List<String> strings) {
+                        return null;
+                    }
+
+                    @Override
+                    public Round createRoundForMultiThreadEnvironment(List<String> strings) {
+                        return null;
+                    }
+                }
+        );
     }
 }

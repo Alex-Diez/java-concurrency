@@ -47,7 +47,7 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
     @Setup
     public void setUp()
             throws Exception {
-        final RoundCreator creator = new StandingOvationRoundCreator(false);
+        final RoundCreator creator = new StandingOvationRoundCreator();
         final RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
         largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");

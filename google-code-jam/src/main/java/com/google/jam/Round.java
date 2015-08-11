@@ -1,18 +1,15 @@
 package com.google.jam;
 
-import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Supplier;
 
 public class Round {
 
     private final Queue<Map.Entry<Integer, String>> roundTasks;
 
-    public Round(final boolean parallelism, final Map<Integer, String> tasks) {
-        roundTasks = parallelism
-                ? new LinkedBlockingQueue<>(tasks.entrySet())
-                : new LinkedList<>(tasks.entrySet());
+    public Round(final Supplier<Queue<Map.Entry<Integer, String>>> roundTasksSupplier) {
+        this.roundTasks = roundTasksSupplier.get();
     }
 
     public Map.Entry<Integer, String> getNextTask() {

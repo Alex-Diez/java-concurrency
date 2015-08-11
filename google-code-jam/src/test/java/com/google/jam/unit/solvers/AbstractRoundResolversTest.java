@@ -10,6 +10,7 @@ import com.google.jam.RoundTaskReader;
 import com.google.jam.solvers.RoundResolver;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -56,6 +57,7 @@ abstract class AbstractRoundResolversTest {
     }
 
     @Test
+    @Ignore
     public void testTaskSolvingProcess()
             throws Exception {
         final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);

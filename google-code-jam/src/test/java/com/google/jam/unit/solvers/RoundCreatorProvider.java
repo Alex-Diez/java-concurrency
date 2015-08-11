@@ -8,7 +8,7 @@ class RoundCreatorProvider {
     public RoundCreator buildRoundCreator(final char roundLetter) {
         switch (roundLetter) {
             case 'A':
-                return new StandingOvationRoundCreator(false);
+                return new StandingOvationRoundCreator();
             case 'B':
                 return new InfiniteHouseOfPancakesRoundCreator();
         }

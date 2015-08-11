@@ -19,12 +19,12 @@ import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static org.hamcrest.MatcherAssert.assertThat;
 
 @RunWith(Parameterized.class)
-public class InputInfiniteHouseOfPancakesRoundTest {
+public class InputInfiniteHouseOfPancakesCreatorRoundTest {
 
     private final String queueLength;
     private RoundCreator creator;
 
-    public InputInfiniteHouseOfPancakesRoundTest(String queueLength) {
+    public InputInfiniteHouseOfPancakesCreatorRoundTest(String queueLength) {
         this.queueLength = queueLength;
     }
 
@@ -43,19 +43,7 @@ public class InputInfiniteHouseOfPancakesRoundTest {
     public void testWrongInputInfiniteHouseOfPancakesRoundFormat_shouldThrowException()
             throws Exception {
         creator.createRound(
-                new ArrayList<>(
-                        Arrays.asList(
-                                queueLength,
-                                "1",
-                                "3",
-                                "4",
-                                "1 2 1 2",
-                                "1",
-                                "4",
-                                "5",
-                                "4 8 7 8 3"
-                        )
-                )
+                new ArrayList<>(Arrays.asList(queueLength, "1", "3", "4", "1 2 1 2", "1", "4", "5", "4 8 7 8 3"))
         );
     }
 
@@ -63,21 +51,24 @@ public class InputInfiniteHouseOfPancakesRoundTest {
     public void testInputInfiniteHouseOfPancakesRoundFormat()
             throws Exception {
         final Round round = creator.createRound(
-                new ArrayList<>(
-                        Arrays.asList(
-                                "4",
-                                "1",
-                                "3",
-                                "4",
-                                "1 2 1 2",
-                                "1",
-                                "4",
-                                "5",
-                                "4 8 7 8 3"
-                        )
-                )
+                new ArrayList<>(Arrays.asList("4", "1", "3", "4", "1 2 1 2", "1", "4", "5", "4 8 7 8 3"))
         );
-        String task = round.getNextTask().getValue();
-        assertThat(task, matchesPattern("^([0-9]*)( [0-9]*)$"));
+        while (round.hasNextTask()) {
+            final String task = round.getNextTask().getValue();
+            assertThat(task, matchesPattern("^([0-9]*)( [0-9])*$"));
+        }
+    }
+
+    @Test
+    public void testValidateInfiniteHouseOfPancakesRound()
+            throws Exception {
+        final InfiniteHouseOfPancakesRoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
+        final Round round = creator.createRound(
+                new ArrayList<>(Arrays.asList("3", "1", "3", "4", "1 2 1 2", "1", "4"))
+        );
+        while (round.hasNextTask()) {
+            final String task = round.getNextTask().getValue();
+            assertThat(task, matchesPattern("^([0-9]) (([0-9] )*([0-9]))"));
+        }
     }
 }

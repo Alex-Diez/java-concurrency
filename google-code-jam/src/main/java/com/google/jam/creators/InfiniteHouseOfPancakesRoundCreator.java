@@ -29,6 +29,27 @@ public class InfiniteHouseOfPancakesRoundCreator
         for (int i = 0; i < strings.size(); i += 2) {
             tasks.put(counter++, strings.get(i) + ' ' + strings.get(i + 1));
         }
-        return new Round(false, tasks);
+        return new Round(new SingleThreadTaskQueueSupplier(tasks));
+    }
+
+    @Override
+    public Round createRoundForMultiThreadEnvironment(final List<String> strings) {
+        final int queueLength;
+        try {
+            final String length = strings.remove(0);
+            queueLength = Integer.parseInt(length);
+        }
+        catch (NumberFormatException e) {
+            throw new WrongRoundFormatException();
+        }
+        if (queueLength != strings.size() / 2) {
+            throw new WrongRoundFormatException();
+        }
+        Map<Integer, String> tasks = new HashMap<>(strings.size() / 2);
+        int counter = 1;
+        for (int i = 0; i < strings.size(); i += 2) {
+            tasks.put(counter++, strings.get(i) + ' ' + strings.get(i + 1));
+        }
+        return new Round(new MultiThreadTaskQueueSupplier(tasks));
     }
 }

@@ -69,6 +69,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
     }
 
     @Test
+    @Ignore
     public void testQueueSizeInConcurrentEnvironment()
             throws Exception {
         for (int i = 0; i < numberOfWriters; i++) {
@@ -141,6 +142,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
     }
 
     @Test
+    @Ignore
     public void testQueueSizeInAsynchronousConcurrentEnvironment()
             throws Exception {
         for (int i = 0; i < numberOfWriters; i++) {
