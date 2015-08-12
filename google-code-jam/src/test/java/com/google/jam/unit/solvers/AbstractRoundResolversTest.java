@@ -4,11 +4,13 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.google.jam.Round;
+import com.google.jam.RoundResolutionFactory;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.solvers.RoundResolver;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -18,27 +20,28 @@ import static org.hamcrest.Matchers.is;
 
 abstract class AbstractRoundResolversTest {
 
+    protected final RoundResolutionFactory roundResolutionFactory;
     private final Function<String, Integer> algorithm;
     private final String location;
     private final char roundLetter;
     private final String complexity;
     private final String roundType;
     private final TestDataProvider testDataProvider;
-    private final RoundCreatorProvider roundCreatorProvider;
 
     public AbstractRoundResolversTest(
+            final RoundResolutionFactory roundResolutionFactory,
             final Function<String, Integer> algorithm,
             final char roundLetter,
             final String location,
             final String complexity,
             final String roundType) {
+        this.roundResolutionFactory = roundResolutionFactory;
         this.algorithm = algorithm;
         this.roundLetter = roundLetter;
         this.location = location;
         this.complexity = complexity;
         this.roundType = roundType;
         this.testDataProvider = new TestDataProvider();
-        this.roundCreatorProvider = new RoundCreatorProvider();
     }
 
     private Round round;
@@ -46,7 +49,7 @@ abstract class AbstractRoundResolversTest {
     @Before
     public void setUp()
             throws Exception {
-        final RoundCreator creator = roundCreatorProvider.buildRoundCreator(roundLetter);
+        final RoundCreator creator = roundResolutionFactory.buildRoundCreator();
         final RoundPathBuilder smokeTestPathBuilder = new RoundPathBuilder(
                 location,
                 roundLetter,
@@ -54,7 +57,10 @@ abstract class AbstractRoundResolversTest {
                 roundType
         );
         round = new RoundTaskReader(smokeTestPathBuilder.build()).applyCreator(creator);
+        setUpResolver();
     }
+
+    protected abstract void setUpResolver();
 
     @Test
     @Ignore(

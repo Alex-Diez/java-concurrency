@@ -8,4 +8,6 @@ import com.google.jam.Round;
 public interface RoundResolver {
 
     Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm);
+
+    void shutDownResolver();
 }

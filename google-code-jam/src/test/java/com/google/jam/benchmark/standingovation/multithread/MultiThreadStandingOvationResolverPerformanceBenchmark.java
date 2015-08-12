@@ -68,7 +68,7 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
     @TearDown
     public void tearDown()
             throws Exception {
-        resolver.shutdownThreadPool();
+        resolver.shutDownResolver();
         assert largeResult.size() == 100;
         assert smallResult.size() == 100;
     }

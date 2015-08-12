@@ -6,10 +6,9 @@ import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.google.jam.RoundResolutionFactory;
 import com.google.jam.solvers.RoundResolver;
-import com.google.jam.solvers.SingleThreadRoundResolver;
 
-import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
@@ -30,20 +29,18 @@ public class SingleThreadRoundResolversTest
     private RoundResolver resolver;
 
     public SingleThreadRoundResolversTest(
+            final RoundResolutionFactory roundResolutionFactory,
             Function<String, Integer> algorithm,
             char roundLetter,
             String smokeTestLocation,
             String smokeTestComplexity,
             String roundType) {
-        super(algorithm, roundLetter, smokeTestLocation, smokeTestComplexity, roundType);
+        super(roundResolutionFactory, algorithm, roundLetter, smokeTestLocation, smokeTestComplexity, roundType);
     }
 
     @Override
-    @Before
-    public void setUp()
-            throws Exception {
-        super.setUp();
-        resolver = new SingleThreadRoundResolver();
+    protected void setUpResolver() {
+        resolver = roundResolutionFactory.buildSingleThreadRoundResolver();
     }
 
     @Override

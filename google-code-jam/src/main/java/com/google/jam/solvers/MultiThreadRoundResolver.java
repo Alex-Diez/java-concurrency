@@ -20,7 +20,8 @@ public class MultiThreadRoundResolver
         this.executor = newFixedThreadPool(numberOfThreadSupplier.get());
     }
 
-    public void shutdownThreadPool() {
+    @Override
+    public void shutDownResolver() {
         executor.shutdown();
     }
 

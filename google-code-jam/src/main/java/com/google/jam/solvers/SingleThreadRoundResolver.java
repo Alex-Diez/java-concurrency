@@ -25,4 +25,8 @@ public class SingleThreadRoundResolver
         final int result = doCalculation(data, algorithm);
         results.put(index, result);
     }
+
+    @Override
+    public void shutDownResolver() {
+    }
 }
