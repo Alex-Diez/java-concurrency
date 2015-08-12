@@ -7,6 +7,7 @@ import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,6 +28,7 @@ public class LastIndexTaskLinkedBlockingQueueDrainTest {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testDrainIntoAnotherQueue()
             throws Exception {
         assertThat(full.drainTo(empty, DATA.size()), is(DATA.size()));
@@ -35,12 +37,14 @@ public class LastIndexTaskLinkedBlockingQueueDrainTest {
     }
 
     @Test(expected = NullPointerException.class)
+    @Ignore("Stop develop queue")
     public void testDrainToNull_shouldThrowException()
             throws Exception {
         full.drainTo(null, DATA.size());
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testDrainPartOfQueueToAnotherQueue()
             throws Exception {
         assertThat(full.drainTo(empty, 2), is(2));

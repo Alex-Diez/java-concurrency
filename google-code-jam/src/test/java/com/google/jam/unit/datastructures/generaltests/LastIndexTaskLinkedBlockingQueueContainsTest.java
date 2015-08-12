@@ -7,6 +7,7 @@ import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,12 +28,14 @@ public class LastIndexTaskLinkedBlockingQueueContainsTest {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testContainsOnEmptyQueue()
             throws Exception {
         assertThat(empty.contains(1), is(false));
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testContainsOnFullQueue()
             throws Exception {
         final Integer expected = DATA.get(0);

@@ -7,6 +7,7 @@ import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -27,6 +28,7 @@ public class LastIndexTaskLinkedBlockingQueueSizeTests {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testSizeOfFullQueue()
             throws Exception {
         assertThat(false, is(full.isEmpty()));
@@ -34,6 +36,7 @@ public class LastIndexTaskLinkedBlockingQueueSizeTests {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testSizeOfEmptyQueue()
             throws Exception {
         assertThat(true, is(empty.isEmpty()));
@@ -41,6 +44,7 @@ public class LastIndexTaskLinkedBlockingQueueSizeTests {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testRemainingCapacity()
             throws Exception {
         assertThat(empty.remainingCapacity(), is(Integer.MAX_VALUE));

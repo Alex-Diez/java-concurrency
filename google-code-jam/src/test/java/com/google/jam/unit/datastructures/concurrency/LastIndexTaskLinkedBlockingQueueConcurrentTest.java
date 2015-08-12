@@ -69,7 +69,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("Stop develop queue")
     public void testQueueSizeInConcurrentEnvironment()
             throws Exception {
         for (int i = 0; i < numberOfWriters; i++) {
@@ -142,7 +142,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
     }
 
     @Test
-    @Ignore
+    @Ignore("Stop develop queue")
     public void testQueueSizeInAsynchronousConcurrentEnvironment()
             throws Exception {
         for (int i = 0; i < numberOfWriters; i++) {

@@ -7,6 +7,7 @@ import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
@@ -28,24 +29,28 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test(expected = NullPointerException.class)
+    @Ignore("Stop develop queue")
     public void testAddNull_shouldThrowException()
             throws Exception {
         empty.add(null);
     }
 
     @Test(expected = NullPointerException.class)
+    @Ignore("Stop develop queue")
     public void testOfferNull_shouldThrowException()
             throws Exception {
         empty.offer(null);
     }
 
     @Test(expected = NullPointerException.class)
+    @Ignore("Stop develop queue")
     public void testPutNull_shouldThrowException()
             throws Exception {
         empty.put(null);
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testAddToEmptyQueue()
             throws Exception {
         assertThat(empty.add(1), is(true));
@@ -54,6 +59,7 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testAddToFullQueue()
             throws Exception {
         assertThat(full.add(1), is(true));
@@ -62,6 +68,7 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testOfferToEmptyQueue()
             throws Exception {
         assertThat(empty.offer(1), is(true));
@@ -70,6 +77,7 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testOfferToFullQueue()
             throws Exception {
         assertThat(full.offer(1), is(true));
@@ -78,6 +86,7 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testPutIntoFullQueue()
             throws Exception {
         full.put(5);
@@ -85,6 +94,7 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test
+    @Ignore("Stop develop queue")
     public void testOfferIntoFullQueueWithTimeOut()
             throws Exception {
         assertThat(full.offer(1, 5L, SECONDS), is(true));
