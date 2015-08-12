@@ -1,6 +1,7 @@
 package com.google.jam.unit.solvers;
 
 import com.google.jam.creators.SingleThreadEnvironmentFunction;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.solvers.SingleThreadRoundResolver;
 import org.junit.runner.RunWith;
@@ -11,8 +12,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -46,7 +45,7 @@ public class SingleThreadRoundResolversTest
     }
 
     @Override
-    protected Function<Map<Integer, String>, Queue<Entry<Integer, String>>> createThreadEnvironmentFactory() {
+    protected Function<Map<Integer, String>, LastIndexTaskQueue<String>> createThreadEnvironmentFactory() {
         return new SingleThreadEnvironmentFunction();
     }
 

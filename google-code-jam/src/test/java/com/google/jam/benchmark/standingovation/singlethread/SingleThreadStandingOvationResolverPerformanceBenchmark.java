@@ -8,6 +8,7 @@ import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
 import com.google.jam.creators.SingleThreadEnvironmentFunction;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.solvers.SingleThreadRoundResolver;
 import org.openjdk.jmh.annotations.Benchmark;
@@ -25,6 +26,7 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -55,7 +57,7 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
         final RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final Function<List<String>, Map<Integer, String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
-        final Function<Map<Integer, String>, Queue<Map.Entry<Integer, String>>> threadEnvironmentFunction =
+        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new SingleThreadEnvironmentFunction();
         largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(
                 creator,

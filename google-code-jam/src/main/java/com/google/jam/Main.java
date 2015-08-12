@@ -4,6 +4,7 @@ import com.google.jam.algorithms.InfiniteHouseOfPancakesContestAnalysisAlgorithm
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
 import com.google.jam.creators.SingleThreadEnvironmentFunction;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.solvers.SingleThreadRoundResolver;
 
@@ -27,7 +28,7 @@ public class Main {
                         roundLetter
                 );
         final RoundCreator creator = new RoundCreator();
-        final Function<Map<Integer, String>, Queue<Map.Entry<Integer, String>>> threadEnvironmentFunction =
+        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new SingleThreadEnvironmentFunction();
         final Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(
                 creator,

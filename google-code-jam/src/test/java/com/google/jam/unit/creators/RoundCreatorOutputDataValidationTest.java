@@ -3,6 +3,8 @@ package com.google.jam.unit.creators;
 import com.google.jam.Round;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.datastructures.LastIndexTaskQueue;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -13,13 +15,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(Parameterized.class)
 public class RoundCreatorOutputDataValidationTest {
@@ -35,14 +36,14 @@ public class RoundCreatorOutputDataValidationTest {
         );
     }
 
-    private final Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction;
+    private final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction;
     private final List<String> testData;
     private final String pattern;
     private final RoundCreator roundCreator;
     private final Function<List<String>, Map<Integer, String>> roundFunction;
 
     public RoundCreatorOutputDataValidationTest(
-            final Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction,
+            final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction,
             final char roundLetter,
             final List<String> testData,
             final String pattern) {
@@ -62,23 +63,42 @@ public class RoundCreatorOutputDataValidationTest {
                 threadEnvironmentFunction
         );
         while (round.hasNextTask()) {
-            String task = round.getNextTask().getValue();
+            final String task = round.getNextTask();
             assertThat(task, matchesPattern(pattern));
+        }
+    }
+
+    @Test
+    @Ignore("Develop queues")
+    public void testRoundLastTaskId() throws Exception {
+        final Round round = roundCreator.createRound(
+                new ArrayList<>(testData),
+                roundFunction,
+                threadEnvironmentFunction
+        );
+        while (round.hasNextTask()) {
+            final int index = round.getLastTaskId();
+            assertThat(
+                    "[ " + roundFunction.getClass().getSimpleName() + " ] [ " + threadEnvironmentFunction.getClass().getSimpleName() + " ]",
+                    index,
+                    is(round.numberOfTasks())
+            );
+            round.getNextTask();
         }
     }
 
     static class DataProvider {
         public Collection<Object[]> provide(
-                final Supplier<Iterator<Function<Map<Integer, String>, Queue<Entry<Integer, String>>>>> threadEnvironmentFunctionSupplier,
+                final Supplier<Iterator<Function<Map<Integer, String>, LastIndexTaskQueue<String>>>> threadEnvironmentFunctionSupplier,
                 final Supplier<Iterator<Character>> roundLetterSupplier,
                 final Supplier<Iterator<String>> taskQueueLengthSupplier,
                 final Supplier<Iterator<List<String>>> roundInputTestDataSupplier,
                 final Supplier<Iterator<String>> regularExpressionSupplier) {
             final Collection<Object[]> collection = new ArrayList<>();
-            final Iterator<Function<Map<Integer, String>, Queue<Entry<Integer, String>>>>
+            final Iterator<Function<Map<Integer, String>, LastIndexTaskQueue<String>>>
                     threadEnvironmentFunctionIterator = threadEnvironmentFunctionSupplier.get();
             while (threadEnvironmentFunctionIterator.hasNext()) {
-                Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction =
+                Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                         threadEnvironmentFunctionIterator.next();
                 final Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
                 final Iterator<List<String>> roundInputTestDataIterator = roundInputTestDataSupplier.get();

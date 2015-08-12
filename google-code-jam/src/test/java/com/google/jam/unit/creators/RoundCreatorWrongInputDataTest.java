@@ -3,6 +3,7 @@ package com.google.jam.unit.creators;
 import com.google.jam.WrongRoundFormatException;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -32,12 +33,12 @@ public class RoundCreatorWrongInputDataTest {
         );
     }
 
-    private final Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction;
+    private final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction;
     private final List<String> testData;
     private final Function<List<String>, Map<Integer, String>> roundFunction;
 
     public RoundCreatorWrongInputDataTest(
-            final Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction,
+            final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction,
             final char roundLetter,
             final List<String> testData) {
         this.threadEnvironmentFunction = threadEnvironmentFunction;
@@ -62,15 +63,15 @@ public class RoundCreatorWrongInputDataTest {
 
     static class DataProvider {
         public Collection<Object[]> provide(
-                final Supplier<Iterator<Function<Map<Integer, String>, Queue<Entry<Integer, String>>>>> threadEnvironmentFunctionSupplier,
+                final Supplier<Iterator<Function<Map<Integer, String>, LastIndexTaskQueue<String>>>> threadEnvironmentFunctionSupplier,
                 final Supplier<Iterator<Character>> roundLetterSupplier,
                 final Supplier<Iterator<String>> taskQueueLengthSupplier,
                 final Supplier<Iterator<List<String>>> roundInputTestDataSupplier) {
             final Collection<Object[]> collection = new ArrayList<>();
-            final Iterator<Function<Map<Integer, String>, Queue<Entry<Integer, String>>>>
+            final Iterator<Function<Map<Integer, String>, LastIndexTaskQueue<String>>>
                     threadEnvironmentFunctionIterator = threadEnvironmentFunctionSupplier.get();
             while (threadEnvironmentFunctionIterator.hasNext()) {
-                Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction =
+                Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                         threadEnvironmentFunctionIterator.next();
                 final Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
                 final Iterator<List<String>> roundInputTestDataIterator = roundInputTestDataSupplier.get();

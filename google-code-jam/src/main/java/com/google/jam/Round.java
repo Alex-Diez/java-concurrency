@@ -1,18 +1,21 @@
 package com.google.jam;
 
+import com.google.jam.datastructures.LastIndexTaskQueue;
+
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.function.Supplier;
 
 public class Round {
 
-    private final Queue<Map.Entry<Integer, String>> roundTasks;
+    private final LastIndexTaskQueue<String> roundTasks;
 
-    public Round(final Queue<Map.Entry<Integer, String>> roundTasks) {
+    public Round(final LastIndexTaskQueue<String> roundTasks) {
         this.roundTasks = roundTasks;
     }
 
-    public Map.Entry<Integer, String> getNextTask() {
+    public String getNextTask() {
         return roundTasks.poll();
     }
 
@@ -22,5 +25,9 @@ public class Round {
 
     public boolean hasNextTask() {
         return roundTasks.peek() != null;
+    }
+
+    public int getLastTaskId() {
+        return roundTasks.getLastRetrievedTaskIndex();
     }
 }

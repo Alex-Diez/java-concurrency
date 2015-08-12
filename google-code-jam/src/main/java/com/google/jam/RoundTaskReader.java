@@ -5,10 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Queue;
 import java.util.function.Function;
 
 import com.google.jam.creators.RoundCreator;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 
 public class RoundTaskReader {
 
@@ -21,7 +23,7 @@ public class RoundTaskReader {
     public Round applyCreator(
             final RoundCreator roundCreator,
             final Function<List<String>, Map<Integer, String>> roundFunction,
-            final Function<Map<Integer, String>, Queue<Map.Entry<Integer, String>>> threadEnvironmentFunction)
+            final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction)
             throws IOException {
         final List<String> fileContent = Files.readAllLines(pathToFile);
         return roundCreator.createRound(fileContent, roundFunction, threadEnvironmentFunction);

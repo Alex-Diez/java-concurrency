@@ -1,14 +1,13 @@
 package com.google.jam.unit.datastructures.generaltests;
 
-import java.util.Arrays;
-import java.util.List;
-
-import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
-import com.google.jam.datastructures.LastIndexTaskQueue;
-
+import com.google.jam.datastructures.LastIndexLinkedTaskBlockingQueue;
+import com.google.jam.datastructures.LastIndexTaskBlockingQueue;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -18,14 +17,14 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
 
     private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
 
-    private LastIndexTaskQueue<Integer> empty;
-    private LastIndexTaskQueue<Integer> full;
+    private LastIndexTaskBlockingQueue<Integer> empty;
+    private LastIndexTaskBlockingQueue<Integer> full;
 
     @Before
     public void setUp()
             throws Exception {
-        full = new LastIndexTaskLinkedBlockingQueue<>(DATA);
-        empty = new LastIndexTaskLinkedBlockingQueue<>();
+        full = new LastIndexLinkedTaskBlockingQueue<>(DATA);
+        empty = new LastIndexLinkedTaskBlockingQueue<>();
     }
 
     @Test(expected = NullPointerException.class)

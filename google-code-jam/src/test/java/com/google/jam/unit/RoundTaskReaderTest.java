@@ -3,10 +3,10 @@ package com.google.jam.unit;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
+import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayDeque;
 import java.util.HashMap;
 
 public class RoundTaskReaderTest {
@@ -25,7 +25,7 @@ public class RoundTaskReaderTest {
         roundTaskReader.applyCreator(
                 new RoundCreator(),
                 strings -> new HashMap<>(),
-                integerStringMap -> new ArrayDeque<>()
+                integerStringMap -> new LastIndexTaskLinkedQueue<>()
         );
     }
 }

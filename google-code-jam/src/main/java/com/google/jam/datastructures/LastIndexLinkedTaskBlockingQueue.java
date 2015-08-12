@@ -7,9 +7,9 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.ReentrantLock;
 
-public class LastIndexTaskLinkedBlockingQueue<E>
+public class LastIndexLinkedTaskBlockingQueue<E>
         extends AbstractQueue<E>
-        implements LastIndexTaskQueue<E> {
+        implements LastIndexTaskBlockingQueue<E> {
 
     private final AtomicInteger size;
     private final ReentrantLock addLock;
@@ -19,14 +19,18 @@ public class LastIndexTaskLinkedBlockingQueue<E>
     private Node<E> tail;
     private Node<E> head;
 
-    public LastIndexTaskLinkedBlockingQueue(Collection<E> collection) {
-        this();
+    public LastIndexLinkedTaskBlockingQueue(Collection<E> collection) {
+        this(collection.size());
         for (E element : collection) {
             add(element);
         }
     }
 
-    public LastIndexTaskLinkedBlockingQueue() {
+    public LastIndexLinkedTaskBlockingQueue() {
+        this(-1);
+    }
+
+    private LastIndexLinkedTaskBlockingQueue(int initialIndex) {
         addLock = new ReentrantLock();
         removeLock = new ReentrantLock();
         size = new AtomicInteger();
@@ -34,7 +38,7 @@ public class LastIndexTaskLinkedBlockingQueue<E>
 
             @Override
             protected Integer initialValue() {
-                return -1;
+                return initialIndex;
             }
         };
     }

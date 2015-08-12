@@ -8,6 +8,7 @@ import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.creators.MultiThreadEnvironmentFunction;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.experiments.CPUNumberOfThreadFunction;
 import com.google.jam.experiments.DoubleCPUNumberOfThreadFunction;
 import com.google.jam.solvers.MultiThreadRoundResolver;
@@ -26,8 +27,6 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -60,7 +59,7 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final Function<List<String>, Map<Integer, String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
-        final Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction =
+        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new MultiThreadEnvironmentFunction();
         largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(
                 creator,

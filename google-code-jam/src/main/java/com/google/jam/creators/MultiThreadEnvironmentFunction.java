@@ -1,16 +1,16 @@
 package com.google.jam.creators;
 
+import com.google.jam.datastructures.LastIndexLinkedTaskBlockingQueue;
+import com.google.jam.datastructures.LastIndexTaskQueue;
+
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 
 public class MultiThreadEnvironmentFunction
-        implements Function<Map<Integer, String>, Queue<Entry<Integer, String>>> {
+        implements Function<Map<Integer, String>, LastIndexTaskQueue<String>> {
 
     @Override
-    public Queue<Map.Entry<Integer, String>> apply(final Map<Integer, String> data) {
-        return new LinkedBlockingQueue<>(data.entrySet());
+    public LastIndexTaskQueue<String> apply(final Map<Integer, String> data) {
+        return new LastIndexLinkedTaskBlockingQueue<>(data.values());
     }
 }

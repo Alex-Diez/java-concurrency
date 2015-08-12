@@ -19,10 +19,9 @@ public class SingleThreadRoundResolver
             final Map<Integer, Integer> results,
             final Round round,
             final Function<String, Integer> algorithm) {
-        final Map.Entry<Integer, String> task = round.getNextTask();
-        final int index = task.getKey();
-        final String data = task.getValue();
-        final int result = doCalculation(data, algorithm);
+        final String task = round.getNextTask();
+        final int index = round.getLastTaskId();
+        final int result = doCalculation(task, algorithm);
         results.put(index, result);
     }
 

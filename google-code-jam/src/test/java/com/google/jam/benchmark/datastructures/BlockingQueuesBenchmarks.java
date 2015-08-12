@@ -7,7 +7,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
+import com.google.jam.datastructures.LastIndexLinkedTaskBlockingQueue;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Level;
@@ -57,7 +57,7 @@ public class BlockingQueuesBenchmarks {
                 queue = new LinkedBlockingQueue<>(DATA);
                 break;
             case "link":
-                queue = new LastIndexTaskLinkedBlockingQueue<>(DATA);
+                queue = new LastIndexLinkedTaskBlockingQueue<>(DATA);
                 break;
             case "array-fair":
                 queue = new ArrayBlockingQueue<>(DATA.size(), true, DATA);

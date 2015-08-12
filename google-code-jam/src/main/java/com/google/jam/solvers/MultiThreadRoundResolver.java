@@ -36,10 +36,9 @@ public class MultiThreadRoundResolver
             final Function<String, Integer> algorithm) {
         executor.execute(
                 () -> {
-                    final Map.Entry<Integer, String> task = round.getNextTask();
-                    final int index = task.getKey();
-                    final String data = task.getValue();
-                    final int result = doCalculation(data, algorithm);
+                    final String task = round.getNextTask();
+                    final int index = round.getLastTaskId();
+                    final int result = doCalculation(task, algorithm);
                     results.put(index, result);
                 }
         );

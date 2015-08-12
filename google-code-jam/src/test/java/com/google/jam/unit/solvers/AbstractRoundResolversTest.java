@@ -5,6 +5,7 @@ import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
 import org.junit.After;
 import org.junit.Before;
@@ -57,7 +58,7 @@ abstract class AbstractRoundResolversTest {
                 complexity,
                 roundType
         );
-        final Function<Map<Integer, String>, Queue<Map.Entry<Integer, String>>> threadEnvironmentFunction =
+        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 createThreadEnvironmentFactory();
         round = new RoundTaskReader(smokeTestPathBuilder.build()).applyCreator(
                 creator,
@@ -72,7 +73,7 @@ abstract class AbstractRoundResolversTest {
         roundResolver.shutDownResolver();
     }
 
-    protected abstract Function<Map<Integer, String>, Queue<Entry<Integer, String>>> createThreadEnvironmentFactory();
+    protected abstract Function<Map<Integer, String>, LastIndexTaskQueue<String>> createThreadEnvironmentFactory();
 
     protected abstract RoundResolver createRoundResolver();
 
