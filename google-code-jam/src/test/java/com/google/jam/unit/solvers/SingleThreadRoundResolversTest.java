@@ -1,17 +1,16 @@
 package com.google.jam.unit.solvers;
 
+import com.google.jam.solvers.RoundResolver;
+import com.google.jam.solvers.SingleThreadRoundResolver;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
-
-import com.google.jam.RoundResolutionFactory;
-import com.google.jam.solvers.RoundResolver;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class SingleThreadRoundResolversTest
@@ -29,18 +28,17 @@ public class SingleThreadRoundResolversTest
     private RoundResolver resolver;
 
     public SingleThreadRoundResolversTest(
-            final RoundResolutionFactory roundResolutionFactory,
             Function<String, Integer> algorithm,
             char roundLetter,
             String smokeTestLocation,
             String smokeTestComplexity,
             String roundType) {
-        super(roundResolutionFactory, algorithm, roundLetter, smokeTestLocation, smokeTestComplexity, roundType);
+        super(algorithm, roundLetter, smokeTestLocation, smokeTestComplexity, roundType);
     }
 
     @Override
     protected void setUpResolver() {
-        resolver = roundResolutionFactory.buildSingleThreadRoundResolver();
+        resolver = new SingleThreadRoundResolver();
     }
 
     @Override

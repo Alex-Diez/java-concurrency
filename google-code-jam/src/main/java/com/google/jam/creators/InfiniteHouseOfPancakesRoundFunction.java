@@ -3,14 +3,15 @@ package com.google.jam.creators;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.jam.WrongRoundFormatException;
 
-public class InfiniteHouseOfPancakesRoundCreator
-        extends RoundCreator {
+public class InfiniteHouseOfPancakesRoundFunction
+        implements Function<List<String>, Map<Integer,String>> {
 
     @Override
-    protected Map<Integer, String> getIntegerStringMap(List<String> strings) {
+    public Map<Integer, String> apply(List<String> strings) {
         final int queueLength;
         try {
             final String length = strings.remove(0);

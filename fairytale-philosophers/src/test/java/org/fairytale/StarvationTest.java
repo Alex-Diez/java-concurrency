@@ -18,6 +18,7 @@ import org.fairytale.util.NamedReentrantLock;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.Ignore;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 
@@ -133,6 +134,7 @@ public class StarvationTest {
     }
 
     @Test
+	@Ignore
     public void philosophersRelativeStarvationTest() {
         final ExecutorService service = initializeThreadPool();
         final long executionTime = calculateExecutionTime();
@@ -143,6 +145,7 @@ public class StarvationTest {
     }
 
     @Test
+	@Ignore
     public void philosophersDirectStarvationTest() {
         final ExecutorService service = initializeThreadPool();
         final long executionTime = calculateExecutionTime();

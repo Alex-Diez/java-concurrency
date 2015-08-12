@@ -1,17 +1,18 @@
 package com.google.jam.creators;
 
+import com.google.jam.WrongRoundFormatException;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 import java.util.stream.IntStream;
 
-import com.google.jam.WrongRoundFormatException;
-
-public class StandingOvationRoundCreator
-        extends RoundCreator {
+public class StandingOvationRoundFunction
+        implements Function<List<String>, Map<Integer, String>> {
 
     @Override
-    protected Map<Integer, String> getIntegerStringMap(List<String> strings) {
+    public Map<Integer, String> apply(final List<String> strings) {
         final int queueLength;
         try {
             final String length = strings.remove(0);

@@ -1,14 +1,17 @@
 package com.google.jam.benchmark.infinitehouseofpancakes;
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 import com.google.jam.Round;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.RoundPathBuilder;
+import com.google.jam.creators.RoundFunctionFactory;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
+import com.google.jam.creators.InfiniteHouseOfPancakesRoundFunction;
 import com.google.jam.solvers.SingleThreadRoundResolver;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
@@ -47,9 +50,12 @@ public class BruteForcePerformanceTest {
     @Setup
     public void setUp()
             throws Exception {
-        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'B', "large", "practice");
-        final RoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
-        round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
+        final char roundLetter = 'B';
+        final Function<List<String>, Map<Integer, String>> roundFunction =
+                new RoundFunctionFactory().createRoundFunction(roundLetter);
+        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
+        final RoundCreator creator = new RoundCreator();
+        round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator, roundFunction);
         resolver = new SingleThreadRoundResolver();
     }
 

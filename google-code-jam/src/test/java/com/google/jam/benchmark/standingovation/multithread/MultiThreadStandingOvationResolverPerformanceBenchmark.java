@@ -1,17 +1,12 @@
 package com.google.jam.benchmark.standingovation.multithread;
 
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import com.google.jam.Round;
-import com.google.jam.creators.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
-import com.google.jam.creators.StandingOvationRoundCreator;
+import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
+import com.google.jam.creators.RoundCreator;
+import com.google.jam.creators.RoundFunctionFactory;
 import com.google.jam.experiments.CPUNumberOfThreadFunction;
 import com.google.jam.experiments.DoubleCPUNumberOfThreadFunction;
 import com.google.jam.solvers.MultiThreadRoundResolver;
@@ -27,6 +22,12 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
+
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -51,11 +52,14 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
     @Setup
     public void setUp()
             throws Exception {
-        final RoundCreator creator = new StandingOvationRoundCreator();
-        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", 'A', "large", "practice");
-        largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-        final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
-        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
+        final RoundCreator creator = new RoundCreator();
+        final char roundLetter = 'A';
+        final Function<List<String>, Map<Integer, String>> roundFunction =
+                new RoundFunctionFactory().createRoundFunction(roundLetter);
+        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
+        largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator, roundFunction);
+        final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "small", "practice");
+        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator, roundFunction);
         Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
                 ? new DoubleCPUNumberOfThreadFunction()
                 : new CPUNumberOfThreadFunction();

@@ -3,6 +3,7 @@ package com.google.jam.unit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Function;
 
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.RoundPathBuilder;
@@ -24,13 +25,6 @@ public class RoundTaskReaderTest {
     @Test
     public void testApplyRoundCreator()
             throws Exception {
-        roundTaskReader.applyCreator(
-                new RoundCreator() {
-                    @Override
-                    protected Map<Integer, String> getIntegerStringMap(List<String> strings) {
-                        return new HashMap<>();
-                    }
-                }
-        );
+        roundTaskReader.applyCreator(new RoundCreator(), strings -> new HashMap<>());
     }
 }

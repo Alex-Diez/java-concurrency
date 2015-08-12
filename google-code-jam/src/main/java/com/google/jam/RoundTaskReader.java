@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
 
 import com.google.jam.creators.RoundCreator;
 
@@ -15,9 +17,11 @@ public class RoundTaskReader {
         this.pathToFile = pathToFile;
     }
 
-    public Round applyCreator(final RoundCreator roundCreator)
+    public Round applyCreator(
+            final RoundCreator roundCreator,
+            final Function<List<String>, Map<Integer, String>> roundFunction)
             throws IOException {
         final List<String> fileContent = Files.readAllLines(pathToFile);
-        return roundCreator.createRound(fileContent);
+        return roundCreator.createRound(fileContent, roundFunction);
     }
 }
