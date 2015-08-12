@@ -1,12 +1,12 @@
 package com.google.jam.experiments;
 
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class CPUNumberOfThreadFunction
-        implements Function<Void, Integer> {
+        implements Supplier<Integer> {
 
     @Override
-    public Integer apply(Void aVoid) {
+    public Integer get() {
         return Runtime.getRuntime().availableProcessors();
     }
 }

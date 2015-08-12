@@ -28,17 +28,12 @@ public class ResultWriterTest {
     }
 
     @Test
-    public void testCreateResultWriter()
-            throws Exception {
-    }
-
-    @Test
     public void testCheckWrittenResult()
             throws Exception {
-        PipedWriter writer = new PipedWriter();
-        BufferedReader reader = new BufferedReader(new PipedReader(writer));
+        final PipedWriter writer = new PipedWriter();
+        final BufferedReader reader = new BufferedReader(new PipedReader(writer));
         resultWriter.writeTo(writer);
-        String resultString = reader.readLine();
+        final String resultString = reader.readLine();
         assertThat("Case #1: 2", is(equalTo(resultString)));
     }
 }

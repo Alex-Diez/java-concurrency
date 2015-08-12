@@ -29,7 +29,7 @@ public class MultiThreadRoundResolversTest
         );
     }
 
-    private final Function<Void, Integer> numberOfThreadFunction;
+    private final Supplier<Integer> numberOfThreadFunction;
 
     public MultiThreadRoundResolversTest(
             final Function<String, Integer> algorithm,
@@ -37,7 +37,7 @@ public class MultiThreadRoundResolversTest
             final String location,
             final String complexity,
             final String roundType,
-            final Function<Void, Integer> numberOfThreadFunction) {
+            final Supplier<Integer> numberOfThreadFunction) {
         super(algorithm, roundLetter, location, complexity, roundType);
         this.numberOfThreadFunction = numberOfThreadFunction;
     }
@@ -69,21 +69,21 @@ public class MultiThreadRoundResolversTest
                 final AlgorithmSupplier algorithmSupplier,
                 final Supplier<Iterator<Character>> roundLetterSupplier,
                 final Supplier<Iterator<String[]>> testDataLocationSupplier,
-                final Supplier<Iterator<Function<Void, Integer>>> numberOfThreadFunctionSupplier) {
-            Collection<Object[]> collection = new ArrayList<>();
-            Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
+                final Supplier<Iterator<Supplier<Integer>>> numberOfThreadFunctionSupplier) {
+            final Collection<Object[]> collection = new ArrayList<>();
+            final Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
             while (roundLetterIterator.hasNext()) {
-                Character roundLetter = roundLetterIterator.next();
-                Iterator<Function<String, Integer>> algorithmIterator = algorithmSupplier.get(roundLetter);
+                final Character roundLetter = roundLetterIterator.next();
+                final Iterator<Function<String, Integer>> algorithmIterator = algorithmSupplier.get(roundLetter);
                 while (algorithmIterator.hasNext()) {
-                    Function<String, Integer> algorithm = algorithmIterator.next();
-                    Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
+                    final Function<String, Integer> algorithm = algorithmIterator.next();
+                    final Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
                     while (testDataLocationIterator.hasNext()) {
-                        String[] testDataLocation = testDataLocationIterator.next();
-                        Iterator<Function<Void, Integer>> numberOfThreadFunctionIterator =
+                        final String[] testDataLocation = testDataLocationIterator.next();
+                        final Iterator<Supplier<Integer>> numberOfThreadFunctionIterator =
                                 numberOfThreadFunctionSupplier.get();
                         while (numberOfThreadFunctionIterator.hasNext()) {
-                            Function<Void, Integer> numberOfThreadFunction = numberOfThreadFunctionIterator.next();
+                            final Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionIterator.next();
                             collection.add(
                                     new Object[] {
                                             algorithm,

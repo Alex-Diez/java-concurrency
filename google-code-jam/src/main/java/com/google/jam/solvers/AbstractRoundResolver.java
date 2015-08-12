@@ -24,12 +24,9 @@ public abstract class AbstractRoundResolver
             final Round round,
             final Function<String, Integer> algorithm);
 
-    protected void doCalculation(
-            final Map<Integer, Integer> results,
-            final int index,
+    protected int doCalculation(
             final String task,
             final Function<String, Integer> algorithm) {
-        int counter = algorithm.apply(task);
-        results.put(index, counter);
+        return algorithm.apply(task);
     }
 }

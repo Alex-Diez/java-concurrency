@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 import com.google.jam.Round;
-import com.google.jam.RoundCreator;
+import com.google.jam.creators.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.solvers.RoundResolver;
@@ -57,7 +57,6 @@ abstract class AbstractRoundResolversTest {
     }
 
     @Test
-    @Ignore
     public void testTaskSolvingProcess()
             throws Exception {
         final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);

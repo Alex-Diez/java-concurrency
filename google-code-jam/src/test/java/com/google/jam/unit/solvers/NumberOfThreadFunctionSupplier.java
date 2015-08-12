@@ -9,10 +9,10 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 class NumberOfThreadFunctionSupplier
-        implements Supplier<Iterator<Function<Void, Integer>>> {
+        implements Supplier<Iterator<Supplier<Integer>>> {
 
     @Override
-    public Iterator<Function<Void, Integer>> get() {
+    public Iterator<Supplier<Integer>> get() {
         return Arrays.asList(
                 new DoubleCPUNumberOfThreadFunction(),
                 new CPUNumberOfThreadFunction()

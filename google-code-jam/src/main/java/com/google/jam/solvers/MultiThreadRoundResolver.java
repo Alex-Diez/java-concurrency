@@ -3,7 +3,9 @@ package com.google.jam.solvers;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.google.jam.Round;
 
@@ -14,8 +16,8 @@ public class MultiThreadRoundResolver
 
     private final ExecutorService executor;
 
-    public MultiThreadRoundResolver(Function<Void, Integer> numberOfThreadFunction) {
-        this.executor = newFixedThreadPool(numberOfThreadFunction.apply(null));
+    public MultiThreadRoundResolver(Supplier<Integer> numberOfThreadSupplier) {
+        this.executor = newFixedThreadPool(numberOfThreadSupplier.get());
     }
 
     public void shutdownThreadPool() {
@@ -34,11 +36,10 @@ public class MultiThreadRoundResolver
         executor.execute(
                 () -> {
                     final Map.Entry<Integer, String> task = round.getNextTask();
-                    if (task != null) {
-                        final int index = task.getKey();
-                        final String data = task.getValue();
-                        doCalculation(results, index, data, algorithm);
-                    }
+                    final int index = task.getKey();
+                    final String data = task.getValue();
+                    final int result = doCalculation(data, algorithm);
+                    results.put(index, result);
                 }
         );
     }

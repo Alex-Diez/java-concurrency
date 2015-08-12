@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.IntStream;
 
-import com.google.jam.RoundCreator;
 import com.google.jam.WrongRoundFormatException;
 
 public class StandingOvationRoundCreator

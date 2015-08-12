@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.jam.Round;
-import com.google.jam.RoundCreator;
+import com.google.jam.creators.RoundCreator;
 import com.google.jam.WrongRoundFormatException;
 import com.google.jam.creators.StandingOvationRoundCreator;
 
@@ -49,10 +49,30 @@ public class InputStandingOvationRoundCreatorTest {
         creator.createRound(new ArrayList<>(Arrays.asList(queueLength, "4 11111", "1 09", "5 110011", "0 1")));
     }
 
+    @Test(expected = WrongRoundFormatException.class)
+    public void testWrongStandingOvationRoundFormatMultiThread_shouldThrowException()
+            throws Exception {
+        creator.createRoundForMultiThreadEnvironment(
+                new ArrayList<>(Arrays.asList(queueLength, "4 11111", "1 09", "5 110011", "0 1"))
+        );
+    }
+
     @Test
     public void testValidateStandingOvationRound()
             throws Exception {
         final Round round = creator.createRound(
+                new ArrayList<>(Arrays.asList("4", "4 11111", "1 09", "5 110011", "0 1"))
+        );
+        while (round.hasNextTask()) {
+            String task = round.getNextTask().getValue();
+            assertThat(task, matchesPattern("^([0-9]*) ([0-9]*)$"));
+        }
+    }
+
+    @Test
+    public void testValidateStandingOvationRoundMultiThread()
+            throws Exception {
+        final Round round = creator.createRoundForMultiThreadEnvironment(
                 new ArrayList<>(Arrays.asList("4", "4 11111", "1 09", "5 110011", "0 1"))
         );
         while (round.hasNextTask()) {

@@ -3,9 +3,10 @@ package com.google.jam.benchmark.standingovation.multithread;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 import com.google.jam.Round;
-import com.google.jam.RoundCreator;
+import com.google.jam.creators.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
@@ -55,7 +56,7 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
         largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", 'A', "small", "practice");
         smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-        Function<Void, Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
+        Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
                 ? new DoubleCPUNumberOfThreadFunction()
                 : new CPUNumberOfThreadFunction();
         resolver = new MultiThreadRoundResolver(numberOfThreadFunction);

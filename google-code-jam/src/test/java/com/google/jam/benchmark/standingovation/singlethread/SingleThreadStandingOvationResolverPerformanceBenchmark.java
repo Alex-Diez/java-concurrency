@@ -5,7 +5,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
 import com.google.jam.Round;
-import com.google.jam.RoundCreator;
+import com.google.jam.creators.RoundCreator;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.RoundTaskReader;

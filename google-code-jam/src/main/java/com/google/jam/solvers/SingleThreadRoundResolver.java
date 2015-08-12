@@ -22,6 +22,7 @@ public class SingleThreadRoundResolver
         final Map.Entry<Integer, String> task = round.getNextTask();
         final int index = task.getKey();
         final String data = task.getValue();
-        doCalculation(results, index, data, algorithm);
+        final int result = doCalculation(data, algorithm);
+        results.put(index, result);
     }
 }

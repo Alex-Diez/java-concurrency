@@ -1,8 +1,9 @@
-package com.google.jam;
+package com.google.jam.creators;
 
 import java.util.List;
 import java.util.Map;
 
+import com.google.jam.Round;
 import com.google.jam.creators.MultiThreadTaskQueueSupplier;
 import com.google.jam.creators.SingleThreadTaskQueueSupplier;
 

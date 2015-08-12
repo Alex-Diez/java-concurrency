@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 import com.google.jam.Round;
-import com.google.jam.RoundCreator;
+import com.google.jam.creators.RoundCreator;
 import com.google.jam.WrongRoundFormatException;
 import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
 
@@ -47,6 +47,14 @@ public class InputInfiniteHouseOfPancakesCreatorRoundTest {
         );
     }
 
+    @Test(expected = WrongRoundFormatException.class)
+    public void testWrongInputInfiniteHouseOfPancakesRoundFormatMultiThread_shouldThrowException()
+            throws Exception {
+        creator.createRoundForMultiThreadEnvironment(
+                new ArrayList<>(Arrays.asList(queueLength, "1", "3", "4", "1 2 1 2", "1", "4", "5", "4 8 7 8 3"))
+        );
+    }
+
     @Test
     public void testInputInfiniteHouseOfPancakesRoundFormat()
             throws Exception {
@@ -60,15 +68,14 @@ public class InputInfiniteHouseOfPancakesCreatorRoundTest {
     }
 
     @Test
-    public void testValidateInfiniteHouseOfPancakesRound()
+    public void testInputInfiniteHouseOfPancakesRoundFormatMultiThread()
             throws Exception {
-        final InfiniteHouseOfPancakesRoundCreator creator = new InfiniteHouseOfPancakesRoundCreator();
-        final Round round = creator.createRound(
-                new ArrayList<>(Arrays.asList("3", "1", "3", "4", "1 2 1 2", "1", "4"))
+        final Round round = creator.createRoundForMultiThreadEnvironment(
+                new ArrayList<>(Arrays.asList("4", "1", "3", "4", "1 2 1 2", "1", "4", "5", "4 8 7 8 3"))
         );
         while (round.hasNextTask()) {
             final String task = round.getNextTask().getValue();
-            assertThat(task, matchesPattern("^([0-9]) (([0-9] )*([0-9]))"));
+            assertThat(task, matchesPattern("^([0-9]*)( [0-9])*$"));
         }
     }
 }

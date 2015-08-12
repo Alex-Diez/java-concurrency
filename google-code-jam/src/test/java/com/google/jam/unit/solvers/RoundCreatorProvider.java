@@ -1,6 +1,6 @@
 package com.google.jam.unit.solvers;
 
-import com.google.jam.RoundCreator;
+import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.InfiniteHouseOfPancakesRoundCreator;
 import com.google.jam.creators.StandingOvationRoundCreator;
 

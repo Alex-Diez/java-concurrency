@@ -1,12 +1,12 @@
 package com.google.jam.experiments;
 
-import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class DoubleCPUNumberOfThreadFunction
-        implements Function<Void, Integer> {
+        implements Supplier<Integer> {
 
     @Override
-    public Integer apply(Void v) {
+    public Integer get() {
         return Runtime.getRuntime().availableProcessors() * 2;
     }
 }
