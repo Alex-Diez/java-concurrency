@@ -8,8 +8,8 @@ public class Round {
 
     private final Queue<Map.Entry<Integer, String>> roundTasks;
 
-    public Round(final Supplier<Queue<Map.Entry<Integer, String>>> roundTasksSupplier) {
-        this.roundTasks = roundTasksSupplier.get();
+    public Round(final Queue<Map.Entry<Integer, String>> roundTasks) {
+        this.roundTasks = roundTasks;
     }
 
     public Map.Entry<Integer, String> getNextTask() {

@@ -6,11 +6,14 @@ import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
 import com.google.jam.solvers.RoundResolver;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.function.Function;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -42,6 +45,7 @@ abstract class AbstractRoundResolversTest {
     }
 
     private Round round;
+    private RoundResolver roundResolver;
 
     @Before
     public void setUp()
@@ -53,14 +57,24 @@ abstract class AbstractRoundResolversTest {
                 complexity,
                 roundType
         );
+        final Function<Map<Integer, String>, Queue<Map.Entry<Integer, String>>> threadEnvironmentFunction =
+                createThreadEnvironmentFactory();
         round = new RoundTaskReader(smokeTestPathBuilder.build()).applyCreator(
                 creator,
-                roundFunctionFactory.createRoundFunction(roundLetter)
+                roundFunctionFactory.createRoundFunction(roundLetter),
+                threadEnvironmentFunction
         );
-        setUpResolver();
+        roundResolver = createRoundResolver();
     }
 
-    protected abstract void setUpResolver();
+    @After
+    public void tearDown() throws Exception {
+        roundResolver.shutDownResolver();
+    }
+
+    protected abstract Function<Map<Integer, String>, Queue<Entry<Integer, String>>> createThreadEnvironmentFactory();
+
+    protected abstract RoundResolver createRoundResolver();
 
     @Test
     @Ignore(
@@ -70,19 +84,17 @@ abstract class AbstractRoundResolversTest {
     )
     public void testTaskSolvingProcess()
             throws Exception {
-        final Map<Integer, Integer> resolverResults = getResolver().solve(round, algorithm);
+        final Map<Integer, Integer> resolverResults = roundResolver.solve(round, algorithm);
         final Map<Integer, Integer> testData = testDataProvider.provideSetOfTestData(
                 roundLetter,
                 complexity,
                 roundType
         );
         assertThat(
-                "[" + algorithm.getClass().getSimpleName() + "] {" + getResolver().getClass().getSimpleName() + "} " +
+                "[" + algorithm.getClass().getSimpleName() + "] {" + roundResolver.getClass().getSimpleName() + "} " +
                         String.valueOf(roundLetter) + '-' + complexity + '-' + roundType,
                 resolverResults,
                 is(testData)
         );
     }
-
-    protected abstract RoundResolver getResolver();
 }

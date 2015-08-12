@@ -1,5 +1,6 @@
 package com.google.jam.unit.solvers;
 
+import com.google.jam.creators.MultiThreadEnvironmentFunction;
 import com.google.jam.solvers.MultiThreadRoundResolver;
 import com.google.jam.solvers.RoundResolver;
 import org.junit.After;
@@ -10,6 +11,9 @@ import org.junit.runners.Parameterized.Parameters;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
@@ -40,22 +44,14 @@ public class MultiThreadRoundResolversTest
         this.numberOfThreadFunction = numberOfThreadFunction;
     }
 
-    private RoundResolver resolver;
-
     @Override
-    protected void setUpResolver() {
-        resolver = new MultiThreadRoundResolver(numberOfThreadFunction);
+    protected RoundResolver createRoundResolver() {
+        return new MultiThreadRoundResolver(numberOfThreadFunction);
     }
 
     @Override
-    protected RoundResolver getResolver() {
-        return resolver;
-    }
-
-    @After
-    public void tearDown()
-            throws Exception {
-        resolver.shutDownResolver();
+    protected Function<Map<Integer, String>, Queue<Entry<Integer, String>>> createThreadEnvironmentFactory() {
+        return new MultiThreadEnvironmentFunction();
     }
 
     private static class DataProvider {

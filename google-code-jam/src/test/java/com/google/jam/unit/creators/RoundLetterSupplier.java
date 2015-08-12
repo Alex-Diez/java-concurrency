@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.function.Supplier;
 
-public class RoundLetterSupplier
+class RoundLetterSupplier
         implements Supplier<Iterator<Character>> {
 
     @Override

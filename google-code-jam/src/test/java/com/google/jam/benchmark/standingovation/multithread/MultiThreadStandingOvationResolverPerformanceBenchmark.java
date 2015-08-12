@@ -5,6 +5,7 @@ import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
+import com.google.jam.creators.MultiThreadEnvironmentFunction;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.creators.RoundFunctionFactory;
 import com.google.jam.experiments.CPUNumberOfThreadFunction;
@@ -25,6 +26,8 @@ import org.openjdk.jmh.annotations.Warmup;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.Supplier;
@@ -54,12 +57,22 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
             throws Exception {
         final RoundCreator creator = new RoundCreator();
         final char roundLetter = 'A';
+        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final Function<List<String>, Map<Integer, String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
-        final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
-        largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator, roundFunction);
+        final Function<Map<Integer, String>, Queue<Entry<Integer, String>>> threadEnvironmentFunction =
+                new MultiThreadEnvironmentFunction();
+        largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(
+                creator,
+                roundFunction,
+                threadEnvironmentFunction
+        );
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "small", "practice");
-        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator, roundFunction);
+        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(
+                creator,
+                roundFunction,
+                threadEnvironmentFunction
+        );
         Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
                 ? new DoubleCPUNumberOfThreadFunction()
                 : new CPUNumberOfThreadFunction();
