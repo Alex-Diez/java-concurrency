@@ -19,7 +19,7 @@ public class LastIndexTaskLinkedBlockingQueue<E>
     private Node<E> tail;
     private Node<E> head;
 
-    public LastIndexTaskLinkedBlockingQueue(Collection<E> collection) {
+    public LastIndexTaskLinkedBlockingQueue(Collection<? extends E> collection) {
         this(collection.size());
         for (E element : collection) {
             add(element);
@@ -63,7 +63,7 @@ public class LastIndexTaskLinkedBlockingQueue<E>
                 head = node;
             }
             if (tail != null) {
-                tail.next = node;
+                tail.setNext(node);
                 tail = node;
             }
             size.getAndIncrement();
@@ -135,8 +135,8 @@ public class LastIndexTaskLinkedBlockingQueue<E>
             final ReentrantLock lock = addLock;
             lock.lock();
             try {
-                E element = head.value;
-                head = head.next;
+                E element = head.getValue();
+                head = head.getNext();
                 int index = size.getAndDecrement();
                 lastThreadTask.set(index);
                 return element;
@@ -151,7 +151,7 @@ public class LastIndexTaskLinkedBlockingQueue<E>
     @Override
     public E peek() {
         if (head != null) {
-            return head.value;
+            return head.getValue();
         }
         return null;
     }
@@ -166,8 +166,8 @@ public class LastIndexTaskLinkedBlockingQueue<E>
         if (isEmpty()) {
             return false;
         }
-        for (Node<E> node = head; node != null; node = node.next) {
-            if (node.value.equals(o)) {
+        for (Node<E> node = head; node != null; node = node.getNext()) {
+            if (node.getValue().equals(o)) {
                 return true;
             }
         }
@@ -182,26 +182,16 @@ public class LastIndexTaskLinkedBlockingQueue<E>
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("[ ");
-        for (Node<E> node = head; node != null; node = node.next) {
+        for (Node<E> node = head; node != null; node = node.getNext()) {
             if (node != tail) {
-                sb.append(node.value).append(", ");
+                sb.append(node.getValue()).append(", ");
             }
             else {
-                sb.append(node.value);
+                sb.append(node.getValue());
             }
         }
         sb.append(" ]");
         return sb.toString();
     }
 
-    private static class Node<E> {
-
-        private final E value;
-        private Node<E> next;
-
-        public Node(E value) {
-            this.value = value;
-        }
-
-    }
 }

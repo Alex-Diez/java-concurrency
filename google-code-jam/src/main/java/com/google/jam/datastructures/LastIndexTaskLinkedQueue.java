@@ -8,10 +8,17 @@ public class LastIndexTaskLinkedQueue<E>
         extends AbstractQueue<E>
         implements LastIndexTaskQueue<E> {
 
+    private int size;
+    private Node<E> head;
+    private Node<E> tail;
+
     public LastIndexTaskLinkedQueue() {
     }
 
-    public LastIndexTaskLinkedQueue(Collection<E> collection) {
+    public LastIndexTaskLinkedQueue(Collection<? extends E> collection) {
+        for(E e : collection) {
+            offer(e);
+        }
     }
 
     @Override
@@ -21,12 +28,26 @@ public class LastIndexTaskLinkedQueue<E>
 
     @Override
     public int size() {
-        return 0;
+        return size;
     }
 
     @Override
     public boolean offer(E e) {
-        return false;
+        if (e == null) {
+            throw new NullPointerException();
+        }
+        Node<E> node = new Node<>(e);
+        size++;
+        if (tail == null
+                && head == null) {
+            tail = node;
+            head = node;
+        }
+        if (tail != null) {
+            tail.setNext(node);
+            tail = node;
+        }
+        return true;
     }
 
     @Override

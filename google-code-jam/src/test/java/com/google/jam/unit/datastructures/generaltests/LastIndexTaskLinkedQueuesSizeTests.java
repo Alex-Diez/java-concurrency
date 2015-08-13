@@ -4,21 +4,19 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
-import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
-
-import com.google.jam.datastructures.LastIndexTaskBlockingQueue;
-import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
+@RunWith(Parameterized.class)
 public class LastIndexTaskLinkedQueuesSizeTests {
 
     private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
@@ -27,24 +25,28 @@ public class LastIndexTaskLinkedQueuesSizeTests {
     public static Collection<Object[]> data() {
         return Arrays.asList(
                 new Object[][] {
-                        {new LastIndexTaskLinkedBlockingQueue<>(DATA), new LastIndexTaskLinkedBlockingQueue<>()},
-                        {new LastIndexTaskLinkedQueue<>(DATA), new LastIndexTaskLinkedQueue<>()}
+                        {new LinkedQueuesFactory()},
+                        {new LinkedBlockingQueuesFactory()}
                 }
         );
     }
 
-    private final LastIndexTaskQueue<Integer> full;
-    private final LastIndexTaskQueue<Integer> empty;
+    private final QueuesFactory queuesFactory;
 
-    public LastIndexTaskLinkedQueuesSizeTests(
-            final LastIndexTaskQueue<Integer> full,
-        final LastIndexTaskQueue<Integer> empty) {
-        this.full = full;
-        this.empty = empty;
+    public LastIndexTaskLinkedQueuesSizeTests(final QueuesFactory queuesFactory) {
+        this.queuesFactory = queuesFactory;
+    }
+
+    private LastIndexTaskQueue<Integer> full;
+    private LastIndexTaskQueue<Integer> empty;
+
+    @Before
+    public void setUp() throws Exception {
+        full = queuesFactory.buildFullQueue();
+        empty = queuesFactory.buildEmptyQueue();
     }
 
     @Test
-    @Ignore("Stop develop queue")
     public void testSizeOfFullQueue()
             throws Exception {
         assertThat(false, is(full.isEmpty()));
@@ -52,7 +54,6 @@ public class LastIndexTaskLinkedQueuesSizeTests {
     }
 
     @Test
-    @Ignore("Stop develop queue")
     public void testSizeOfEmptyQueue()
             throws Exception {
         assertThat(true, is(empty.isEmpty()));
