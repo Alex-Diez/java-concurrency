@@ -33,14 +33,14 @@ public class LastIndexTaskLinkedQueuesSizeTests {
         );
     }
 
-    private final LastIndexTaskQueue<Integer> empty;
     private final LastIndexTaskQueue<Integer> full;
+    private final LastIndexTaskQueue<Integer> empty;
 
     public LastIndexTaskLinkedQueuesSizeTests(
-            final LastIndexTaskQueue<Integer> empty,
-            final LastIndexTaskQueue<Integer> full) {
-        this.empty = empty;
+            final LastIndexTaskQueue<Integer> full,
+        final LastIndexTaskQueue<Integer> empty) {
         this.full = full;
+        this.empty = empty;
     }
 
     @Test

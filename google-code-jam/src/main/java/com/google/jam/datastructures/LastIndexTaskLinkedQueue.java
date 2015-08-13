@@ -3,7 +3,6 @@ package com.google.jam.datastructures;
 import java.util.AbstractQueue;
 import java.util.Collection;
 import java.util.Iterator;
-import java.util.Queue;
 
 public class LastIndexTaskLinkedQueue<E>
         extends AbstractQueue<E>

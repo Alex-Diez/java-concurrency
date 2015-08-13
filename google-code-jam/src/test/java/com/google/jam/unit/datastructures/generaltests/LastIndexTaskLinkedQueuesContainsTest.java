@@ -8,7 +8,6 @@ import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
-import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,21 +32,21 @@ public class LastIndexTaskLinkedQueuesContainsTest {
         );
     }
 
-    private final LastIndexTaskQueue<Integer> empty;
     private final LastIndexTaskQueue<Integer> full;
+    private final LastIndexTaskQueue<Integer> empty;
 
     public LastIndexTaskLinkedQueuesContainsTest(
-            final LastIndexTaskQueue<Integer> empty,
-            final LastIndexTaskQueue<Integer> full) {
-        this.empty = empty;
+            final LastIndexTaskQueue<Integer> full,
+            final LastIndexTaskQueue<Integer> empty) {
         this.full = full;
+        this.empty = empty;
     }
 
     @Test
-    @Ignore("Stop develop queue")
+    @Ignore
     public void testContainsOnEmptyQueue()
             throws Exception {
-        assertThat(empty.contains(1), is(false));
+        assertThat("[ " + empty + " " + empty.getClass().getSimpleName() + " ]", empty.contains(1), is(false));
     }
 
     @Test
@@ -55,6 +54,6 @@ public class LastIndexTaskLinkedQueuesContainsTest {
     public void testContainsOnFullQueue()
             throws Exception {
         final Integer expected = DATA.get(0);
-        assertThat(full.contains(expected), is(true));
+        assertThat("[ " + full.getClass().getSimpleName() + " ]", full.contains(expected), is(true));
     }
 }
