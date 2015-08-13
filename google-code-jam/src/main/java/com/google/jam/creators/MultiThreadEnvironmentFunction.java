@@ -1,6 +1,6 @@
 package com.google.jam.creators;
 
-import com.google.jam.datastructures.LastIndexLinkedTaskBlockingQueue;
+import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import java.util.Map;
@@ -11,6 +11,6 @@ public class MultiThreadEnvironmentFunction
 
     @Override
     public LastIndexTaskQueue<String> apply(final Map<Integer, String> data) {
-        return new LastIndexLinkedTaskBlockingQueue<>(data.values());
+        return new LastIndexTaskLinkedBlockingQueue<>(data.values());
     }
 }

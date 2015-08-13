@@ -1,30 +1,46 @@
 package com.google.jam.unit.datastructures.generaltests;
 
-import com.google.jam.datastructures.LastIndexLinkedTaskBlockingQueue;
+import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskBlockingQueue;
+import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
+import com.google.jam.datastructures.LastIndexTaskQueue;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
-public class LastIndexTaskLinkedBlockingQueueInsertionTest {
+public class LastIndexTaskLinkedQueuesInsertionTest {
 
     private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
 
-    private LastIndexTaskBlockingQueue<Integer> empty;
-    private LastIndexTaskBlockingQueue<Integer> full;
+    @Parameters
+    public static Collection<Object[]> data() {
+        return Arrays.asList(
+                new Object[][] {
+                        {new LastIndexTaskLinkedBlockingQueue<>(DATA), new LastIndexTaskLinkedBlockingQueue<>()},
+                        {new LastIndexTaskLinkedQueue<>(DATA), new LastIndexTaskLinkedQueue<>()}
+                }
+        );
+    }
 
-    @Before
-    public void setUp()
-            throws Exception {
-        full = new LastIndexLinkedTaskBlockingQueue<>(DATA);
-        empty = new LastIndexLinkedTaskBlockingQueue<>();
+    private final LastIndexTaskQueue<Integer> empty;
+    private final LastIndexTaskQueue<Integer> full;
+
+    public LastIndexTaskLinkedQueuesInsertionTest(
+            final LastIndexTaskQueue<Integer> empty,
+            final LastIndexTaskQueue<Integer> full) {
+        this.empty = empty;
+        this.full = full;
     }
 
     @Test(expected = NullPointerException.class)
@@ -42,10 +58,10 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test(expected = NullPointerException.class)
-    @Ignore("Stop develop queue")
+    @Ignore("for blocking queue")
     public void testPutNull_shouldThrowException()
             throws Exception {
-        empty.put(null);
+//        empty.put(null);
     }
 
     @Test
@@ -85,18 +101,18 @@ public class LastIndexTaskLinkedBlockingQueueInsertionTest {
     }
 
     @Test
-    @Ignore("Stop develop queue")
+    @Ignore("for blocking queue")
     public void testPutIntoFullQueue()
             throws Exception {
-        full.put(5);
+//        full.put(5);
         assertThat(full.size(), is(DATA.size() + 1));
     }
 
     @Test
-    @Ignore("Stop develop queue")
+    @Ignore("for blocking queue")
     public void testOfferIntoFullQueueWithTimeOut()
             throws Exception {
-        assertThat(full.offer(1, 5L, SECONDS), is(true));
+//        assertThat(full.offer(1, 5L, SECONDS), is(true));
         assertThat(full.size(), is(DATA.size() + 1));
     }
 }

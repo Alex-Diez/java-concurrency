@@ -1,7 +1,8 @@
 package com.google.jam.unit.datastructures.generaltests;
 
-import com.google.jam.datastructures.LastIndexLinkedTaskBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskBlockingQueue;
+import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
+
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -22,8 +23,8 @@ public class LastIndexTaskLinkedBlockingQueueDrainTest {
     @Before
     public void setUp()
             throws Exception {
-        full = new LastIndexLinkedTaskBlockingQueue<>(DATA);
-        empty = new LastIndexLinkedTaskBlockingQueue<>();
+        full = new LastIndexTaskLinkedBlockingQueue<>(DATA);
+        empty = new LastIndexTaskLinkedBlockingQueue<>();
     }
 
     @Test
