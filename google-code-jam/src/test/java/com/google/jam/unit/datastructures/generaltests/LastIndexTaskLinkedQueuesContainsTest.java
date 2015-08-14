@@ -43,14 +43,12 @@ public class LastIndexTaskLinkedQueuesContainsTest {
     }
 
     @Test
-    @Ignore
     public void testContainsOnEmptyQueue()
             throws Exception {
         assertThat("[ " + empty + " " + empty.getClass().getSimpleName() + " ]", empty.contains(1), is(false));
     }
 
     @Test
-    @Ignore("Stop develop queue")
     public void testContainsOnFullQueue()
             throws Exception {
         final Integer expected = DATA.get(0);

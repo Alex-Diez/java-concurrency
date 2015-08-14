@@ -1,7 +1,5 @@
 package com.google.jam.unit.datastructures.generaltests;
 
-import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
-import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
@@ -51,37 +49,24 @@ public class LastIndexTaskLinkedQueuesRetrieveTest {
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    @Ignore("Stop develop queue")
     public void testRemove_shouldThrowException()
             throws Exception {
         empty.remove(1);
     }
 
     @Test(expected = NoSuchElementException.class)
-    @Ignore("Stop develop queue")
     public void testRemoveFromEmptyQueue()
             throws Exception {
         empty.remove();
     }
 
     @Test
-    @Ignore("Stop develop queue")
     public void testPollFromEmptyQueue()
             throws Exception {
         assertThat(empty.poll(), is(nullValue()));
     }
 
     @Test
-    @Ignore("for blocking queue")
-    public void testTakeOnFullQueue()
-            throws Exception {
-//        final Integer takenElement = full.take();
-        final Integer expected = DATA.get(0);
-//        assertThat(takenElement, is(expected));
-    }
-
-    @Test
-    @Ignore("Stop develop queue")
     public void testRemoveFromFullQueue()
             throws Exception {
         final Integer removedElement = full.remove();
@@ -90,7 +75,6 @@ public class LastIndexTaskLinkedQueuesRetrieveTest {
     }
 
     @Test
-    @Ignore("Stop develop queue")
     public void testPollFromFullQueue()
             throws Exception {
         final Integer polledElement = full.poll();
@@ -100,15 +84,6 @@ public class LastIndexTaskLinkedQueuesRetrieveTest {
     }
 
     @Test
-    @Ignore("for blocking queue")
-    public void testPollElementWithTimeOut()
-            throws Exception {
-//        assertThat(full.poll(5L, SECONDS), is(DATA.get(0)));
-        assertThat(full.size(), is(DATA.size() - 1));
-    }
-
-    @Test
-    @Ignore("Stop develop queue")
     public void testPeekElementFromFullQueue()
             throws Exception {
         assertThat(full.peek(), is(DATA.get(0)));

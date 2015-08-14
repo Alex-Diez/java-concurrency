@@ -57,13 +57,6 @@ public class LastIndexTaskLinkedQueuesInsertionTest {
         empty.offer(null);
     }
 
-    @Test(expected = NullPointerException.class)
-    @Ignore("for blocking queue")
-    public void testPutNull_shouldThrowException()
-            throws Exception {
-//        empty.put(null);
-    }
-
     @Test
     public void testAddToEmptyQueue()
             throws Exception {
@@ -94,21 +87,5 @@ public class LastIndexTaskLinkedQueuesInsertionTest {
         assertThat(full.offer(1), is(true));
         assertThat(full.size(), is(DATA.size() + 1));
         assertThat(full.isEmpty(), is(false));
-    }
-
-    @Test
-    @Ignore("for blocking queue")
-    public void testPutIntoFullQueue()
-            throws Exception {
-//        full.put(5);
-        assertThat(full.size(), is(DATA.size() + 1));
-    }
-
-    @Test
-    @Ignore("for blocking queue")
-    public void testOfferIntoFullQueueWithTimeOut()
-            throws Exception {
-//        assertThat(full.offer(1, 5L, SECONDS), is(true));
-        assertThat(full.size(), is(DATA.size() + 1));
     }
 }

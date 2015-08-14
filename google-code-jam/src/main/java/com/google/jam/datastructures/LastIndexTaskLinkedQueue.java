@@ -16,14 +16,34 @@ public class LastIndexTaskLinkedQueue<E>
     }
 
     public LastIndexTaskLinkedQueue(Collection<? extends E> collection) {
-        for(E e : collection) {
+        for (E e : collection) {
             offer(e);
         }
     }
 
     @Override
     public Iterator<E> iterator() {
-        return null;
+        return new Iterator<E>() {
+
+            private Node<E> current = head;
+
+            @Override
+            public boolean hasNext() {
+                return current != tail;
+            }
+
+            @Override
+            public E next() {
+                E element = current.getValue();
+                current = current.getNext();
+                return element;
+            }
+        };
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        throw new UnsupportedOperationException();
     }
 
     @Override
@@ -52,11 +72,21 @@ public class LastIndexTaskLinkedQueue<E>
 
     @Override
     public E poll() {
+        if (head != null) {
+            E element = head.getValue();
+            head.setNext(null);
+            head = head.getNext();
+            size--;
+            return element;
+        }
         return null;
     }
 
     @Override
     public E peek() {
+        if (head != null) {
+            return head.getValue();
+        }
         return null;
     }
 

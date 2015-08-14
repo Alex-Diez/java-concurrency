@@ -110,7 +110,7 @@ public class LastIndexTaskLinkedBlockingQueue<E>
 
     @Override
     public int drainTo(Collection<? super E> collection) {
-        return 0;
+        return drainTo(collection, size.get());
     }
 
     @Override
@@ -135,8 +135,10 @@ public class LastIndexTaskLinkedBlockingQueue<E>
             final ReentrantLock lock = addLock;
             lock.lock();
             try {
+                Node<E> h = head;
                 E element = head.getValue();
                 head = head.getNext();
+                h.setNext(null);
                 int index = size.getAndDecrement();
                 lastThreadTask.set(index);
                 return element;

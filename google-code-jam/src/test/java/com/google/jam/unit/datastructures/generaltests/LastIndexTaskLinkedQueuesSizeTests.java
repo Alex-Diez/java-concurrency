@@ -59,11 +59,4 @@ public class LastIndexTaskLinkedQueuesSizeTests {
         assertThat(true, is(empty.isEmpty()));
         assertThat(empty.size(), is(0));
     }
-
-    @Test
-    @Ignore("for blocking queue")
-    public void testRemainingCapacity()
-            throws Exception {
-//        assertThat(empty.remainingCapacity(), is(Integer.MAX_VALUE));
-    }
 }
