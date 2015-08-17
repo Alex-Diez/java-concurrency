@@ -12,6 +12,7 @@ import java.io.BufferedWriter;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
@@ -23,12 +24,12 @@ public class Main {
             throws Exception {
         final char roundLetter = 'B';
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "small", "practice");
-        final Function<List<String>, Map<Integer, String>> roundFunction =
+        final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(
                         roundLetter
                 );
         final RoundCreator creator = new RoundCreator();
-        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
+        final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new SingleThreadEnvironmentFunction();
         final Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(
                 creator,

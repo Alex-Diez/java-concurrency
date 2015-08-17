@@ -24,10 +24,9 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 
@@ -55,9 +54,9 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
         final RoundCreator creator = new RoundCreator();
         final char roundLetter = 'A';
         final RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
-        final Function<List<String>, Map<Integer, String>> roundFunction =
+        final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
-        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
+        final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new SingleThreadEnvironmentFunction();
         largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(
                 creator,
@@ -74,6 +73,12 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
         algorithm = algorithmType.equals("forward")
                 ? new StandingOvationForwardCountingAlgorithm()
                 : new StandingOvationContestAnalysisAlgorithm();
+        if(smallResult != null) {
+            smallResult.clear();
+        }
+        if(largeResult != null) {
+            largeResult.clear();
+        }
     }
 
     @TearDown

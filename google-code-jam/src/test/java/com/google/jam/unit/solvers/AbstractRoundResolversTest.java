@@ -9,12 +9,10 @@ import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
+import java.util.Collection;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.function.Function;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -58,7 +56,7 @@ abstract class AbstractRoundResolversTest {
                 complexity,
                 roundType
         );
-        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
+        final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 createThreadEnvironmentFactory();
         round = new RoundTaskReader(smokeTestPathBuilder.build()).applyCreator(
                 creator,
@@ -73,16 +71,16 @@ abstract class AbstractRoundResolversTest {
         roundResolver.shutDownResolver();
     }
 
-    protected abstract Function<Map<Integer, String>, LastIndexTaskQueue<String>> createThreadEnvironmentFactory();
+    protected abstract Function<Collection<String>, LastIndexTaskQueue<String>> createThreadEnvironmentFactory();
 
     protected abstract RoundResolver createRoundResolver();
 
     @Test
-    @Ignore(
-            "Need to develop:\n" +
-                    " * manageable multi-thread queue\n" +
-                    " * queue which can return element's id after element polling"
-    )
+//    @Ignore(
+//            "Need to develop:\n" +
+//                    " * manageable multi-thread queue\n" +
+//                    " * queue which can return element's id after element polling"
+//    )
     public void testTaskSolvingProcess()
             throws Exception {
         final Map<Integer, Integer> resolverResults = roundResolver.solve(round, algorithm);

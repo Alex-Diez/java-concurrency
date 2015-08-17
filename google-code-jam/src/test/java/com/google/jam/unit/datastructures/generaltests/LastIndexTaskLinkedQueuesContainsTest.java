@@ -8,6 +8,7 @@ import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -26,20 +27,26 @@ public class LastIndexTaskLinkedQueuesContainsTest {
     public static Collection<Object[]> data() {
         return Arrays.asList(
                 new Object[][] {
-                        {new LastIndexTaskLinkedBlockingQueue<>(DATA), new LastIndexTaskLinkedBlockingQueue<>()},
-                        {new LastIndexTaskLinkedQueue<>(DATA), new LastIndexTaskLinkedQueue<>()}
+                        {new LinkedQueuesFactory()},
+                        {new LinkedBlockingQueuesFactory()}
                 }
         );
     }
 
-    private final LastIndexTaskQueue<Integer> full;
-    private final LastIndexTaskQueue<Integer> empty;
+    private final QueuesFactory queuesFactory;
 
-    public LastIndexTaskLinkedQueuesContainsTest(
-            final LastIndexTaskQueue<Integer> full,
-            final LastIndexTaskQueue<Integer> empty) {
-        this.full = full;
-        this.empty = empty;
+    public LastIndexTaskLinkedQueuesContainsTest(final QueuesFactory queuesFactory) {
+        this.queuesFactory = queuesFactory;
+    }
+
+    private  LastIndexTaskQueue<Integer> full;
+    private  LastIndexTaskQueue<Integer> empty;
+
+    @Before
+    public void setUp()
+            throws Exception {
+        empty = queuesFactory.buildEmptyQueue();
+        full = queuesFactory.buildFullQueue();
     }
 
     @Test

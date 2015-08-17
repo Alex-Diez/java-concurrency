@@ -45,7 +45,7 @@ public class SingleThreadRoundResolversTest
     }
 
     @Override
-    protected Function<Map<Integer, String>, LastIndexTaskQueue<String>> createThreadEnvironmentFactory() {
+    protected Function<Collection<String>, LastIndexTaskQueue<String>> createThreadEnvironmentFactory() {
         return new SingleThreadEnvironmentFunction();
     }
 

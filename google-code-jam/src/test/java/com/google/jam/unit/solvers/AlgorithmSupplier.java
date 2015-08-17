@@ -15,16 +15,16 @@ class AlgorithmSupplier {
     public Iterator<Function<String, Integer>> get(final char roundLetter) {
         switch (roundLetter) {
             case 'A': {
-                return Arrays.asList(
-                        new StandingOvationContestAnalysisAlgorithm(),
+                return Arrays.<Function<String, Integer>>asList(
+//                        new StandingOvationContestAnalysisAlgorithm(),
                         new StandingOvationForwardCountingAlgorithm()
                 ).iterator();
             }
-            case 'B': {
-                List<Function<String, Integer>> result = new ArrayList<>();
-                result.add(new InfiniteHouseOfPancakesContestAnalysisAlgorithm());
-                return result.iterator();
-            }
+//            case 'B': {
+//                List<Function<String, Integer>> result = new ArrayList<>();
+//                result.add(new InfiniteHouseOfPancakesContestAnalysisAlgorithm());
+//                return result.iterator();
+//            }
         }
         throw new RuntimeException("Impossible situation!!!");
     }

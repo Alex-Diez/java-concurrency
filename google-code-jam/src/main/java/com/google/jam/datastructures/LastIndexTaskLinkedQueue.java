@@ -8,14 +8,21 @@ public class LastIndexTaskLinkedQueue<E>
         extends AbstractQueue<E>
         implements LastIndexTaskQueue<E> {
 
+    private static final Node NULL = new Node(null);
+
     private int size;
+    private int lastRetrievedTaskIndex;
     private Node<E> head;
     private Node<E> tail;
 
     public LastIndexTaskLinkedQueue() {
+        lastRetrievedTaskIndex = 1;
+        head = NULL;
+        tail = NULL;
     }
 
     public LastIndexTaskLinkedQueue(Collection<? extends E> collection) {
+        this();
         for (E e : collection) {
             offer(e);
         }
@@ -58,14 +65,16 @@ public class LastIndexTaskLinkedQueue<E>
         }
         Node<E> node = new Node<>(e);
         size++;
-        if (tail == null
-                && head == null) {
+        if (tail == NULL) {
             tail = node;
-            head = node;
         }
-        if (tail != null) {
+        else {
             tail.setNext(node);
             tail = node;
+        }
+        if (head == NULL) {
+            head = node;
+            head.setNext(node);
         }
         return true;
     }
@@ -74,8 +83,9 @@ public class LastIndexTaskLinkedQueue<E>
     public E poll() {
         if (head != null) {
             E element = head.getValue();
-            head.setNext(null);
+            Node<E> h = head;
             head = head.getNext();
+            h.setNext(null);
             size--;
             return element;
         }
@@ -92,6 +102,8 @@ public class LastIndexTaskLinkedQueue<E>
 
     @Override
     public int getLastRetrievedTaskIndex() {
-        return 0;
+        final int index = lastRetrievedTaskIndex;
+        lastRetrievedTaskIndex++;
+        return index;
     }
 }

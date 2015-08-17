@@ -13,8 +13,8 @@ class NumberOfThreadFunctionSupplier
 
     @Override
     public Iterator<Supplier<Integer>> get() {
-        return Arrays.asList(
-                new DoubleCPUNumberOfThreadFunction(),
+        return Arrays.<Supplier<Integer>>asList(
+//                new DoubleCPUNumberOfThreadFunction(),
                 new CPUNumberOfThreadFunction()
         ).iterator();
     }

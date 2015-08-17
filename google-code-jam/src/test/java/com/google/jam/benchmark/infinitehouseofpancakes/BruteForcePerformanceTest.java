@@ -23,6 +23,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -51,7 +52,7 @@ public class BruteForcePerformanceTest {
     public void setUp()
             throws Exception {
         final char roundLetter = 'B';
-        final Function<List<String>, Map<Integer, String>> roundFunction =
+        final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final RoundCreator creator = new RoundCreator();

@@ -38,7 +38,10 @@
     </properties>
 
     <modules>
-        <!--<module>sudoku-standalone</module> need to be redevelop-->        <!--<module>sudoku-distributed</module> need to be redevelop-->
+        <!--
+        module>sudoku-standalone</module> need to be redevelop
+        <module>sudoku-distributed</module> need to be redevelop
+        -->
         <module>fairytale-philosophers</module>
         <module>google-code-jam</module>
     </modules>

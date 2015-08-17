@@ -1,17 +1,17 @@
 package com.google.jam.creators;
 
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 import com.google.jam.WrongRoundFormatException;
 
 public class InfiniteHouseOfPancakesRoundFunction
-        implements Function<List<String>, Map<Integer,String>> {
+        implements Function<List<String>, Collection<String>> {
 
     @Override
-    public Map<Integer, String> apply(List<String> strings) {
+    public Collection<String> apply(List<String> strings) {
         final int queueLength;
         try {
             final String length = strings.remove(0);
@@ -23,10 +23,9 @@ public class InfiniteHouseOfPancakesRoundFunction
         if (queueLength != strings.size() / 2) {
             throw new WrongRoundFormatException();
         }
-        Map<Integer, String> tasks = new HashMap<>(strings.size() / 2);
-        int counter = 1;
+        Collection<String> tasks = new ArrayList<>(strings.size() / 2);
         for (int i = 0; i < strings.size(); i += 2) {
-            tasks.put(counter++, strings.get(i) + ' ' + strings.get(i + 1));
+            tasks.add(strings.get(i) + ' ' + strings.get(i + 1));
         }
         return tasks;
     }

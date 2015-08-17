@@ -7,6 +7,7 @@ import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class RoundTaskReaderTest {
@@ -24,7 +25,7 @@ public class RoundTaskReaderTest {
             throws Exception {
         roundTaskReader.applyCreator(
                 new RoundCreator(),
-                strings -> new HashMap<>(),
+                strings -> new ArrayList<>(),
                 integerStringMap -> new LastIndexTaskLinkedQueue<>()
         );
     }

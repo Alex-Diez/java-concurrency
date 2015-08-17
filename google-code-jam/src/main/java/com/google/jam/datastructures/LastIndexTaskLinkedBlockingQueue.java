@@ -12,6 +12,7 @@ public class LastIndexTaskLinkedBlockingQueue<E>
         implements LastIndexTaskBlockingQueue<E> {
 
     private final AtomicInteger size;
+    private final AtomicInteger lastRetrievedTaskIndex;
     private final ReentrantLock addLock;
     private final ReentrantLock removeLock;
     private final ThreadLocal<Integer> lastThreadTask;
@@ -31,6 +32,7 @@ public class LastIndexTaskLinkedBlockingQueue<E>
     }
 
     private LastIndexTaskLinkedBlockingQueue(int initialIndex) {
+        lastRetrievedTaskIndex = new AtomicInteger(1);
         addLock = new ReentrantLock();
         removeLock = new ReentrantLock();
         size = new AtomicInteger();
@@ -139,7 +141,8 @@ public class LastIndexTaskLinkedBlockingQueue<E>
                 E element = head.getValue();
                 head = head.getNext();
                 h.setNext(null);
-                int index = size.getAndDecrement();
+                size.getAndDecrement();
+                final int index = lastRetrievedTaskIndex.getAndIncrement();
                 lastThreadTask.set(index);
                 return element;
             }

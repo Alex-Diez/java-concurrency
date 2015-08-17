@@ -1,12 +1,12 @@
 package com.google.jam.creators;
 
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
 public class RoundFunctionFactory {
 
-    public Function<List<String>, Map<Integer, String>> createRoundFunction(final char roundLetter) {
+    public Function<List<String>, Collection<String>> createRoundFunction(final char roundLetter) {
         switch (roundLetter) {
             case 'A':
                 return new StandingOvationRoundFunction();

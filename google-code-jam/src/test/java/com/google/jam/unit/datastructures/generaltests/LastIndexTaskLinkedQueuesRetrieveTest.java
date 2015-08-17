@@ -90,4 +90,19 @@ public class LastIndexTaskLinkedQueuesRetrieveTest {
         assertThat(full.size(), is(DATA.size()));
         assertThat(full.peek(), is(DATA.get(0)));
     }
+
+    @Test
+    public void testRemoveAddedElementFromEmptyQueue()
+            throws Exception {
+        empty.add(1);
+        empty.add(2);
+        empty.add(3);
+        empty.add(4);
+        empty.add(5);
+        assertThat(empty.poll(), is(1));
+        assertThat(empty.poll(), is(2));
+        assertThat(empty.poll(), is(3));
+        assertThat(empty.poll(), is(4));
+        assertThat(empty.poll(), is(5));
+    }
 }

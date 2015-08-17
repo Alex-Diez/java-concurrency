@@ -3,10 +3,8 @@ package com.google.jam;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.function.Function;
 
 import com.google.jam.creators.RoundCreator;
@@ -22,8 +20,8 @@ public class RoundTaskReader {
 
     public Round applyCreator(
             final RoundCreator roundCreator,
-            final Function<List<String>, Map<Integer, String>> roundFunction,
-            final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction)
+            final Function<List<String>, Collection<String>> roundFunction,
+            final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction)
             throws IOException {
         final List<String> fileContent = Files.readAllLines(pathToFile);
         return roundCreator.createRound(fileContent, roundFunction, threadEnvironmentFunction);

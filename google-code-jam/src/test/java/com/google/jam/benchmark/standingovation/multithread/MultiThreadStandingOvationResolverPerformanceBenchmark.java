@@ -25,6 +25,7 @@ import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -57,9 +58,9 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
         final RoundCreator creator = new RoundCreator();
         final char roundLetter = 'A';
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
-        final Function<List<String>, Map<Integer, String>> roundFunction =
+        final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
-        final Function<Map<Integer, String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
+        final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new MultiThreadEnvironmentFunction();
         largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(
                 creator,
@@ -79,6 +80,8 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
         algorithm = algorithmType.equals("forward")
                 ? new StandingOvationForwardCountingAlgorithm()
                 : new StandingOvationContestAnalysisAlgorithm();
+        largeResult.clear();
+        smallResult.clear();
     }
 
     @TearDown

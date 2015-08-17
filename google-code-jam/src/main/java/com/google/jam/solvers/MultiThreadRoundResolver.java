@@ -9,10 +9,15 @@ import java.util.function.Supplier;
 
 import com.google.jam.Round;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class MultiThreadRoundResolver
         extends AbstractRoundResolver {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(MultiThreadRoundResolver.class);
 
     private final ExecutorService executor;
 
@@ -37,9 +42,13 @@ public class MultiThreadRoundResolver
         executor.execute(
                 () -> {
                     final String task = round.getNextTask();
+//                    LOGGER.debug("Task is - {}", task);
                     final int index = round.getLastTaskId();
-                    final int result = doCalculation(task, algorithm);
-                    results.put(index, result);
+//                    LOGGER.debug("Task index is - {}", index);
+                    if(task != null) {
+                        final int result = doCalculation(task, algorithm);
+                        results.put(index, result);
+                    }
                 }
         );
     }
