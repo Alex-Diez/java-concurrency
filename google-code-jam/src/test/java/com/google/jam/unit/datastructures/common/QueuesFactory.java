@@ -1,4 +1,4 @@
-package com.google.jam.unit.datastructures.generaltests;
+package com.google.jam.unit.datastructures.common;
 
 import com.google.jam.datastructures.LastIndexTaskQueue;
 

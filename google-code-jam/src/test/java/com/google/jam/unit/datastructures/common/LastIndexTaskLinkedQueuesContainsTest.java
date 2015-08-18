@@ -1,4 +1,4 @@
-package com.google.jam.unit.datastructures.generaltests;
+package com.google.jam.unit.datastructures.common;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -7,7 +7,6 @@ import java.util.List;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -17,7 +16,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
 @RunWith(Parameterized.class)
-public class LastIndexTaskLinkedQueuesSizeTests {
+public class LastIndexTaskLinkedQueuesContainsTest {
 
     private static final List<Integer> DATA = Arrays.asList(1, 2, 3);
 
@@ -33,30 +32,30 @@ public class LastIndexTaskLinkedQueuesSizeTests {
 
     private final QueuesFactory queuesFactory;
 
-    public LastIndexTaskLinkedQueuesSizeTests(final QueuesFactory queuesFactory) {
+    public LastIndexTaskLinkedQueuesContainsTest(final QueuesFactory queuesFactory) {
         this.queuesFactory = queuesFactory;
     }
 
-    private LastIndexTaskQueue<Integer> full;
-    private LastIndexTaskQueue<Integer> empty;
+    private  LastIndexTaskQueue<Integer> full;
+    private  LastIndexTaskQueue<Integer> empty;
 
     @Before
-    public void setUp() throws Exception {
-        full = queuesFactory.buildFullQueue();
+    public void setUp()
+            throws Exception {
         empty = queuesFactory.buildEmptyQueue();
+        full = queuesFactory.buildFullQueue();
     }
 
     @Test
-    public void testSizeOfFullQueue()
+    public void testContainsOnEmptyQueue()
             throws Exception {
-        assertThat(false, is(full.isEmpty()));
-        assertThat(full.size(), is(DATA.size()));
+        assertThat("[ " + empty + " " + empty.getClass().getSimpleName() + " ]", empty.contains(1), is(false));
     }
 
     @Test
-    public void testSizeOfEmptyQueue()
+    public void testContainsOnFullQueue()
             throws Exception {
-        assertThat(true, is(empty.isEmpty()));
-        assertThat(empty.size(), is(0));
+        final Integer expected = DATA.get(0);
+        assertThat("[ " + full.getClass().getSimpleName() + " ]", full.contains(expected), is(true));
     }
 }

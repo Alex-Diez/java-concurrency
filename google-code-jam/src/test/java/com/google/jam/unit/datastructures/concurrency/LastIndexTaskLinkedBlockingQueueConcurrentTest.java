@@ -1,18 +1,18 @@
 package com.google.jam.unit.datastructures.concurrency;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
-import java.util.concurrent.LinkedBlockingQueue;
 
+import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,8 +55,8 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
         this.numberOfWriters = numberOfThreads - numberOfReaders;
         writerBarrier = new CyclicBarrier(numberOfWriters);
         readerBarrier = new CyclicBarrier(numberOfReaders);
-        writeFutures = new ArrayList<>(numberOfReaders);
-        readFutures = new ArrayList<>(numberOfReaders);
+        writeFutures = new CopyOnWriteArrayList<>();
+        readFutures = new CopyOnWriteArrayList<>();
         executor = Executors.newFixedThreadPool(numberOfReaders + numberOfWriters);
     }
 
@@ -65,12 +65,13 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
     @Before
     public void setUp()
             throws Exception {
-        queue = new LinkedBlockingQueue<>();
+        queue = new LastIndexTaskLinkedBlockingQueue<>();
     }
 
     @Test
     public void testQueueSizeInConcurrentEnvironment()
             throws Exception {
+        assertThat(queue.size(), is(0));
         final Callable<Integer> writer = () -> {
             final Thread currentThread = Thread.currentThread();
             final int threadID = (int) currentThread.getId();
@@ -88,6 +89,7 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
             return c;
         };
         submitWriters(writer);
+        final int numberOfWriteOperations = calculateNumberOfOperations(writeFutures, "Fail on get writers results");
         final Callable<Integer> reader = () -> {
             final Thread currentThread = Thread.currentThread();
             int c = 0;
@@ -104,7 +106,6 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
             return c;
         };
         submitReaders(reader);
-        final int numberOfWriteOperations = calculateNumberOfOperations(writeFutures, "Fail on get writers results");
         final int numberOfReadOperations = calculateNumberOfOperations(readFutures, "Fail on get readers results");
         assertThat(queue.size(), is(numberOfWriteOperations - numberOfReadOperations));
     }
@@ -115,16 +116,16 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
         }
     }
 
-    private void submitWriters(Callable<Integer> writeres) {
+    private void submitWriters(Callable<Integer> writer) {
         for (int i = 0; i < numberOfWriters; i++) {
-            writeFutures.add(executor.submit(writeres));
+            writeFutures.add(executor.submit(writer));
         }
     }
 
     private int calculateNumberOfOperations(
             final List<Future<Integer>> futures,
             final String failMessage) {
-        final List<Integer> results = new ArrayList<>(futures.size());
+        final List<Integer> results = new CopyOnWriteArrayList<>();
         futures.forEach(
                 (f) -> {
                     try {

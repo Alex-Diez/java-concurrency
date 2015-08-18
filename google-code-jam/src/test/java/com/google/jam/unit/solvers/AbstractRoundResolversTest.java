@@ -74,11 +74,6 @@ abstract class AbstractRoundResolversTest {
     protected abstract RoundResolver createRoundResolver();
 
     @Test
-//    @Ignore(
-//            "Need to develop:\n" +
-//                    " * manageable multi-thread queue\n" +
-//                    " * queue which can return element's id after element polling"
-//    )
     public void testTaskSolvingProcess()
             throws Exception {
         final Map<Integer, Integer> resolverResults = roundResolver.solve(round, algorithm);

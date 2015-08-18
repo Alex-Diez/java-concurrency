@@ -1,10 +1,9 @@
-package com.google.jam.unit.datastructures.generaltests;
+package com.google.jam.unit.datastructures.common;
 
 import com.google.jam.datastructures.LastIndexTaskBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Arrays;
