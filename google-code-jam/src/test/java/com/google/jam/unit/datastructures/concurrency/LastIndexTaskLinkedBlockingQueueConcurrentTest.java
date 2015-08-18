@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Callable;
 import java.util.concurrent.CyclicBarrier;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -14,7 +15,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -69,55 +69,56 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
     }
 
     @Test
-    @Ignore("Stop develop queue")
     public void testQueueSizeInConcurrentEnvironment()
             throws Exception {
-        for (int i = 0; i < numberOfWriters; i++) {
-            writeFutures.add(
-                    executor.submit(
-                            () -> {
-                                final Thread currentThread = Thread.currentThread();
-                                final int threadID = (int) currentThread.getId();
-                                int c = 0;
-                                try {
-                                    writerBarrier.await();
-                                    while (c < DATA.size()) {
-                                        queue.add(DATA.get(c) * threadID * COEFFICIENT);
-                                        c++;
-                                    }
-                                }
-                                catch (InterruptedException e) {
-                                    currentThread.interrupt();
-                                }
-                                return c;
-                            }
-                    )
-            );
-        }
-        for (int i = 0; i < numberOfReaders; i++) {
-            readFutures.add(
-                    executor.submit(
-                            () -> {
-                                final Thread currentThread = Thread.currentThread();
-                                int c = 0;
-                                try {
-                                    readerBarrier.await();
-                                    while (c < NUMBER_OF_READ) {
-                                        queue.poll();
-                                        c++;
-                                    }
-                                }
-                                catch (InterruptedException e) {
-                                    currentThread.interrupt();
-                                }
-                                return c;
-                            }
-                    )
-            );
-        }
+        final Callable<Integer> writer = () -> {
+            final Thread currentThread = Thread.currentThread();
+            final int threadID = (int) currentThread.getId();
+            int c = 0;
+            try {
+                writerBarrier.await();
+                while (c < DATA.size()) {
+                    queue.add(DATA.get(c) * threadID * COEFFICIENT);
+                    c++;
+                }
+            }
+            catch (InterruptedException e) {
+                currentThread.interrupt();
+            }
+            return c;
+        };
+        submitWriters(writer);
+        final Callable<Integer> reader = () -> {
+            final Thread currentThread = Thread.currentThread();
+            int c = 0;
+            try {
+                readerBarrier.await();
+                while (c < NUMBER_OF_READ) {
+                    queue.poll();
+                    c++;
+                }
+            }
+            catch (InterruptedException e) {
+                currentThread.interrupt();
+            }
+            return c;
+        };
+        submitReaders(reader);
         final int numberOfWriteOperations = calculateNumberOfOperations(writeFutures, "Fail on get writers results");
         final int numberOfReadOperations = calculateNumberOfOperations(readFutures, "Fail on get readers results");
         assertThat(queue.size(), is(numberOfWriteOperations - numberOfReadOperations));
+    }
+
+    private void submitReaders(Callable<Integer> reader) {
+        for (int i = 0; i < numberOfReaders; i++) {
+            readFutures.add(executor.submit(reader));
+        }
+    }
+
+    private void submitWriters(Callable<Integer> writeres) {
+        for (int i = 0; i < numberOfWriters; i++) {
+            writeFutures.add(executor.submit(writeres));
+        }
     }
 
     private int calculateNumberOfOperations(
@@ -142,45 +143,34 @@ public class LastIndexTaskLinkedBlockingQueueConcurrentTest {
     }
 
     @Test
-    @Ignore("Stop develop queue")
     public void testQueueSizeInAsynchronousConcurrentEnvironment()
             throws Exception {
-        for (int i = 0; i < numberOfWriters; i++) {
-            writeFutures.add(
-                    executor.submit(
-                            () -> {
-                                final Thread currentThread = Thread.currentThread();
-                                final int threadID = (int) currentThread.getId();
-                                int c = 0;
-                                int writeOperations = 0;
-                                while (c < DATA.size()) {
-                                    if (queue.add(DATA.get(c) * threadID * COEFFICIENT)) {
-                                        writeOperations++;
-                                    }
-                                    c++;
-                                }
-                                return writeOperations;
-                            }
-                    )
-            );
-        }
-        for (int i = 0; i < numberOfReaders; i++) {
-            readFutures.add(
-                    executor.submit(
-                            () -> {
-                                int c = 0;
-                                int readOperations = 0;
-                                while (c < NUMBER_OF_READ) {
-                                    if (queue.poll() != null) {
-                                        readOperations++;
-                                    }
-                                    c++;
-                                }
-                                return readOperations;
-                            }
-                    )
-            );
-        }
+        final Callable<Integer> writer = () -> {
+            final Thread currentThread = Thread.currentThread();
+            final int threadID = (int) currentThread.getId();
+            int c = 0;
+            int writeOperations = 0;
+            while (c < DATA.size()) {
+                if (queue.add(DATA.get(c) * threadID * COEFFICIENT)) {
+                    writeOperations++;
+                }
+                c++;
+            }
+            return writeOperations;
+        };
+        submitWriters(writer);
+        final Callable<Integer> reader = () -> {
+            int c = 0;
+            int readOperations = 0;
+            while (c < NUMBER_OF_READ) {
+                if (queue.poll() != null) {
+                    readOperations++;
+                }
+                c++;
+            }
+            return readOperations;
+        };
+        submitReaders(reader);
         final int numberOfWriteOperations = calculateNumberOfOperations(writeFutures, "Fail on get writers results");
         final int numberOfReadOperations = calculateNumberOfOperations(readFutures, "Fail on get readers results");
         final int numberOfOperations = numberOfWriteOperations - numberOfReadOperations;
