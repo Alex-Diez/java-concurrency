@@ -1,8 +1,11 @@
-package com.google.jam.creators;
+package com.google.jam;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+
+import com.google.jam.creators.InfiniteHouseOfPancakesRoundFunction;
+import com.google.jam.creators.StandingOvationRoundFunction;
 
 public class RoundFunctionFactory {
 

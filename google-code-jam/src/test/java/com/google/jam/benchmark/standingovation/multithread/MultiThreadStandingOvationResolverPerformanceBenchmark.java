@@ -7,7 +7,7 @@ import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.creators.MultiThreadEnvironmentFunction;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.RoundFunctionFactory;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.experiments.CPUNumberOfThreadFunction;
 import com.google.jam.experiments.DoubleCPUNumberOfThreadFunction;

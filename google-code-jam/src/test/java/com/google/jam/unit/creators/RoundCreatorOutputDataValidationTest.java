@@ -2,7 +2,7 @@ package com.google.jam.unit.creators;
 
 import com.google.jam.Round;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.RoundFunctionFactory;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 import org.junit.Ignore;
 import org.junit.Test;

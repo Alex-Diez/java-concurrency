@@ -2,7 +2,7 @@ package com.google.jam.unit.creators;
 
 import com.google.jam.WrongRoundFormatException;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.RoundFunctionFactory;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,9 +14,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Queue;
 import java.util.function.Function;
 import java.util.function.Supplier;
 

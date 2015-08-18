@@ -4,7 +4,7 @@ import com.google.jam.Round;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.creators.RoundFunctionFactory;
+import com.google.jam.RoundFunctionFactory;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
 import org.junit.After;
