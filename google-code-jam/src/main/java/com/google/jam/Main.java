@@ -21,15 +21,16 @@ public class Main {
     public static void main(String[] args)
             throws IOException {
         final char[] roundLetters = {'A', 'B'};
-        final RoundCreator creator = new RoundCreator();
         final RoundResolver resolver = new SingleThreadRoundResolver();
         final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvFunction =
                 new SingleThreadEnvironmentFunction();
+        final RoundCreator.Builder builder = new RoundCreator.Builder(threadEnvFunction);
         final RoundFunctionFactory functionFactory = new RoundFunctionFactory();
         final AlgorithmsFactory algorithmsFactory = new AlgorithmsFactory();
-        for(char letter : roundLetters) {
+        for (char letter : roundLetters) {
             final Function<List<String>, Collection<String>> roundFunction = functionFactory.createRoundFunction(letter);
             final Function<String, Integer> algorithm = algorithmsFactory.createAlgorithm(letter);
+            RoundCreator creator = builder.setRoundFunction(roundFunction).build();
             writeSolvedTaskToDisk(letter, creator, algorithm, resolver, roundFunction, "small", threadEnvFunction);
             writeSolvedTaskToDisk(letter, creator, algorithm, resolver, roundFunction, "large", threadEnvFunction);
         }
@@ -43,13 +44,10 @@ public class Main {
             final RoundResolver resolver,
             final Function<List<String>, Collection<String>> roundFunction,
             final String taskType,
-            final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction) throws IOException {
+            final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction)
+            throws IOException {
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, taskType, "practice");
-        final Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(
-                creator,
-                roundFunction,
-                threadEnvironmentFunction
-        );
+        final Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
         final Map<Integer, Integer> smallResult = resolver.solve(
                 smallRound,
                 algorithm

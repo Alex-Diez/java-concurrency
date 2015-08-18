@@ -1,15 +1,5 @@
 package com.google.jam.unit.creators;
 
-import com.google.jam.Round;
-import com.google.jam.creators.RoundCreator;
-import com.google.jam.RoundFunctionFactory;
-import com.google.jam.datastructures.LastIndexTaskQueue;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -17,9 +7,18 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
+import com.google.jam.Round;
+import com.google.jam.RoundFunctionFactory;
+import com.google.jam.creators.RoundCreator;
+import com.google.jam.datastructures.LastIndexTaskQueue;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
+
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.Matchers.is;
 
 @RunWith(Parameterized.class)
 public class RoundCreatorOutputDataValidationTest {
@@ -35,54 +34,29 @@ public class RoundCreatorOutputDataValidationTest {
         );
     }
 
-    private final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction;
     private final List<String> testData;
     private final String pattern;
     private final RoundCreator roundCreator;
-    private final Function<List<String>, Collection<String>> roundFunction;
 
     public RoundCreatorOutputDataValidationTest(
             final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction,
             final char roundLetter,
             final List<String> testData,
             final String pattern) {
-        this.threadEnvironmentFunction = threadEnvironmentFunction;
         this.testData = testData;
         this.pattern = pattern;
-        this.roundCreator = new RoundCreator();
-        this.roundFunction = new RoundFunctionFactory().createRoundFunction(roundLetter);
+        this.roundCreator = new RoundCreator.Builder(threadEnvironmentFunction)
+                .setRoundFunction(new RoundFunctionFactory().createRoundFunction(roundLetter))
+                .build();
     }
 
     @Test
     public void testValidateRound()
             throws Exception {
-        final Round round = roundCreator.createRound(
-                new ArrayList<>(testData),
-                roundFunction,
-                threadEnvironmentFunction
-        );
+        final Round round = roundCreator.createRound(new ArrayList<>(testData));
         while (round.hasNextTask()) {
             final String task = round.getNextTask();
             assertThat(task, matchesPattern(pattern));
-        }
-    }
-
-    @Test
-    @Ignore("Develop queues")
-    public void testRoundLastTaskId() throws Exception {
-        final Round round = roundCreator.createRound(
-                new ArrayList<>(testData),
-                roundFunction,
-                threadEnvironmentFunction
-        );
-        while (round.hasNextTask()) {
-            final int index = round.getLastTaskId();
-            assertThat(
-                    "[ " + roundFunction.getClass().getSimpleName() + " ] [ " + threadEnvironmentFunction.getClass().getSimpleName() + " ]",
-                    index,
-                    is(round.numberOfTasks())
-            );
-            round.getNextTask();
         }
     }
 

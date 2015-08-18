@@ -1,12 +1,18 @@
 package com.google.jam.benchmark.standingovation.singlethread;
 
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+
 import com.google.jam.Round;
+import com.google.jam.RoundFunctionFactory;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.RoundFunctionFactory;
 import com.google.jam.creators.SingleThreadEnvironmentFunction;
 import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
@@ -23,12 +29,6 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
-
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
@@ -51,32 +51,26 @@ public class SingleThreadStandingOvationResolverPerformanceBenchmark {
     @Setup
     public void setUp()
             throws Exception {
-        final RoundCreator creator = new RoundCreator();
         final char roundLetter = 'A';
         final RoundPathBuilder largeTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
         final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new SingleThreadEnvironmentFunction();
-        largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(
-                creator,
-                roundFunction,
-                threadEnvironmentFunction
-        );
+        final RoundCreator creator = new RoundCreator.Builder(threadEnvironmentFunction)
+                .setRoundFunction(roundFunction)
+                .build();
+        largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "small", "practice");
-        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(
-                creator,
-                roundFunction,
-                threadEnvironmentFunction
-        );
+        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
         resolver = new SingleThreadRoundResolver();
         algorithm = algorithmType.equals("forward")
                 ? new StandingOvationForwardCountingAlgorithm()
                 : new StandingOvationContestAnalysisAlgorithm();
-        if(smallResult != null) {
+        if (smallResult != null) {
             smallResult.clear();
         }
-        if(largeResult != null) {
+        if (largeResult != null) {
             largeResult.clear();
         }
     }

@@ -48,14 +48,14 @@ public class RoundCreatorWrongInputDataTest {
     @Before
     public void setUp()
             throws Exception {
-        roundCreator = new RoundCreator();
+        roundCreator = new RoundCreator.Builder(threadEnvironmentFunction).setRoundFunction(roundFunction).build();
     }
 
 
     @Test(expected = WrongRoundFormatException.class)
     public void testWrongStandingOvationRoundFormat_shouldThrowException()
             throws Exception {
-        roundCreator.createRound(testData, roundFunction, threadEnvironmentFunction);
+        roundCreator.createRound(testData);
     }
 
     static class DataProvider {

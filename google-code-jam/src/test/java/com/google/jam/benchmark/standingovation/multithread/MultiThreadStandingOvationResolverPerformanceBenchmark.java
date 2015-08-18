@@ -55,24 +55,18 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
     @Setup
     public void setUp()
             throws Exception {
-        final RoundCreator creator = new RoundCreator();
         final char roundLetter = 'A';
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
         final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 new MultiThreadEnvironmentFunction();
-        largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(
-                creator,
-                roundFunction,
-                threadEnvironmentFunction
-        );
+        final RoundCreator creator = new RoundCreator.Builder(threadEnvironmentFunction)
+                .setRoundFunction(roundFunction)
+                .build();
+        largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "small", "practice");
-        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(
-                creator,
-                roundFunction,
-                threadEnvironmentFunction
-        );
+        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
         Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
                 ? new DoubleCPUNumberOfThreadFunction()
                 : new CPUNumberOfThreadFunction();

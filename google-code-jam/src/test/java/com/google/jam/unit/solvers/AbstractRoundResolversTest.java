@@ -49,7 +49,6 @@ abstract class AbstractRoundResolversTest {
     @Before
     public void setUp()
             throws Exception {
-        final RoundCreator creator = new RoundCreator();
         final RoundPathBuilder smokeTestPathBuilder = new RoundPathBuilder(
                 location,
                 roundLetter,
@@ -58,11 +57,10 @@ abstract class AbstractRoundResolversTest {
         );
         final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
                 createThreadEnvironmentFactory();
-        round = new RoundTaskReader(smokeTestPathBuilder.build()).applyCreator(
-                creator,
-                roundFunctionFactory.createRoundFunction(roundLetter),
-                threadEnvironmentFunction
-        );
+        final RoundCreator creator = new RoundCreator.Builder(threadEnvironmentFunction)
+                .setRoundFunction(roundFunctionFactory.createRoundFunction(roundLetter))
+                .build();
+        round = new RoundTaskReader(smokeTestPathBuilder.build()).applyCreator(creator);
         roundResolver = createRoundResolver();
     }
 

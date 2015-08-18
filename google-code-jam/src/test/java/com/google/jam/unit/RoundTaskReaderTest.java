@@ -3,12 +3,11 @@ package com.google.jam.unit;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
+import com.google.jam.creators.SingleThreadEnvironmentFunction;
 import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
+
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class RoundTaskReaderTest {
 
@@ -24,9 +23,9 @@ public class RoundTaskReaderTest {
     public void testApplyRoundCreator()
             throws Exception {
         roundTaskReader.applyCreator(
-                new RoundCreator(),
-                strings -> new ArrayList<>(),
-                integerStringMap -> new LastIndexTaskLinkedQueue<>()
+                new RoundCreator.Builder(new SingleThreadEnvironmentFunction())
+                        .setRoundFunction((list) -> new LastIndexTaskLinkedQueue<>())
+                        .build()
         );
     }
 }

@@ -55,12 +55,10 @@ public class BruteForcePerformanceTest {
         final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
-        final RoundCreator creator = new RoundCreator();
-        round = new RoundTaskReader(pathBuilder.build()).applyCreator(
-                creator,
-                roundFunction,
-                new SingleThreadEnvironmentFunction()
-        );
+        final RoundCreator creator = new RoundCreator.Builder(new SingleThreadEnvironmentFunction())
+                .setRoundFunction(roundFunction)
+                .build();
+        round = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
         resolver = new SingleThreadRoundResolver();
     }
 
