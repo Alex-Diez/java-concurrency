@@ -26,7 +26,7 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 @State(Scope.Benchmark)
 @BenchmarkMode(Mode.AverageTime)
 @OutputTimeUnit(TimeUnit.NANOSECONDS)
-public class BlockingQueuesBenchmarks {
+public class AddElementToQueuesBenchmarks {
 
     public static final Collection<Integer> DATA = Arrays.asList(
             1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
@@ -41,68 +41,29 @@ public class BlockingQueuesBenchmarks {
             91, 92, 93, 94, 95, 96, 97, 98, 99, 100
     );
 
-    @Param({"impl", "link", "array-fair", "array-unfair"})
-    private String queueType;
-
-    private BlockingQueue<Integer> queue;
-    private Object result;
-    private Object insertResult;
-    private Object removeResult;
-
-    @Setup(Level.Iteration)
-    public void setUp()
+    @Benchmark
+    public void baseline()
             throws Exception {
-        switch (queueType) {
-            case "impl":
-                queue = new LinkedBlockingQueue<>(DATA);
-                break;
-            case "link":
-                queue = new LastIndexTaskLinkedBlockingQueue<>(DATA);
-                break;
-            case "array-fair":
-                queue = new ArrayBlockingQueue<>(DATA.size(), true, DATA);
-                break;
-            default:
-                queue = new ArrayBlockingQueue<>(DATA.size(), false, DATA);
-                break;
-        }
-    }
-
-    @TearDown(Level.Invocation)
-    public void check()
-            throws Exception {
-        assert queue != null;
-        assert !queue.isEmpty();
-        assert result != null;
-        assert insertResult != null;
-        assert removeResult != null;
     }
 
     @Benchmark
-    public void addRemoveElement()
+    public void addElementToArrayQueue(ArrayQueueState arrayQueueState)
             throws Exception {
-        insertResult = queue.offer(1);
-        removeResult = queue.poll();
+        arrayQueueState.queue.add(1);
     }
 
     @Benchmark
-    public void addElement()
+    public void addElementToLinkedQueue(LinkedQueueState linkedQueueState)
             throws Exception {
-        result = queue.offer(1);
-    }
-
-    @Benchmark
-    public void removeElement()
-            throws Exception {
-        result = queue.poll();
+        linkedQueueState.queue.add(1);
     }
 
     public static void main(String[] args)
             throws RunnerException {
         final Options options = new OptionsBuilder()
-                .include(BlockingQueuesBenchmarks.class.getSimpleName())
-                .warmupIterations(30)
-                .measurementIterations(30)
+                .include(AddElementToQueuesBenchmarks.class.getSimpleName())
+                .warmupIterations(5)
+                .measurementIterations(5)
                 .forks(1)
                 .jvmArgs("-ea")
                 .build();
