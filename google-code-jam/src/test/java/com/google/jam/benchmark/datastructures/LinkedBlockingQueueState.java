@@ -1,12 +1,18 @@
 package com.google.jam.benchmark.datastructures;
 
-import java.util.concurrent.BlockingQueue;
-
+import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
-@State(Scope.Thread)
-public class LinkedBlockingQueueState {
+import java.util.concurrent.LinkedBlockingQueue;
 
-    private BlockingQueue<Integer> queue;
+@State(Scope.Thread)
+public class LinkedBlockingQueueState
+        extends AbstractQueueState {
+
+    @Setup(Level.Trial)
+    public void setUp() {
+        queue = new LinkedBlockingQueue<>();
+    }
 }
