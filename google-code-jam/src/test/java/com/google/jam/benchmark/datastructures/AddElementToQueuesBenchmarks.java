@@ -2,30 +2,21 @@ package com.google.jam.benchmark.datastructures;
 
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
 
-import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
-import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Mode;
 import org.openjdk.jmh.annotations.OutputTimeUnit;
-import org.openjdk.jmh.annotations.Param;
-import org.openjdk.jmh.annotations.Scope;
-import org.openjdk.jmh.annotations.Setup;
-import org.openjdk.jmh.annotations.State;
-import org.openjdk.jmh.annotations.TearDown;
+import org.openjdk.jmh.infra.Blackhole;
 import org.openjdk.jmh.runner.Runner;
 import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
-@State(Scope.Benchmark)
-@BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public class AddElementToQueuesBenchmarks {
 
     public static final Collection<Integer> DATA = Arrays.asList(
@@ -42,20 +33,40 @@ public class AddElementToQueuesBenchmarks {
     );
 
     @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public void baseline()
             throws Exception {
     }
 
     @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public void addElementToArrayQueue(ArrayQueueState arrayQueueState)
             throws Exception {
+        Blackhole.consumeCPU(arrayQueueState.cpu);
         arrayQueueState.queue.add(1);
+        arrayQueueState.counter++;
     }
 
     @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
     public void addElementToLinkedQueue(LinkedQueueState linkedQueueState)
             throws Exception {
+        Blackhole.consumeCPU(linkedQueueState.cpu);
         linkedQueueState.queue.add(1);
+        linkedQueueState.counter++;
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.NANOSECONDS)
+    public void addElementToHashMap(HashMapState hashMapState)
+            throws Exception {
+        Blackhole.consumeCPU(hashMapState.cpu);
+        hashMapState.map.put("1", "1");
+        hashMapState.counter++;
     }
 
     public static void main(String[] args)

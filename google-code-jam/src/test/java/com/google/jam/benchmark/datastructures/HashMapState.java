@@ -1,7 +1,7 @@
 package com.google.jam.benchmark.datastructures;
 
-import java.util.LinkedList;
-import java.util.Queue;
+import java.util.HashMap;
+import java.util.Map;
 
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Param;
@@ -14,21 +14,21 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 @State(Scope.Thread)
-public class LinkedQueueState {
+public class HashMapState {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(LinkedQueueState.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HashMapState.class);
 
     @Param("2000")
     int cpu;
 
-    volatile Queue<Integer> queue;
+    Map<String, String> map;
     int counter;
 
     @Setup(Level.Trial)
     public void setUp()
             throws Exception {
         LOGGER.info("Initialize state");
-        queue = new LinkedList<>();
+        map = new HashMap<>();
         counter = 0;
     }
 
@@ -36,6 +36,6 @@ public class LinkedQueueState {
     public void tearDown()
             throws Exception {
         LOGGER.info("Let check it up!");
-        LOGGER.info("LinkedQueueState was called {} times", counter);
+        LOGGER.info("HashMapState was called {} times", counter);
     }
 }
