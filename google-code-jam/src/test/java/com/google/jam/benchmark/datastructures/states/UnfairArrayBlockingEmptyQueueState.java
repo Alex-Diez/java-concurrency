@@ -7,11 +7,11 @@ import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.State;
 
 @State(Scope.Thread)
-public class UnfairArrayBlockingQueueState
-        extends AbstractQueueState {
+public class UnfairArrayBlockingEmptyQueueState
+        extends AbstractEmptyQueueState {
 
     @Override
-    protected Queue<Integer> buildQueue(int queueCapacity) {
+    public Queue<Integer> buildQueue(int queueCapacity) {
         return new ArrayBlockingQueue<>(queueCapacity, false);
     }
 }

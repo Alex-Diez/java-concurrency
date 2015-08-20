@@ -9,54 +9,43 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 
-import static java.lang.Math.abs;
-
 @State(Scope.Thread)
-public abstract class AbstractQueueState {
+public abstract class AbstractQueueState
+        implements QueueState {
 
-    static final int LARGE_QUEUE_SIZE = 30_000_000;
+    protected final Random random = new Random();
 
-    final Random random = new Random();
+    private Queue<Integer> testedQueue;
+    private Queue<Integer> initialQueue;
 
-    Queue<Integer> emptyQueue;
-    Queue<Integer> largeQueue;
-
-    public Queue<Integer> getEmptyQueue() {
-        return emptyQueue;
+    @Override
+    public Queue<Integer> getQueue() {
+        return testedQueue;
     }
 
-    public Queue<Integer> getLargeQueue() {
-        return largeQueue;
-    }
-
+    @Override
     @Setup(Level.Trial)
     public void setUp() {
-        emptyQueue = buildQueue(LARGE_QUEUE_SIZE);
-        largeQueue = buildQueue(LARGE_QUEUE_SIZE);
-        for (int i = 0; i < LARGE_QUEUE_SIZE; i++) {
-            largeQueue.add(random.nextInt());
-        }
+        testedQueue = buildQueue(LARGE_QUEUE_SIZE);
+        initialQueue = buildQueue(LARGE_QUEUE_SIZE);
+        fillQueue();
     }
 
-    @TearDown(Level.Iteration)
-    public void printIterationNumber() {
-        if(!emptyQueue.isEmpty()) {
-            printNumberOfMethodInvocation(emptyQueue, 0);
-        }
-        if(largeQueue.size() != LARGE_QUEUE_SIZE) {
-            printNumberOfMethodInvocation(largeQueue, LARGE_QUEUE_SIZE);
-        }
-    }
-
-    @TearDown(Level.Trial)
+    @Override
+    @TearDown
     public void checkUp() {
-        emptyQueue = null;
-        largeQueue = null;
+        assert !testedQueue.equals(initialQueue);
+        testedQueue = null;
+        initialQueue = null;
     }
 
-    protected abstract Queue<Integer> buildQueue(final int queueCapacity);
-
-    private static void printNumberOfMethodInvocation(final Queue<Integer> queue, final int offset) {
-        System.out.printf("%nNumber of iterations is %d%n", abs(offset - queue.size()));
+    @Override
+    public void fillQueue() {
+        final int length = startQueueSize();
+        for (int i = 0; i < length; i++) {
+            final int e = random.nextInt();
+            testedQueue.add(e);
+            initialQueue.add(e);
+        }
     }
 }

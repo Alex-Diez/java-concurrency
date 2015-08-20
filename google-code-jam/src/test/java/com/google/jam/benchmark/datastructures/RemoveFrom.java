@@ -2,13 +2,18 @@ package com.google.jam.benchmark.datastructures;
 
 import java.util.concurrent.TimeUnit;
 
-import com.google.jam.benchmark.datastructures.states.ArrayQueueState;
-import com.google.jam.benchmark.datastructures.states.DataState;
-import com.google.jam.benchmark.datastructures.states.FairArrayBlockingQueueState;
-import com.google.jam.benchmark.datastructures.states.LastIndexLinkedBlockingQueueState;
-import com.google.jam.benchmark.datastructures.states.LinkedBlockingQueueState;
-import com.google.jam.benchmark.datastructures.states.LinkedQueueState;
-import com.google.jam.benchmark.datastructures.states.UnfairArrayBlockingQueueState;
+import com.google.jam.benchmark.datastructures.states.ArrayBigQueueState;
+import com.google.jam.benchmark.datastructures.states.ArrayLargeQueueState;
+import com.google.jam.benchmark.datastructures.states.FairArrayBlockingBigQueueState;
+import com.google.jam.benchmark.datastructures.states.FairArrayBlockingLargeQueueState;
+import com.google.jam.benchmark.datastructures.states.LastIndexLinkedBlockingBigQueueState;
+import com.google.jam.benchmark.datastructures.states.LastIndexLinkedBlockingLargeQueueState;
+import com.google.jam.benchmark.datastructures.states.LinkedBigQueueState;
+import com.google.jam.benchmark.datastructures.states.LinkedBlockingBigQueueState;
+import com.google.jam.benchmark.datastructures.states.LinkedBlockingLargeQueueState;
+import com.google.jam.benchmark.datastructures.states.LinkedLargeQueueState;
+import com.google.jam.benchmark.datastructures.states.UnfairArrayBlockingBigQueueState;
+import com.google.jam.benchmark.datastructures.states.UnfairArrayBlockingLargeQueueState;
 import org.openjdk.jmh.annotations.Benchmark;
 import org.openjdk.jmh.annotations.BenchmarkMode;
 import org.openjdk.jmh.annotations.Mode;
@@ -22,62 +27,108 @@ public class RemoveFrom {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void ArrayQueue(final ArrayQueueState arrayQueueState)
+    public void BigArrayQueue(final ArrayBigQueueState arrayBigQueueState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
-        arrayQueueState.getLargeQueue().remove();
+        arrayBigQueueState.getQueue().remove();
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void LinkedQueue(final LinkedQueueState linkedQueueState)
+    public void BigLinkedQueue(final LinkedBigQueueState linkedBigQueueState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
-        linkedQueueState.getLargeQueue().remove();
+        linkedBigQueueState.getQueue().remove();
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void FairArrayBlockingQueue(
-            final FairArrayBlockingQueueState fairArrayBlockingQueueState,
-            final DataState dataState)
+    public void BigFairArrayBlockingQueue(final FairArrayBlockingBigQueueState fairArrayBlockingBigQueueState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
-        fairArrayBlockingQueueState.getLargeQueue().remove();
+        fairArrayBlockingBigQueueState.getQueue().remove();
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void UnfairArrayBlockingQueue(
-            final UnfairArrayBlockingQueueState unfairArrayBlockingQueueState,
-            final DataState dataState)
+    public void BigUnfairArrayBlockingQueue(final UnfairArrayBlockingBigQueueState unfairArrayBlockingBigQueueState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
-        unfairArrayBlockingQueueState.getLargeQueue().remove();
+        unfairArrayBlockingBigQueueState.getQueue().remove();
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void LinkedBlockingQueue(
-            final LinkedBlockingQueueState linkedBlockingQueueState,
-            final DataState dataState)
+    public void BigLinkedBlockingQueue(final LinkedBlockingBigQueueState linkedBlockingBigQueueState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
-        linkedBlockingQueueState.getLargeQueue().remove();
+        linkedBlockingBigQueueState.getQueue().remove();
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void LastIndexLinkedBlockingQueue(
-            final LastIndexLinkedBlockingQueueState lastIndexLinkedBlockingQueueState,
-            final DataState dataState)
+    public void BigLastIndexLinkedBlockingQueue(final LastIndexLinkedBlockingBigQueueState lastIndexLinkedBlockingBigQueueState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
-        lastIndexLinkedBlockingQueueState.getLargeQueue().remove();
+        lastIndexLinkedBlockingBigQueueState.getQueue().remove();
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void LargeArrayQueue(final ArrayLargeQueueState arrayLargeQueueState)
+            throws Exception {
+        Blackhole.consumeCPU(CPU_TOKENS);
+        arrayLargeQueueState.getQueue().remove();
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void LargeLinkedQueue(final LinkedLargeQueueState linkedLargeQueueState)
+            throws Exception {
+        Blackhole.consumeCPU(CPU_TOKENS);
+        linkedLargeQueueState.getQueue().remove();
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void LargeFairArrayBlockingQueue(final FairArrayBlockingLargeQueueState fairArrayBlockingLargeQueueState)
+            throws Exception {
+        Blackhole.consumeCPU(CPU_TOKENS);
+        fairArrayBlockingLargeQueueState.getQueue().remove();
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void LargeUnfairArrayBlockingQueue(final UnfairArrayBlockingLargeQueueState unfairArrayBlockingLargeQueueState)
+            throws Exception {
+        Blackhole.consumeCPU(CPU_TOKENS);
+        unfairArrayBlockingLargeQueueState.getQueue().remove();
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void LargeLinkedBlockingQueue(final LinkedBlockingLargeQueueState linkedBlockingLargeQueueState)
+            throws Exception {
+        Blackhole.consumeCPU(CPU_TOKENS);
+        linkedBlockingLargeQueueState.getQueue().remove();
+    }
+
+    @Benchmark
+    @BenchmarkMode(Mode.AverageTime)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    public void LargeLastIndexLinkedBlockingQueue(final LastIndexLinkedBlockingLargeQueueState lastIndexLinkedBlockingLargeQueueState)
+            throws Exception {
+        Blackhole.consumeCPU(CPU_TOKENS);
+        lastIndexLinkedBlockingLargeQueueState.getQueue().remove();
     }
 }
