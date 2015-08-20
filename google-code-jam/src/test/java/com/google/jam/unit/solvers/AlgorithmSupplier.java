@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.Function;
 
 import com.google.jam.algorithms.InfiniteHouseOfPancakesContestAnalysisAlgorithm;
+import com.google.jam.algorithms.InfiniteHouseOfPancakesSearchByHalving;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
 
@@ -16,15 +17,16 @@ class AlgorithmSupplier {
         switch (roundLetter) {
             case 'A': {
                 return Arrays.<Function<String, Integer>>asList(
-//                        new StandingOvationContestAnalysisAlgorithm(),
+                        new StandingOvationContestAnalysisAlgorithm(),
                         new StandingOvationForwardCountingAlgorithm()
                 ).iterator();
             }
-//            case 'B': {
-//                List<Function<String, Integer>> result = new ArrayList<>();
-//                result.add(new InfiniteHouseOfPancakesContestAnalysisAlgorithm());
-//                return result.iterator();
-//            }
+            case 'B': {
+                return Arrays.<Function<String, Integer>>asList(
+                        new InfiniteHouseOfPancakesContestAnalysisAlgorithm(),
+                        new InfiniteHouseOfPancakesSearchByHalving()
+                ).iterator();
+            }
         }
         throw new RuntimeException("Impossible situation!!!");
     }

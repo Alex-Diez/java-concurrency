@@ -12,8 +12,8 @@ class TestDataLocationSupplier
         return Arrays.asList(
                 new String[][] {
                         {"test", "small", "test"},
-//                        {"main", "small", "practice"},
-//                        {"main", "large", "practice"}
+                        {"main", "small", "practice"},
+                        {"main", "large", "practice"}
                 }
         ).iterator();
     }

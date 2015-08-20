@@ -28,8 +28,6 @@ public class SingleThreadRoundResolversTest
         );
     }
 
-    private RoundResolver resolver;
-
     public SingleThreadRoundResolversTest(
             Function<String, Integer> algorithm,
             char roundLetter,
