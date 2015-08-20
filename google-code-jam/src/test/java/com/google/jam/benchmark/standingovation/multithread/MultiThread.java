@@ -1,14 +1,12 @@
 package com.google.jam.benchmark.standingovation.multithread;
 
 import com.google.jam.Round;
+import com.google.jam.RoundFunctionFactory;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 import com.google.jam.algorithms.StandingOvationForwardCountingAlgorithm;
-import com.google.jam.creators.MultiThreadEnvironmentFunction;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.RoundFunctionFactory;
-import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.experiments.CPUNumberOfThreadFunction;
 import com.google.jam.experiments.DoubleCPUNumberOfThreadFunction;
 import com.google.jam.solvers.MultiThreadRoundResolver;
@@ -24,6 +22,7 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.infra.Blackhole;
 
 import java.util.Collection;
 import java.util.List;
@@ -34,23 +33,15 @@ import java.util.function.Supplier;
 
 @State(Scope.Thread)
 @BenchmarkMode(Mode.AverageTime)
-@OutputTimeUnit(TimeUnit.NANOSECONDS)
-@Warmup(iterations = 5)
-@Measurement(iterations = 5)
-@Fork(1)
-public class MultiThreadStandingOvationResolverPerformanceBenchmark {
+@OutputTimeUnit(TimeUnit.MICROSECONDS)
+public class MultiThread {
 
-    @Param({"forward", "StandingOvationContestAnalysis"})
-    private String algorithmType;
     @Param({"Double", "Current"})
     private String numberOfThreadFunctionType;
 
     private MultiThreadRoundResolver resolver;
     private Round largeRound;
-    private Round smallRound;
     private Function<String, Integer> algorithm;
-    private Map<Integer, Integer> largeResult;
-    private Map<Integer, Integer> smallResult;
 
     @Setup
     public void setUp()
@@ -59,42 +50,26 @@ public class MultiThreadStandingOvationResolverPerformanceBenchmark {
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
-        final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
-                new MultiThreadEnvironmentFunction();
-        final RoundCreator creator = new RoundCreator.Builder(threadEnvironmentFunction)
+        final RoundCreator creator = new RoundCreator.Builder()
                 .setRoundFunction(roundFunction)
                 .build();
         largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-        final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, "small", "practice");
-        smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
         Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
                 ? new DoubleCPUNumberOfThreadFunction()
                 : new CPUNumberOfThreadFunction();
         resolver = new MultiThreadRoundResolver(numberOfThreadFunction);
-        algorithm = algorithmType.equals("forward")
-                ? new StandingOvationForwardCountingAlgorithm()
-                : new StandingOvationContestAnalysisAlgorithm();
-        largeResult.clear();
-        smallResult.clear();
+        algorithm = new StandingOvationContestAnalysisAlgorithm();
     }
 
     @TearDown
     public void tearDown()
             throws Exception {
         resolver.shutDownResolver();
-        assert largeResult.size() == 100;
-        assert smallResult.size() == 100;
     }
 
     @Benchmark
-    public void performanceOfTaskSolvingProcess()
+    public void performanceOfTaskSolvingProcess(final Blackhole blackhole)
             throws Exception {
-        largeResult = resolver.solve(largeRound, algorithm);
-    }
-
-    @Benchmark
-    public void performanceOfSmallTaskSolvingProcess()
-            throws Exception {
-        smallResult = resolver.solve(smallRound, algorithm);
+        blackhole.consume(resolver.solve(largeRound, algorithm));
     }
 }

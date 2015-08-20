@@ -3,7 +3,6 @@ package com.google.jam.unit;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.creators.SingleThreadEnvironmentFunction;
 import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
 
 import org.junit.Before;
@@ -23,7 +22,7 @@ public class RoundTaskReaderTest {
     public void testApplyRoundCreator()
             throws Exception {
         roundTaskReader.applyCreator(
-                new RoundCreator.Builder(new SingleThreadEnvironmentFunction())
+                new RoundCreator.Builder()
                         .setRoundFunction((list) -> new LastIndexTaskLinkedQueue<>())
                         .build()
         );

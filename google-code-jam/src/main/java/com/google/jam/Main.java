@@ -1,5 +1,9 @@
 package com.google.jam;
 
+import com.google.jam.creators.RoundCreator;
+import com.google.jam.solvers.RoundResolver;
+import com.google.jam.solvers.SingleThreadRoundResolver;
+
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,29 +14,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-import com.google.jam.creators.RoundCreator;
-import com.google.jam.creators.SingleThreadEnvironmentFunction;
-import com.google.jam.datastructures.LastIndexTaskQueue;
-import com.google.jam.solvers.RoundResolver;
-import com.google.jam.solvers.SingleThreadRoundResolver;
-
 public class Main {
 
     public static void main(String[] args)
             throws IOException {
         final char[] roundLetters = {'A', 'B'};
         final RoundResolver resolver = new SingleThreadRoundResolver();
-        final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvFunction =
-                new SingleThreadEnvironmentFunction();
-        final RoundCreator.Builder builder = new RoundCreator.Builder(threadEnvFunction);
+        final RoundCreator.Builder builder = new RoundCreator.Builder();
         final RoundFunctionFactory functionFactory = new RoundFunctionFactory();
         final AlgorithmsFactory algorithmsFactory = new AlgorithmsFactory();
         for (char letter : roundLetters) {
             final Function<List<String>, Collection<String>> roundFunction = functionFactory.createRoundFunction(letter);
             final Function<String, Integer> algorithm = algorithmsFactory.createAlgorithm(letter);
             RoundCreator creator = builder.setRoundFunction(roundFunction).build();
-            writeSolvedTaskToDisk(letter, creator, algorithm, resolver, roundFunction, "small", threadEnvFunction);
-            writeSolvedTaskToDisk(letter, creator, algorithm, resolver, roundFunction, "large", threadEnvFunction);
+            writeSolvedTaskToDisk(letter, creator, algorithm, resolver, "small");
+            writeSolvedTaskToDisk(letter, creator, algorithm, resolver, "large");
         }
         System.exit(0);
     }
@@ -42,9 +38,7 @@ public class Main {
             final RoundCreator creator,
             final Function<String, Integer> algorithm,
             final RoundResolver resolver,
-            final Function<List<String>, Collection<String>> roundFunction,
-            final String taskType,
-            final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction)
+            final String taskType)
             throws IOException {
         final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, taskType, "practice");
         final Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);

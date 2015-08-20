@@ -1,28 +1,32 @@
 package com.google.jam.solvers;
 
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
-import java.util.function.Function;
-import java.util.function.Supplier;
-
 import com.google.jam.Round;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class MultiThreadRoundResolver
-        extends AbstractRoundResolver {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(MultiThreadRoundResolver.class);
+        implements RoundResolver {
 
     private final ExecutorService executor;
+    private final Lock lock;
+    private final AtomicInteger taskCounter;
 
     public MultiThreadRoundResolver(Supplier<Integer> numberOfThreadSupplier) {
         this.executor = newFixedThreadPool(numberOfThreadSupplier.get());
+        this.lock = new ReentrantLock();
+        this.taskCounter = new AtomicInteger();
     }
 
     @Override
@@ -30,26 +34,38 @@ public class MultiThreadRoundResolver
         executor.shutdown();
     }
 
-    protected Map<Integer, Integer> buildCollectionOfResults(Round round) {
-        return new ConcurrentHashMap<>(round.numberOfTasks(), 1.0f);
+    private Map<Integer, Integer> buildCollectionOfResults(Round round) {
+        return new HashMap<>(round.numberOfTasks());
     }
 
     @Override
-    protected void runCalculation(
-            final Map<Integer, Integer> results,
-            final Round round,
-            final Function<String, Integer> algorithm) {
-        executor.execute(
-                () -> {
-                    final String task = round.getNextTask();
-//                    LOGGER.debug("Task is - {}", task);
-                    final int index = round.getLastTaskId();
-//                    LOGGER.debug("Task index is - {}", index);
-                    if(task != null) {
-                        final int result = doCalculation(task, algorithm);
-                        results.put(index, result);
-                    }
-                }
-        );
+    public Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm) {
+        taskCounter.set(0);
+        final Map<Integer, Integer> results = buildCollectionOfResults(round);
+        Callable<Integer> callable = () -> {
+            String task;
+            int index;
+            lock.lock();
+            try {
+                task = round.getNextTask();
+                index = taskCounter.incrementAndGet();
+            }
+            finally {
+                lock.unlock();
+            }
+            final int result = algorithm.apply(task);
+            results.put(index, result);
+            return null;
+        };
+        Collection<Callable<Integer>> callableCollection = Collections.nCopies(round.numberOfTasks(), callable);
+        try {
+            executor.invokeAll(callableCollection);
+        }
+        catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        while (taskCounter.get() < round.numberOfTasks()) {
+        }
+        return results;
     }
 }

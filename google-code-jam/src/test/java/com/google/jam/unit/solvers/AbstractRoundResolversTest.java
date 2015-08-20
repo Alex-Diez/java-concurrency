@@ -1,17 +1,15 @@
 package com.google.jam.unit.solvers;
 
 import com.google.jam.Round;
+import com.google.jam.RoundFunctionFactory;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.RoundFunctionFactory;
-import com.google.jam.datastructures.LastIndexTaskQueue;
 import com.google.jam.solvers.RoundResolver;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -55,9 +53,7 @@ abstract class AbstractRoundResolversTest {
                 complexity,
                 roundType
         );
-        final Function<Collection<String>, LastIndexTaskQueue<String>> threadEnvironmentFunction =
-                createThreadEnvironmentFactory();
-        final RoundCreator creator = new RoundCreator.Builder(threadEnvironmentFunction)
+        final RoundCreator creator = new RoundCreator.Builder()
                 .setRoundFunction(roundFunctionFactory.createRoundFunction(roundLetter))
                 .build();
         round = new RoundTaskReader(smokeTestPathBuilder.build()).applyCreator(creator);
@@ -68,8 +64,6 @@ abstract class AbstractRoundResolversTest {
     public void tearDown() throws Exception {
         roundResolver.shutDownResolver();
     }
-
-    protected abstract Function<Collection<String>, LastIndexTaskQueue<String>> createThreadEnvironmentFactory();
 
     protected abstract RoundResolver createRoundResolver();
 
