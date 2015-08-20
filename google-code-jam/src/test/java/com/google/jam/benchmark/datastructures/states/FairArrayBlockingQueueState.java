@@ -1,20 +1,19 @@
-package com.google.jam.benchmark.datastructures;
+package com.google.jam.benchmark.datastructures.states;
 
 import org.openjdk.jmh.annotations.Level;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 
+import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
 @State(Scope.Thread)
 public class FairArrayBlockingQueueState
         extends AbstractQueueState {
 
-    static final int ARRAY_BLOCKING_QUEUE_SIZE = 30_000_000;
-
-    @Setup(Level.Trial)
-    public void setUp() {
-        queue = new ArrayBlockingQueue<>(ARRAY_BLOCKING_QUEUE_SIZE, true);
+    @Override
+    protected Queue<Integer> buildQueue(int queueCapacity) {
+        return new ArrayBlockingQueue<>(queueCapacity, true);
     }
 }
