@@ -66,6 +66,8 @@ public class MultiThreadRoundResolver
         }
         while (taskCounter.get() < round.numberOfTasks()) {
         }
+        assert results.size() == round.numberOfTasks()
+                : "Results should have size " + round.numberOfTasks() + " but has " + results;
         return results;
     }
 }

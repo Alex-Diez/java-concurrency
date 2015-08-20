@@ -22,6 +22,8 @@ public class SingleThreadRoundResolver
             final int index = ++taskCounter;
             results.put(index, result);
         }
+        assert results.size() == round.numberOfTasks()
+                : "Results should have size " + round.numberOfTasks() + " but has " + results;
         return results;
     }
 
