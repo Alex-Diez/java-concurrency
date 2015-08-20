@@ -9,6 +9,8 @@ import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
 import org.openjdk.jmh.annotations.TearDown;
 
+import static java.lang.Math.abs;
+
 @State(Scope.Thread)
 public abstract class AbstractQueueState {
 
@@ -39,10 +41,10 @@ public abstract class AbstractQueueState {
     @TearDown(Level.Iteration)
     public void printIterationNumber() {
         if(!emptyQueue.isEmpty()) {
-            System.out.printf("%nNumber of iterations is %d%n", emptyQueue.size());
+            printNumberOfMethodInvocation(emptyQueue, 0);
         }
         if(largeQueue.size() != LARGE_QUEUE_SIZE) {
-            System.out.printf("%nNumber of iterations is %d%n", LARGE_QUEUE_SIZE - largeQueue.size());
+            printNumberOfMethodInvocation(largeQueue, LARGE_QUEUE_SIZE);
         }
     }
 
@@ -53,4 +55,8 @@ public abstract class AbstractQueueState {
     }
 
     protected abstract Queue<Integer> buildQueue(final int queueCapacity);
+
+    private static void printNumberOfMethodInvocation(final Queue<Integer> queue, final int offset) {
+        System.out.printf("%nNumber of iterations is %d%n", abs(offset - queue.size()));
+    }
 }

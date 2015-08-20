@@ -15,6 +15,8 @@ public class QueuesBenchmarks {
                 .include(AddElementTo.class.getSimpleName())
                 .include(Base.class.getSimpleName())
                 .include(RemoveFrom.class.getSimpleName())
+                .include(AddElementThenRemoveFrom.class.getSimpleName())
+                .include(RemoveElementFrom.class.getSimpleName())
                 .warmupIterations(30)
                 .measurementIterations(30)
                 .forks(1)
