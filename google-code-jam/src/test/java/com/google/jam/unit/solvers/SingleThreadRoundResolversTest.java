@@ -1,16 +1,17 @@
 package com.google.jam.unit.solvers;
 
-import com.google.jam.solvers.RoundResolver;
-import com.google.jam.solvers.SingleThreadRoundResolver;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
-import org.junit.runners.Parameterized.Parameters;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.function.Function;
 import java.util.function.Supplier;
+
+import com.google.jam.solvers.RoundResolver;
+import com.google.jam.solvers.SingleThreadRoundResolver;
+
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 @RunWith(Parameterized.class)
 public class SingleThreadRoundResolversTest

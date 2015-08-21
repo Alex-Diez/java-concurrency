@@ -13,6 +13,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

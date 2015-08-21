@@ -1,5 +1,10 @@
 package com.google.jam.unit.datastructures.common;
 
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import com.google.jam.datastructures.LastIndexTaskQueue;
 
 import org.junit.Before;
@@ -7,11 +12,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
-
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;

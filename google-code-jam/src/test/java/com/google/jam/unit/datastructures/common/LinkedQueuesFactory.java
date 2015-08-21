@@ -1,10 +1,10 @@
 package com.google.jam.unit.datastructures.common;
 
-import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
-import com.google.jam.datastructures.LastIndexTaskQueue;
-
 import java.util.Arrays;
 import java.util.List;
+
+import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
+import com.google.jam.datastructures.LastIndexTaskQueue;
 
 class LinkedQueuesFactory
         implements QueuesFactory {

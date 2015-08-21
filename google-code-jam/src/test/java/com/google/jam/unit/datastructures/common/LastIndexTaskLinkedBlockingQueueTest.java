@@ -1,13 +1,13 @@
 package com.google.jam.unit.datastructures.common;
 
+import java.util.Arrays;
+import java.util.List;
+
 import com.google.jam.datastructures.LastIndexTaskBlockingQueue;
 import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.hamcrest.MatcherAssert.assertThat;

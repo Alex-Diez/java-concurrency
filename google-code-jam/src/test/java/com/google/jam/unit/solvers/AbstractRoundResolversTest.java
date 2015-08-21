@@ -1,17 +1,18 @@
 package com.google.jam.unit.solvers;
 
+import java.util.Map;
+import java.util.function.Function;
+
 import com.google.jam.Round;
 import com.google.jam.RoundFunctionFactory;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.solvers.RoundResolver;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.Map;
-import java.util.function.Function;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
