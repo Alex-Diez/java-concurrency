@@ -47,12 +47,13 @@ public class Main {
                 algorithm
         );
         final ResultWriter resultWriter = new ResultWriter(smallResult);
-        final Path pathToResults = Paths.get(taskType + "-" + roundLetter + ".out");
+        final String fileSeparator = System.getProperty("file.separator");
+        final Path pathToResults = Paths.get("target" + fileSeparator + taskType + "-" + roundLetter + ".out");
         if (Files.exists(pathToResults)) {
             Files.delete(pathToResults);
         }
-        try (BufferedWriter smallWriter = Files.newBufferedWriter(pathToResults)) {
-            resultWriter.writeTo(smallWriter);
+        try (BufferedWriter writer = Files.newBufferedWriter(pathToResults)) {
+            resultWriter.writeTo(writer);
         }
     }
 }
