@@ -3,10 +3,10 @@ package com.google.jam.algorithms;
 import java.util.function.Function;
 
 public final class StandingOvationForwardCountingAlgorithm
-        implements Function<String, Integer> {
+        implements Function<String, String> {
 
     @Override
-    public Integer apply(String task) {
+    public String apply(String task) {
         int counter = 0;
         int previousCounter;
         int allPeople = 0;
@@ -22,7 +22,7 @@ public final class StandingOvationForwardCountingAlgorithm
             }
             value = retrieveIntFromChar(audience, currentShineLevel);
         }
-        return counter;
+        return Integer.toString(counter);
     }
 
     private int retrieveIntFromChar(String audience, int currentShineLevel) {

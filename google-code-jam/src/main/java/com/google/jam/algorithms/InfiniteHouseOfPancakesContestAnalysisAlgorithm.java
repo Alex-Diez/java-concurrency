@@ -3,10 +3,10 @@ package com.google.jam.algorithms;
 import java.util.function.Function;
 
 public final class InfiniteHouseOfPancakesContestAnalysisAlgorithm
-        implements Function<String, Integer> {
+        implements Function<String, String> {
 
     @Override
-    public Integer apply(String task) {
+    public String apply(String task) {
         final int[] array = convertRoundTaskToNumbers(task);
         final int maxPancakes = maxElement(array);
         int ret = maxPancakes;
@@ -17,7 +17,7 @@ public final class InfiniteHouseOfPancakesContestAnalysisAlgorithm
             }
             ret = Math.min(ret, totalMoves + i);
         }
-        return ret;
+        return Integer.toString(ret);
     }
 
     private int maxElement(final int[] array) {

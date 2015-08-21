@@ -36,14 +36,14 @@ public class MultiThreadRoundResolver
         executor.shutdown();
     }
 
-    private Map<Integer, Integer> buildCollectionOfResults(final Round round) {
+    private Map<Integer, String> buildCollectionOfResults(final Round round) {
         return new HashMap<>(round.numberOfTasks(), 1.0f);
     }
 
     @Override
-    public Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm) {
+    public Map<Integer, String> solve(final Round round, final Function<String, String> algorithm) {
         resetCounters();
-        final Map<Integer, Integer> results = buildCollectionOfResults(round);
+        final Map<Integer, String> results = buildCollectionOfResults(round);
         submitAllTasks(round, algorithm, results);
         waitForCompletion(round.numberOfTasks());
         assert results.size() == round.numberOfTasks()
@@ -58,8 +58,8 @@ public class MultiThreadRoundResolver
 
     private void submitAllTasks(
             final Round round,
-            final Function<String, Integer> algorithm,
-            final Map<Integer, Integer> results) {
+            final Function<String, String> algorithm,
+            final Map<Integer, String> results) {
         Callable<Void> callable = buildTask(round, algorithm, results);
         Collection<Callable<Void>> callableCollection = Collections.nCopies(round.numberOfTasks(), callable);
         try {
@@ -72,8 +72,8 @@ public class MultiThreadRoundResolver
 
     private Callable<Void> buildTask(
             final Round round,
-            final Function<String, Integer> algorithm,
-            final Map<Integer, Integer> results) {
+            final Function<String, String> algorithm,
+            final Map<Integer, String> results) {
         return () -> {
             String task;
             int index;
@@ -85,7 +85,7 @@ public class MultiThreadRoundResolver
             finally {
                 lock.unlock();
             }
-            final int result = algorithm.apply(task);
+            final String result = algorithm.apply(task);
             results.put(index, result);
             completedTaskCounter.incrementAndGet();
             return null;

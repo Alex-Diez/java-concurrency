@@ -27,7 +27,7 @@ public class SingleThreadRoundResolversTest
     }
 
     public SingleThreadRoundResolversTest(
-            Function<String, Integer> algorithm,
+            Function<String, String> algorithm,
             char roundLetter,
             String smokeTestLocation,
             String smokeTestComplexity,
@@ -50,9 +50,9 @@ public class SingleThreadRoundResolversTest
             Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
             while (roundLetterIterator.hasNext()) {
                 Character roundLetter = roundLetterIterator.next();
-                Iterator<Function<String, Integer>> algorithmIterator = algorithmSupplier.get(roundLetter);
+                Iterator<Function<String, String>> algorithmIterator = algorithmSupplier.get(roundLetter);
                 while (algorithmIterator.hasNext()) {
-                    Function<String, Integer> algorithm = algorithmIterator.next();
+                    Function<String, String> algorithm = algorithmIterator.next();
                     Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
                     while (testDataLocationIterator.hasNext()) {
                         String[] testDataLocation = testDataLocationIterator.next();

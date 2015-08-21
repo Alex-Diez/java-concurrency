@@ -3,10 +3,10 @@ package com.google.jam.algorithms;
 import java.util.function.Function;
 
 public final class StandingOvationContestAnalysisAlgorithm
-        implements Function<String, Integer> {
+        implements Function<String, String> {
 
     @Override
-    public Integer apply(String task) {
+    public String apply(String task) {
         final String[] array = task.split("\\s+");
         final int shineMaxLevel = Integer.parseInt(array[0]);
         final String audience = array[1];
@@ -16,6 +16,6 @@ public final class StandingOvationContestAnalysisAlgorithm
             value = Math.max(value, currentShineLevel - temp);
             temp += audience.charAt(currentShineLevel) - '0';
         }
-        return value;
+        return Integer.toString(value);
     }
 }

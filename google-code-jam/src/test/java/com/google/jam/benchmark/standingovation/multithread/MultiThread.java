@@ -31,7 +31,7 @@ public class MultiThread {
 
     public RoundResolver resolver;
     public Round largeRound;
-    public Function<String, Integer> algorithm;
+    public Function<String, String> algorithm;
     public volatile Map<Integer, Integer> results;
 
     @Setup(Level.Iteration)

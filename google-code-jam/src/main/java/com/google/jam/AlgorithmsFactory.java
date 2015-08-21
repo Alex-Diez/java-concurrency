@@ -6,7 +6,7 @@ import com.google.jam.algorithms.InfiniteHouseOfPancakesContestAnalysisAlgorithm
 import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
 
 public class AlgorithmsFactory {
-    public Function<String, Integer> createAlgorithm(final char letter) {
+    public Function<String, String> createAlgorithm(final char letter) {
         switch (letter) {
             case 'A':
                 return new StandingOvationContestAnalysisAlgorithm();

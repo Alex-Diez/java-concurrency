@@ -9,7 +9,7 @@ import java.util.Map;
 
 class TestDataProvider {
 
-    public Map<Integer, Integer> provideSetOfTestData(
+    public Map<Integer, String> provideSetOfTestData(
             final char roundLetter,
             final String complexity,
             final String type)
@@ -25,12 +25,12 @@ class TestDataProvider {
                                 roundLetter + '-' + complexity + '-' + type + ".out"
                 )
         );
-        Map<Integer, Integer> testData = new HashMap<>(data.size());
+        Map<Integer, String> testData = new HashMap<>(data.size());
         data.forEach(
                 (datum) -> {
-                    String[] split = datum.split("\\s+");
-                    int key = Integer.parseInt(split[0]);
-                    int value = Integer.parseInt(split[1]);
+                    final String[] split = datum.split("\\s+");
+                    final int key = Integer.parseInt(split[0]);
+                    final String value = split[1];
                     testData.put(key, value);
                 }
         );

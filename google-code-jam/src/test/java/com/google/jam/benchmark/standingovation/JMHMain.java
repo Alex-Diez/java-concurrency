@@ -32,7 +32,7 @@ public class JMHMain {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public Map<Integer, Integer> multiThreadPerformance(final MultiThread multiThread)
+    public Map<Integer, String> multiThreadPerformance(final MultiThread multiThread)
             throws Exception {
         Blackhole.consumeCPU(2000);
         return multiThread.resolver.solve(multiThread.largeRound, multiThread.algorithm);
@@ -41,7 +41,7 @@ public class JMHMain {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public Map<Integer, Integer> singleThreadPerformance(final SingleThread singleThread)
+    public Map<Integer, String> singleThreadPerformance(final SingleThread singleThread)
             throws Exception {
         Blackhole.consumeCPU(2000);
         return singleThread.resolver.solve(singleThread.largeRound, singleThread.algorithm);

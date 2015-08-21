@@ -25,7 +25,7 @@ public class Main {
         final AlgorithmsFactory algorithmsFactory = new AlgorithmsFactory();
         for (char letter : roundLetters) {
             final Function<List<String>, Collection<String>> roundFunction = functionFactory.createRoundFunction(letter);
-            final Function<String, Integer> algorithm = algorithmsFactory.createAlgorithm(letter);
+            final Function<String, String> algorithm = algorithmsFactory.createAlgorithm(letter);
             RoundCreator creator = builder.setRoundFunction(roundFunction).build();
             writeSolvedTaskToDisk(letter, creator, algorithm, resolver, "small");
             writeSolvedTaskToDisk(letter, creator, algorithm, resolver, "large");
@@ -36,23 +36,23 @@ public class Main {
     private static void writeSolvedTaskToDisk(
             final char roundLetter,
             final RoundCreator creator,
-            final Function<String, Integer> algorithm,
+            final Function<String, String> algorithm,
             final RoundResolver resolver,
             final String taskType)
             throws IOException {
-        final RoundPathBuilder smallTaskPathBuilder = new RoundPathBuilder("main", roundLetter, taskType, "practice");
-        final Round smallRound = new RoundTaskReader(smallTaskPathBuilder.build()).applyCreator(creator);
-        final Map<Integer, Integer> smallResult = resolver.solve(
-                smallRound,
+        final RoundPathBuilder taskPathBuilder = new RoundPathBuilder("main", roundLetter, taskType, "practice");
+        final Round round = new RoundTaskReader(taskPathBuilder.build()).applyCreator(creator);
+        final Map<Integer, String> smallResult = resolver.solve(
+                round,
                 algorithm
         );
-        final ResultWriter smallResultWriter = new ResultWriter(smallResult);
+        final ResultWriter resultWriter = new ResultWriter(smallResult);
         final Path pathToResults = Paths.get(taskType + "-" + roundLetter + ".out");
         if (Files.exists(pathToResults)) {
             Files.delete(pathToResults);
         }
         try (BufferedWriter smallWriter = Files.newBufferedWriter(pathToResults)) {
-            smallResultWriter.writeTo(smallWriter);
+            resultWriter.writeTo(smallWriter);
         }
     }
 }

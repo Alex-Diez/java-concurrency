@@ -7,7 +7,7 @@ import com.google.jam.Round;
 
 public interface RoundResolver {
 
-    Map<Integer, Integer> solve(final Round round, final Function<String, Integer> algorithm);
+    Map<Integer, String> solve(final Round round, final Function<String, String> algorithm);
 
     void shutDownResolver();
 }

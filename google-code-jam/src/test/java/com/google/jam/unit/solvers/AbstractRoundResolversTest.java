@@ -19,7 +19,7 @@ import static org.hamcrest.Matchers.is;
 
 abstract class AbstractRoundResolversTest {
 
-    private final Function<String, Integer> algorithm;
+    private final Function<String, String> algorithm;
     private final String location;
     private final char roundLetter;
     private final String complexity;
@@ -28,7 +28,7 @@ abstract class AbstractRoundResolversTest {
     private final RoundFunctionFactory roundFunctionFactory;
 
     public AbstractRoundResolversTest(
-            final Function<String, Integer> algorithm,
+            final Function<String, String> algorithm,
             final char roundLetter,
             final String location,
             final String complexity,
@@ -71,8 +71,8 @@ abstract class AbstractRoundResolversTest {
     @Test
     public void testTaskSolvingProcess()
             throws Exception {
-        final Map<Integer, Integer> resolverResults = roundResolver.solve(round, algorithm);
-        final Map<Integer, Integer> testData = testDataProvider.provideSetOfTestData(
+        final Map<Integer, String> resolverResults = roundResolver.solve(round, algorithm);
+        final Map<Integer, String> testData = testDataProvider.provideSetOfTestData(
                 roundLetter,
                 complexity,
                 roundType

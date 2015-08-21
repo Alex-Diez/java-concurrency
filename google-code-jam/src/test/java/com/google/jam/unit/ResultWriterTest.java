@@ -22,8 +22,8 @@ public class ResultWriterTest {
     @Before
     public void setUp()
             throws Exception {
-        final Map<Integer, Integer> resultToWrite = new HashMap<>();
-        resultToWrite.put(1, 2);
+        final Map<Integer, String> resultToWrite = new HashMap<>();
+        resultToWrite.put(1, "2");
         resultWriter = new ResultWriter(resultToWrite);
     }
 

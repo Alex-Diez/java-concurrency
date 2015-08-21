@@ -24,7 +24,7 @@ public class SingleThread {
 
     public Round largeRound;
     public RoundResolver resolver;
-    public Function<String, Integer> algorithm;
+    public Function<String, String> algorithm;
     public Map<Integer, Integer> results;
 
     @Setup(Level.Iteration)
