@@ -18,8 +18,8 @@ public class SingleThreadRoundResolver
         final Map<Integer, String> results = buildCollectionOfResults(round);
         int taskCounter = 0;
         while (round.hasNextTask()) {
-            final String result = algorithm.apply(round.getNextTask());
             final int index = ++taskCounter;
+            final String result = algorithm.apply(round.getNextTask());
             results.put(index, result);
         }
         assert results.size() == round.numberOfTasks()
