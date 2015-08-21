@@ -13,7 +13,7 @@ class TestDataLocationSupplier
                 new String[][] {
                         {"test", "small", "test"},
                         {"main", "small", "practice"},
-//                        {"main", "large", "practice"}
+                        {"main", "large", "practice"}
                 }
         ).iterator();
     }
