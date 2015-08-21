@@ -13,9 +13,9 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-//@RunWith(Parameterized.class)
-public class MultiThreadRoundResolversTest/*
-        extends AbstractRoundResolversTest */ {
+@RunWith(Parameterized.class)
+public class MultiThreadRoundResolversTest
+        extends AbstractRoundResolversTest {
 
     @Parameters
     public static Collection<Object[]> dataSubClass() {
@@ -30,17 +30,17 @@ public class MultiThreadRoundResolversTest/*
     private final Supplier<Integer> numberOfThreadFunction;
 
     public MultiThreadRoundResolversTest(
-            final Function<String, Integer> algorithm,
+            final Function<String, String> algorithm,
             final char roundLetter,
             final String location,
             final String complexity,
             final String roundType,
             final Supplier<Integer> numberOfThreadFunction) {
-//        super(algorithm, roundLetter, location, complexity, roundType);
+        super(algorithm, roundLetter, location, complexity, roundType);
         this.numberOfThreadFunction = numberOfThreadFunction;
     }
 
-    //    @Override
+    @Override
     protected RoundResolver createRoundResolver() {
         return new MultiThreadRoundResolver(numberOfThreadFunction);
     }
