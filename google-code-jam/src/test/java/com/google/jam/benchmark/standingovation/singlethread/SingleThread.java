@@ -4,7 +4,7 @@ import com.google.jam.Round;
 import com.google.jam.RoundFunctionFactory;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
+import com.google.jam.algorithms.StandingOvationAlgorithm;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.solvers.SingleThreadRoundResolver;
@@ -39,7 +39,7 @@ public class SingleThread {
                 .build();
         largeRound = new RoundTaskReader(largeTaskPathBuilder.build()).applyCreator(creator);
         resolver = new SingleThreadRoundResolver();
-        algorithm = new StandingOvationContestAnalysisAlgorithm();
+        algorithm = new StandingOvationAlgorithm();
     }
 
     @TearDown(Level.Iteration)

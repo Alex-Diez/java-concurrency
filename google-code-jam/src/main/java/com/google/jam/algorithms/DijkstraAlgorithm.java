@@ -29,10 +29,10 @@ public final class DijkstraAlgorithm
     @Override
     public String apply(String task) {
         final String[] split = task.split("\\s+");
-        final int times = Integer.parseInt(split[1]);
+        final long times = Long.parseLong(split[1]);
         String line = split[2];
         int result = 1;
-        for (int i = 0; i < times; i++) {
+        for (long i = 0; i < times; i++) {
             for (int j = 0; j < line.length(); j++) {
                 final char c = line.charAt(j);
                 final int index = CHARACTER_INTEGER_MAP.get(c);
@@ -43,10 +43,10 @@ public final class DijkstraAlgorithm
         if (result != -1) {
             return "NO";
         }
-        int time = 0;
+        long time = 0;
         int position = 0;
         result = 1;
-        for (int i = 0; i < times; i++) {
+        for (long i = 0; i < times; i++) {
             for (int j = 0; j < line.length(); j++) {
                 final char c = line.charAt(j);
                 final int index = CHARACTER_INTEGER_MAP.get(c);
@@ -63,7 +63,7 @@ public final class DijkstraAlgorithm
             }
         }
         result = 1;
-        for (int i = time; i < times; i++) {
+        for (long i = time; i < times; i++) {
             int start = i == time ? position + 1 : 0;
             for (int j = start; j < line.length(); j++) {
                 final char c = line.charAt(j);

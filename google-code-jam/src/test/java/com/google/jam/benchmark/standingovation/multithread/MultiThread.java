@@ -4,7 +4,7 @@ import com.google.jam.Round;
 import com.google.jam.RoundFunctionFactory;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
-import com.google.jam.algorithms.StandingOvationContestAnalysisAlgorithm;
+import com.google.jam.algorithms.StandingOvationAlgorithm;
 import com.google.jam.creators.RoundCreator;
 import com.google.jam.experiments.CPUNumberOfThreadFunction;
 import com.google.jam.experiments.DoubleCPUNumberOfThreadFunction;
@@ -49,7 +49,7 @@ public class MultiThread {
                 ? new DoubleCPUNumberOfThreadFunction()
                 : new CPUNumberOfThreadFunction();
         resolver = new MultiThreadRoundResolver(numberOfThreadFunction);
-        algorithm = new StandingOvationContestAnalysisAlgorithm();
+        algorithm = new StandingOvationAlgorithm();
     }
 
     @TearDown(Level.Iteration)

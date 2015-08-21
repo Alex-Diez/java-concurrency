@@ -43,29 +43,27 @@ public class SingleThreadRoundResolversTest
     private static class DataProvider {
 
         public Collection<Object[]> provide(
-                final AlgorithmSupplier algorithmSupplier,
+                final Supplier<Iterator<Function<String, String>>> algorithmSupplier,
                 final Supplier<Iterator<Character>> roundLetterSupplier,
                 final Supplier<Iterator<String[]>> testDataLocationSupplier) {
             Collection<Object[]> collection = new ArrayList<>();
             Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
+            Iterator<Function<String, String>> algorithmIterator = algorithmSupplier.get();
             while (roundLetterIterator.hasNext()) {
                 Character roundLetter = roundLetterIterator.next();
-                Iterator<Function<String, String>> algorithmIterator = algorithmSupplier.get(roundLetter);
-                while (algorithmIterator.hasNext()) {
-                    Function<String, String> algorithm = algorithmIterator.next();
-                    Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
-                    while (testDataLocationIterator.hasNext()) {
-                        String[] testDataLocation = testDataLocationIterator.next();
-                        collection.add(
-                                new Object[] {
-                                        algorithm,
-                                        roundLetter,
-                                        testDataLocation[0],
-                                        testDataLocation[1],
-                                        testDataLocation[2]
-                                }
-                        );
-                    }
+                Function<String, String> algorithm = algorithmIterator.next();
+                Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
+                while (testDataLocationIterator.hasNext()) {
+                    String[] testDataLocation = testDataLocationIterator.next();
+                    collection.add(
+                            new Object[] {
+                                    algorithm,
+                                    roundLetter,
+                                    testDataLocation[0],
+                                    testDataLocation[1],
+                                    testDataLocation[2]
+                            }
+                    );
                 }
             }
             return collection;

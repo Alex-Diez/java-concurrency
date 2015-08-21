@@ -2,7 +2,7 @@ package com.google.jam.algorithms;
 
 import java.util.function.Function;
 
-public final class InfiniteHouseOfPancakesContestAnalysisAlgorithm
+public final class InfiniteHouseOfPancakesAlgorithm
         implements Function<String, String> {
 
     @Override

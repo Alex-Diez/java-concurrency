@@ -15,7 +15,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 //@RunWith(Parameterized.class)
 public class MultiThreadRoundResolversTest/*
-        extends AbstractRoundResolversTest */{
+        extends AbstractRoundResolversTest */ {
 
     @Parameters
     public static Collection<Object[]> dataSubClass() {
@@ -40,7 +40,7 @@ public class MultiThreadRoundResolversTest/*
         this.numberOfThreadFunction = numberOfThreadFunction;
     }
 
-//    @Override
+    //    @Override
     protected RoundResolver createRoundResolver() {
         return new MultiThreadRoundResolver(numberOfThreadFunction);
     }
@@ -48,35 +48,33 @@ public class MultiThreadRoundResolversTest/*
     private static class DataProvider {
 
         public Collection<Object[]> provide(
-                final AlgorithmSupplier algorithmSupplier,
+                final Supplier<Iterator<Function<String, String>>> algorithmSupplier,
                 final Supplier<Iterator<Character>> roundLetterSupplier,
                 final Supplier<Iterator<String[]>> testDataLocationSupplier,
                 final Supplier<Iterator<Supplier<Integer>>> numberOfThreadFunctionSupplier) {
             final Collection<Object[]> collection = new ArrayList<>();
             final Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
+            final Iterator<Function<String, String>> algorithmIterator = algorithmSupplier.get();
             while (roundLetterIterator.hasNext()) {
                 final Character roundLetter = roundLetterIterator.next();
-                final Iterator<Function<String, String>> algorithmIterator = algorithmSupplier.get(roundLetter);
-                while (algorithmIterator.hasNext()) {
-                    final Function<String, String> algorithm = algorithmIterator.next();
-                    final Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
-                    while (testDataLocationIterator.hasNext()) {
-                        final String[] testDataLocation = testDataLocationIterator.next();
-                        final Iterator<Supplier<Integer>> numberOfThreadFunctionIterator =
-                                numberOfThreadFunctionSupplier.get();
-                        while (numberOfThreadFunctionIterator.hasNext()) {
-                            final Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionIterator.next();
-                            collection.add(
-                                    new Object[] {
-                                            algorithm,
-                                            roundLetter,
-                                            testDataLocation[0],
-                                            testDataLocation[1],
-                                            testDataLocation[2],
-                                            numberOfThreadFunction
-                                    }
-                            );
-                        }
+                final Function<String, String> algorithm = algorithmIterator.next();
+                final Iterator<String[]> testDataLocationIterator = testDataLocationSupplier.get();
+                while (testDataLocationIterator.hasNext()) {
+                    final String[] testDataLocation = testDataLocationIterator.next();
+                    final Iterator<Supplier<Integer>> numberOfThreadFunctionIterator =
+                            numberOfThreadFunctionSupplier.get();
+                    while (numberOfThreadFunctionIterator.hasNext()) {
+                        final Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionIterator.next();
+                        collection.add(
+                                new Object[] {
+                                        algorithm,
+                                        roundLetter,
+                                        testDataLocation[0],
+                                        testDataLocation[1],
+                                        testDataLocation[2],
+                                        numberOfThreadFunction
+                                }
+                        );
                     }
                 }
             }

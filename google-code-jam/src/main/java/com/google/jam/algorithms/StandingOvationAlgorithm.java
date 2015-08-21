@@ -2,7 +2,7 @@ package com.google.jam.algorithms;
 
 import java.util.function.Function;
 
-public final class StandingOvationForwardCountingAlgorithm
+public final class StandingOvationAlgorithm
         implements Function<String, String> {
 
     @Override
