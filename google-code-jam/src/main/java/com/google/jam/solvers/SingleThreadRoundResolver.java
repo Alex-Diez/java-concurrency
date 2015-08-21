@@ -9,7 +9,7 @@ import java.util.function.Function;
 public class SingleThreadRoundResolver
         implements RoundResolver {
 
-    protected Map<Integer, Integer> buildCollectionOfResults(final Round round) {
+    private Map<Integer, Integer> buildCollectionOfResults(final Round round) {
         return new HashMap<>(round.numberOfTasks(), 1.0f);
     }
 
@@ -18,17 +18,13 @@ public class SingleThreadRoundResolver
         final Map<Integer, Integer> results = buildCollectionOfResults(round);
         int taskCounter = 0;
         while (round.hasNextTask()) {
-            final int result = calculateResult(round.getNextTask(), algorithm);
+            final int result = algorithm.apply(round.getNextTask());
             final int index = ++taskCounter;
             results.put(index, result);
         }
         assert results.size() == round.numberOfTasks()
                 : "Results should have size " + round.numberOfTasks() + " but has " + results;
         return results;
-    }
-
-    private int calculateResult(String task, final Function<String, Integer> algorithm) {
-        return algorithm.apply(task);
     }
 
     @Override
