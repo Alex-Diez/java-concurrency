@@ -7,17 +7,17 @@ import java.util.function.Function;
 
 import com.google.jam.WrongRoundFormatException;
 
-public class InfiniteHouseOfPancakesRoundFunction
+public class DijkstraRoundFunction
         extends AbstractRoundFunction
         implements Function<List<String>, Collection<String>> {
 
     @Override
     public Collection<String> apply(List<String> strings) {
         final int queueLength = parseLength(strings);
-        if (queueLength != strings.size() / 2) {
+        if(queueLength != strings.size() / 2) {
             throw new WrongRoundFormatException();
         }
-        Collection<String> tasks = new ArrayList<>(strings.size() / 2);
+        final Collection<String> tasks = new ArrayList<>(strings.size() / 2);
         for (int i = 0; i < strings.size(); i += 2) {
             tasks.add(strings.get(i) + ' ' + strings.get(i + 1));
         }

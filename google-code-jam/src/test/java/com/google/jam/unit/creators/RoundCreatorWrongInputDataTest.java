@@ -4,6 +4,7 @@ import com.google.jam.RoundFunctionFactory;
 import com.google.jam.WrongRoundFormatException;
 import com.google.jam.creators.RoundCreator;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -59,10 +60,10 @@ public class RoundCreatorWrongInputDataTest {
             final Collection<Object[]> collection = new ArrayList<>();
             final Iterator<Character> roundLetterIterator = roundLetterSupplier.get();
             final Iterator<List<String>> roundInputTestDataIterator = roundInputTestDataSupplier.get();
-            final Iterator<String> taskQueueLengthIterator = taskQueueLengthSupplier.get();
             while (roundInputTestDataIterator.hasNext()) {
                 char roundLetter = roundLetterIterator.next();
                 final List<String> roundInputTestDataNext = roundInputTestDataIterator.next();
+                final Iterator<String> taskQueueLengthIterator = taskQueueLengthSupplier.get();
                 while (taskQueueLengthIterator.hasNext()) {
                     final List<String> roundInputTestData = new ArrayList<>(roundInputTestDataNext);
                     final String taskQueueLength = taskQueueLengthIterator.next();

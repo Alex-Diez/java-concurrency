@@ -4,15 +4,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.function.Function;
 import java.util.function.Supplier;
 
 import com.google.jam.Round;
 import com.google.jam.RoundFunctionFactory;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.datastructures.LastIndexTaskQueue;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
@@ -20,6 +17,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import static com.jcabi.matchers.RegexMatchers.matchesPattern;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.is;
 
 @RunWith(Parameterized.class)
 public class RoundCreatorOutputDataValidationTest {
@@ -50,10 +48,10 @@ public class RoundCreatorOutputDataValidationTest {
     }
 
     @Test
-    @Ignore
     public void testValidateRound()
             throws Exception {
         final Round round = roundCreator.createRound(new ArrayList<>(testData));
+        assertThat(roundCreator.toString() ,round.hasNextTask(), is(true));
         while (round.hasNextTask()) {
             final String task = round.getNextTask();
             assertThat(task, matchesPattern(pattern));

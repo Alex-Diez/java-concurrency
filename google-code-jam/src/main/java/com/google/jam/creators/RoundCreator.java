@@ -1,10 +1,10 @@
 package com.google.jam.creators;
 
-import com.google.jam.Round;
-
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Function;
+
+import com.google.jam.Round;
 
 public class RoundCreator {
 
@@ -17,6 +17,13 @@ public class RoundCreator {
     public Round createRound(final List<String> strings) {
         final Collection<String> tasks = roundFunction.apply(strings);
         return new Round(tasks);
+    }
+
+    @Override
+    public String toString() {
+        return "[Round creator with " +
+                roundFunction.getClass().getSimpleName().replace("RoundFunction", "") +
+                " round function]";
     }
 
     public static class Builder {

@@ -12,6 +12,7 @@ import org.openjdk.jmh.runner.RunnerException;
 import org.openjdk.jmh.runner.options.Options;
 import org.openjdk.jmh.runner.options.OptionsBuilder;
 
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class JMHMain {
@@ -31,19 +32,19 @@ public class JMHMain {
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void multiThreadPerformance(final MultiThread multiThread)
+    public Map<Integer, Integer> multiThreadPerformance(final MultiThread multiThread)
             throws Exception {
         Blackhole.consumeCPU(2000);
-        multiThread.results = multiThread.resolver.solve(multiThread.largeRound, multiThread.algorithm);
+        return multiThread.resolver.solve(multiThread.largeRound, multiThread.algorithm);
     }
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
     @OutputTimeUnit(TimeUnit.MICROSECONDS)
-    public void singleThreadPerformance(final SingleThread singleThread)
+    public Map<Integer, Integer> singleThreadPerformance(final SingleThread singleThread)
             throws Exception {
         Blackhole.consumeCPU(2000);
-        singleThread.results = singleThread.resolver.solve(singleThread.largeRound, singleThread.algorithm);
+        return singleThread.resolver.solve(singleThread.largeRound, singleThread.algorithm);
     }
 
     @Benchmark
