@@ -7,14 +7,13 @@ import org.openjdk.jmh.runner.options.OptionsBuilder;
 
 public class QueuesBenchmarks {
 
-    static final long CPU_TOKENS = 2000;
+    static final long CPU_TOKENS = 1_000_000;
 
     public static void main(String[] args)
             throws RunnerException {
         final Options options = new OptionsBuilder()
                 .include(AddElementTo.class.getSimpleName())
                 .include(Base.class.getSimpleName())
-                .include(RemoveFrom.class.getSimpleName())
                 .include(AddElementThenRemoveFrom.class.getSimpleName())
                 .include(RemoveElementFrom.class.getSimpleName())
                 .warmupIterations(30)

@@ -1,5 +1,7 @@
 package com.google.jam.benchmark.datastructures.states;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Random;
 
 import org.openjdk.jmh.annotations.Level;
@@ -10,17 +12,17 @@ import org.openjdk.jmh.annotations.State;
 @State(Scope.Thread)
 public class DataState {
 
-    private final Random random = new Random(System.nanoTime());
+    private final SecureRandom random = new SecureRandom();
 
-    private int datum;
+    private String datum;
 
-    public int getDatum() {
+    public String getDatum() {
         return datum;
     }
 
     @Setup(Level.Invocation)
     public void setUp()
             throws Exception {
-        datum = random.nextInt();
+        datum = new BigInteger(120, random).toString();
     }
 }

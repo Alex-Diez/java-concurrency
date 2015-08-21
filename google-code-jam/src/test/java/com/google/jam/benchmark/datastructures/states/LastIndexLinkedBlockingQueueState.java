@@ -4,11 +4,11 @@ import java.util.Queue;
 
 import com.google.jam.datastructures.LastIndexTaskLinkedBlockingQueue;
 
-public class LastIndexLinkedBlockingBigQueueState
-        extends AbstractBigQueueState {
+public class LastIndexLinkedBlockingQueueState
+        extends AbstractQueueState {
 
     @Override
-    public Queue<Integer> buildQueue(int queueCapacity) {
+    public Queue<String> buildQueue(int queueCapacity) {
         return new LastIndexTaskLinkedBlockingQueue<>();
     }
 }

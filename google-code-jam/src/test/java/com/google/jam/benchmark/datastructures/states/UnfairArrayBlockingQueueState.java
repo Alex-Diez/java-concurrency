@@ -3,11 +3,11 @@ package com.google.jam.benchmark.datastructures.states;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
 
-public class UnfairArrayBlockingBigQueueState
-        extends AbstractBigQueueState {
+public class UnfairArrayBlockingQueueState
+        extends AbstractQueueState {
 
     @Override
-    public Queue<Integer> buildQueue(int queueCapacity) {
+    public Queue<String> buildQueue(int queueCapacity) {
         return new ArrayBlockingQueue<>(queueCapacity, false);
     }
 }
