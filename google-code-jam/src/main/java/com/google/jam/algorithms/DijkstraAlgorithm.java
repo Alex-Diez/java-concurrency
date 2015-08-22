@@ -3,8 +3,9 @@ package com.google.jam.algorithms;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import java.util.function.IntPredicate;
 
-import static java.lang.Math.*;
+import static java.lang.Math.abs;
 
 public final class DijkstraAlgorithm
         implements Function<String, String> {
@@ -31,52 +32,22 @@ public final class DijkstraAlgorithm
         final String[] split = task.split("\\s+");
         final long times = Long.parseLong(split[1]);
         String line = split[2];
-        int result = multiplyAll(times, line);
-        if (result != -1) {
+        if (hasPossibleSolution(times, line)) {
             return "NO";
         }
-        long time = 0;
-        int position = 0;
-        result = 1;
-        for (long i = 0; i < times; i++) {
-            for (int j = 0; j < line.length(); j++) {
-                final char c = line.charAt(j);
-                final int index = CHARACTER_INTEGER_MAP.get(c);
-                final int sign = index * result > 0 ? 1 : -1;
-                result = sign * MULTIPLICATION_TABLE[abs(result)][abs(index)];
-                if (result == 2) {
-                    time = i;
-                    position = j;
-                    break;
-                }
-            }
-            if (result == 2) {
-                break;
-            }
-            if(result == 1) {
-                return "NO";
-            }
-            if(i != 0 && i % 4 == 0) {
-                return "NO";
-            }
+        final StringReducer reducerToI = new StringReducer();
+        if (!reducerToI.couldBeReducedTo((v) -> CHARACTER_INTEGER_MAP.get('i') == v, line, times, (i) -> i == 1)) {
+            return "NO";
         }
-        result = 1;
-        for (long i = time; i < times; i++) {
-            int start = i == time ? position + 1 : 0;
-            for (int j = start; j < line.length(); j++) {
-                final char c = line.charAt(j);
-                final int index = CHARACTER_INTEGER_MAP.get(c);
-                final int sign = index * result > 0 ? 1 : -1;
-                result = sign * MULTIPLICATION_TABLE[abs(result)][abs(index)];
-                if (result == 3) {
-                    return "YES";
-                }
-            }
-            if(i != 0 && i % 4 == 0) {
-                return "NO";
-            }
+        final StringReducer reducerToJ = new StringReducer(reducerToI.stopAtTime, reducerToI.stopAtPosition);
+        if (!reducerToJ.couldBeReducedTo((v) -> CHARACTER_INTEGER_MAP.get('j') == v, line, times, (i) -> false)) {
+            return "NO";
         }
-        return "NO";
+        return "YES";
+    }
+
+    private boolean hasPossibleSolution(long times, String line) {
+        return multiplyAll(times, line) != -1;
     }
 
     private int multiplyAll(final long times, final String line) {
@@ -100,5 +71,49 @@ public final class DijkstraAlgorithm
             result = multiply(result, base);
         }
         return result;
+    }
+
+    private class StringReducer {
+        private final long startAtTime;
+        private final int startAtPosition;
+        private long stopAtTime;
+        private int stopAtPosition;
+
+        public StringReducer() {
+            this(0, -1);
+        }
+
+        public StringReducer(final long startAtTime, final int startAtPosition) {
+            this.startAtTime = startAtTime;
+            this.startAtPosition = startAtPosition;
+        }
+
+        private boolean couldBeReducedTo(
+                final IntPredicate matcher,
+                final String line,
+                final long times,
+                final IntPredicate aheadOfTimePrediction) {
+            int result = 1;
+            for (long i = startAtTime; i < times; i++) {
+                final int start = i == startAtTime ? startAtPosition + 1 : 0;
+                for (int j = start; j < line.length(); j++) {
+                    final char c = line.charAt(j);
+                    final int index = CHARACTER_INTEGER_MAP.get(c);
+                    result = multiply(result, index);
+                    if (matcher.test(result)) {
+                        stopAtTime = i;
+                        stopAtPosition = j;
+                        return true;
+                    }
+                }
+                if (aheadOfTimePrediction.test(result)) {
+                    return false;
+                }
+                if (i != 0 && i % 4 == 0) {
+                    return false;
+                }
+            }
+            return false;
+        }
     }
 }
