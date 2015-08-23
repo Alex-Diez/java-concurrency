@@ -7,17 +7,17 @@ public final class InfiniteHouseOfPancakesAlgorithm
 
     @Override
     public String apply(String task) {
-        final int[] array = convertRoundTaskToNumbers(task);
-        final int maxPancakes = maxElement(array);
-        int ret = maxPancakes;
-        for (int i = 1; i < maxPancakes; i++) {
+        final int[] initialPlateWithPancakes = convertRoundTaskToNumbers(task);
+        final int maxPancakes = maxElement(initialPlateWithPancakes);
+        int minPossibleTime = maxPancakes;
+        for (int eatingTime = 1; eatingTime < maxPancakes; eatingTime++) {
             int totalMoves = 0;
-            for (int element : array) {
-                totalMoves += (element - 1) / i;
+            for (int plate : initialPlateWithPancakes) {
+                totalMoves += (plate - 1) / eatingTime;
             }
-            ret = Math.min(ret, totalMoves + i);
+            minPossibleTime = Math.min(minPossibleTime, totalMoves + eatingTime);
         }
-        return Integer.toString(ret);
+        return Integer.toString(minPossibleTime);
     }
 
     private int maxElement(final int[] array) {
