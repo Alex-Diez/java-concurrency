@@ -2,34 +2,24 @@ package com.google.jam.algorithms;
 
 import java.util.function.Function;
 
+import static java.lang.Math.max;
+
 public final class StandingOvationAlgorithm
         implements Function<String, String> {
 
     @Override
     public String apply(String task) {
-        int counter = 0;
-        int previousCounter;
-        int allPeople = 0;
         final String audience = task.split("\\s+")[1];
-        int value = retrieveIntFromChar(audience, 0);
-        for (int currentShineLevel = 1; currentShineLevel < audience.length(); currentShineLevel++) {
-            previousCounter = counter;
-            allPeople += value;
-            final int needNewPeople = needNewPeople(allPeople, currentShineLevel);
-            counter += needNewPeople > 0 ? needNewPeople : 0;
-            if (previousCounter < counter) {
-                allPeople += counter - previousCounter;
-            }
-            value = retrieveIntFromChar(audience, currentShineLevel);
+        int shinedAudience = 0;
+        int invitedFriends = 0;
+        for (int currentShineLevel = 0; currentShineLevel < audience.length(); currentShineLevel++) {
+            invitedFriends = max(currentShineLevel - shinedAudience, invitedFriends);
+            shinedAudience += charToInt(audience.charAt(currentShineLevel));
         }
-        return Integer.toString(counter);
+        return Integer.toString(invitedFriends);
     }
 
-    private int retrieveIntFromChar(String audience, int currentShineLevel) {
-        return audience.charAt(currentShineLevel) - '0';
-    }
-
-    private int needNewPeople(final int allPeople, final int currentShineLevel) {
-        return currentShineLevel - allPeople;
+    private int charToInt(final char c) {
+        return c - '0';
     }
 }
