@@ -9,6 +9,6 @@ class RoundLetterSupplier
 
     @Override
     public Iterator<Character> get() {
-        return Arrays.asList('A', 'B', 'C').iterator();
+        return Arrays.asList('A', 'B', 'C', 'D').iterator();
     }
 }

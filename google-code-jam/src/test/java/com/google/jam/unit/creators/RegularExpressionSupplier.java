@@ -9,7 +9,12 @@ class RegularExpressionSupplier
 
     @Override
     public Iterator<String> get() {
-        return Arrays.asList("^([0-9]*) ([0-9]*)$", "^([0-9]*)( [0-9])*$", "^([0-9]([\\s])?){2} ([j|i|k])*$")
+        return Arrays.asList(
+                "^([0-9]*) ([0-9]*)$",
+                "^([0-9]*)( [0-9])*$",
+                "^([0-9]([\\s])?){2} ([j|i|k])*$",
+                "^([0-9])* ([0-9])* ([0-9])*$"
+        )
                 .iterator();
     }
 }

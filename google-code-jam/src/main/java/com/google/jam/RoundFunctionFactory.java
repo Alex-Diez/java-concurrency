@@ -6,6 +6,7 @@ import java.util.function.Function;
 
 import com.google.jam.creators.DijkstraRoundFunction;
 import com.google.jam.creators.InfiniteHouseOfPancakesRoundFunction;
+import com.google.jam.creators.OminousOminoRoundFunction;
 import com.google.jam.creators.StandingOvationRoundFunction;
 
 public class RoundFunctionFactory {
@@ -18,6 +19,8 @@ public class RoundFunctionFactory {
                 return new InfiniteHouseOfPancakesRoundFunction();
             case 'C':
                 return new DijkstraRoundFunction();
+            case 'D':
+                return new OminousOminoRoundFunction();
         }
         throw new RuntimeException("Impossible situation!!!");
     }
