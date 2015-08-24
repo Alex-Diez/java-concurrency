@@ -18,7 +18,7 @@ public class Main {
 
     public static void main(String[] args)
             throws IOException {
-        final char[] roundLetters = {'A', 'B', 'C'};
+        final char[] roundLetters = {'A', 'B', 'C', 'D'};
         final RoundResolver resolver = new SingleThreadRoundResolver();
         final RoundCreator.Builder builder = new RoundCreator.Builder();
         final RoundFunctionFactory functionFactory = new RoundFunctionFactory();

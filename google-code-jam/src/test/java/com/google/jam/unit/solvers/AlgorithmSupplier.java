@@ -2,6 +2,7 @@ package com.google.jam.unit.solvers;
 
 import com.google.jam.algorithms.DijkstraAlgorithm;
 import com.google.jam.algorithms.InfiniteHouseOfPancakesAlgorithm;
+import com.google.jam.algorithms.OminousOminoAlgorithm;
 import com.google.jam.algorithms.StandingOvationAlgorithm;
 
 import java.util.Arrays;
@@ -16,7 +17,8 @@ class AlgorithmSupplier
         return Arrays.asList(
                 new StandingOvationAlgorithm(),
                 new InfiniteHouseOfPancakesAlgorithm(),
-                new DijkstraAlgorithm()
+                new DijkstraAlgorithm(),
+                new OminousOminoAlgorithm()
         ).iterator();
     }
 }
