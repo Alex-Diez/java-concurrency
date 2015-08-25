@@ -2,9 +2,9 @@ package com.google.jam.solvers;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
@@ -18,17 +18,15 @@ import static java.util.concurrent.Executors.newFixedThreadPool;
 
 public class MultiThreadRoundResolver
         implements RoundResolver {
-
+    
     private final ExecutorService executor;
     private final Lock lock;
     private final AtomicInteger taskCounter;
-    private final AtomicInteger completedTaskCounter;
 
     public MultiThreadRoundResolver(final Supplier<Integer> numberOfThreadSupplier) {
         this.executor = newFixedThreadPool(numberOfThreadSupplier.get());
         this.lock = new ReentrantLock();
         this.taskCounter = new AtomicInteger();
-        this.completedTaskCounter = new AtomicInteger();
     }
 
     @Override
@@ -36,24 +34,25 @@ public class MultiThreadRoundResolver
         executor.shutdown();
     }
 
-    private Map<Integer, String> buildCollectionOfResults(final Round round) {
-        return new HashMap<>(round.numberOfTasks(), 1.0f);
-    }
-
     @Override
     public Map<Integer, String> solve(final Round round, final Function<String, String> algorithm) {
         resetCounters();
         final Map<Integer, String> results = buildCollectionOfResults(round);
         submitAllTasks(round, algorithm, results);
-        waitForCompletion(round.numberOfTasks());
-        assert results.size() == round.numberOfTasks()
-                : "Results should have size " + round.numberOfTasks() + " but has " + results;
+        waitForCompletion(results, round.numberOfTasks());
+        final int resultsSize = results.size();
+        final int roundNumberOfTasks = round.numberOfTasks();
+        assert resultsSize == roundNumberOfTasks
+                : "Results should have size " + roundNumberOfTasks + " but is " + resultsSize;
         return results;
     }
 
-    private void waitForCompletion(final int numberOfTasks) {
-        while (completedTaskCounter.get() < numberOfTasks) {
-        }
+    private void resetCounters() {
+        taskCounter.set(0);
+    }
+
+    private Map<Integer, String> buildCollectionOfResults(final Round round) {
+        return new ConcurrentHashMap<>(round.numberOfTasks(), 1.0f);
     }
 
     private void submitAllTasks(
@@ -87,13 +86,12 @@ public class MultiThreadRoundResolver
             }
             final String result = algorithm.apply(task);
             results.put(index, result);
-            completedTaskCounter.incrementAndGet();
             return null;
         };
     }
 
-    private void resetCounters() {
-        taskCounter.set(0);
-        completedTaskCounter.set(0);
+    private void waitForCompletion(final Map<Integer, String> results, final int numberOfTasks) {
+        while (results.size() < numberOfTasks) {
+        }
     }
 }

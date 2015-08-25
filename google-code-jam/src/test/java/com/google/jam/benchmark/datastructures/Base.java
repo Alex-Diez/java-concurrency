@@ -15,14 +15,7 @@ public class Base {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.NANOSECONDS)
-    public void line()
-            throws Exception {
-    }
-
-    @Benchmark
-    @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MICROSECONDS)
+    @OutputTimeUnit(TimeUnit.MILLISECONDS)
     public void lineBurnCPU(final Blackhole blackhole, final DataState dataState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);

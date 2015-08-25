@@ -1,4 +1,4 @@
-package com.google.jam.benchmark.standingovation.singlethread;
+package com.google.jam.benchmark.algorithms;
 
 import com.google.jam.Round;
 import com.google.jam.RoundFunctionFactory;
@@ -9,6 +9,7 @@ import com.google.jam.creators.RoundCreator;
 import com.google.jam.solvers.RoundResolver;
 import com.google.jam.solvers.SingleThreadRoundResolver;
 import org.openjdk.jmh.annotations.Level;
+import org.openjdk.jmh.annotations.Param;
 import org.openjdk.jmh.annotations.Scope;
 import org.openjdk.jmh.annotations.Setup;
 import org.openjdk.jmh.annotations.State;
@@ -22,12 +23,15 @@ import java.util.function.Function;
 @State(Scope.Thread)
 public class SingleThread {
 
+    @Param({"A", "B", "C", "D"})
+    private char roundLetter;
+
     public Round largeRound;
     public RoundResolver resolver;
     public Function<String, String> algorithm;
-    public Map<Integer, Integer> results;
+    public Map<Integer, String> results;
 
-    @Setup(Level.Iteration)
+    @Setup(Level.Invocation)
     public void setUp()
             throws Exception {
         final char roundLetter = 'A';
@@ -42,11 +46,11 @@ public class SingleThread {
         algorithm = new StandingOvationAlgorithm();
     }
 
-    @TearDown(Level.Iteration)
+    @TearDown(Level.Invocation)
     public void tearDown()
             throws Exception {
         resolver.shutDownResolver();
-//        assert results != null && results.size() == largeRound.numberOfTasks()
-//                : "Results should have size " + largeRound.numberOfTasks() + " but has " + results;
+        assert results != null && results.size() == largeRound.numberOfTasks()
+                : "Results should have size " + largeRound.numberOfTasks() + " but has " + results;
     }
 }

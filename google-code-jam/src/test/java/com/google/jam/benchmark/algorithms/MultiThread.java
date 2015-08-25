@@ -1,4 +1,4 @@
-package com.google.jam.benchmark.standingovation.multithread;
+package com.google.jam.benchmark.algorithms;
 
 import com.google.jam.Round;
 import com.google.jam.RoundFunctionFactory;
@@ -26,18 +26,19 @@ import java.util.function.Supplier;
 @State(Scope.Thread)
 public class MultiThread {
 
-    @Param({"Double", "Current"})
-    private String numberOfThreadFunctionType;
+    @Param({"DOUBLE", "CURRENT"})
+    private String functionType;
+    @Param({"A", "B", "C", "D"})
+    private char roundLetter;
 
     public RoundResolver resolver;
     public Round largeRound;
     public Function<String, String> algorithm;
-    public volatile Map<Integer, Integer> results;
+    public Map<Integer, String> results;
 
-    @Setup(Level.Iteration)
+    @Setup(Level.Invocation)
     public void setUp()
             throws Exception {
-        final char roundLetter = 'A';
         final RoundPathBuilder pathBuilder = new RoundPathBuilder("main", roundLetter, "large", "practice");
         final Function<List<String>, Collection<String>> roundFunction =
                 new RoundFunctionFactory().createRoundFunction(roundLetter);
@@ -45,18 +46,18 @@ public class MultiThread {
                 .setRoundFunction(roundFunction)
                 .build();
         largeRound = new RoundTaskReader(pathBuilder.build()).applyCreator(creator);
-        Supplier<Integer> numberOfThreadFunction = numberOfThreadFunctionType.equals("Double")
+        Supplier<Integer> numberOfThreadFunction = functionType.equals("DOUBLE")
                 ? new DoubleCPUNumberOfThreadFunction()
                 : new CPUNumberOfThreadFunction();
         resolver = new MultiThreadRoundResolver(numberOfThreadFunction);
         algorithm = new StandingOvationAlgorithm();
     }
 
-    @TearDown(Level.Iteration)
+    @TearDown(Level.Invocation)
     public void tearDown()
             throws Exception {
         resolver.shutDownResolver();
-//        assert results != null && results.size() == largeRound.numberOfTasks()
-//                : "Results should have size " + largeRound.numberOfTasks() + " but has " + results;
+        assert results != null && results.size() == largeRound.numberOfTasks()
+                : "Results should have size " + largeRound.numberOfTasks() + " but has " + results;
     }
 }
