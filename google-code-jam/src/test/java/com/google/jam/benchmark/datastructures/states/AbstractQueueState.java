@@ -21,7 +21,7 @@ public abstract class AbstractQueueState {
     int SMALL_QUEUE_SIZE = MIDDLE_QUEUE_SIZE / 10;
     int EMPTY_QUEUE_SIZE = 0;
 
-    @Param({"EMPTY", "SMALL", "MIDDLE", "BIG", "LARGE"})
+    @Param({/*"EMPTY", "SMALL", "MIDDLE", "BIG", */"LARGE"})
     String size;
 
     protected final SecureRandom random = new SecureRandom();

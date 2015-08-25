@@ -21,7 +21,7 @@ public class AddElementTo {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void ArrayQueue(final ArrayQueueState arrayEmptyQueueState, final DataState dataState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
@@ -30,7 +30,7 @@ public class AddElementTo {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void LinkedQueue(final LinkedQueueState linkedEmptyQueueState, final DataState dataState)
             throws Exception {
         Blackhole.consumeCPU(CPU_TOKENS);
@@ -39,7 +39,7 @@ public class AddElementTo {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void FairArrayBlockingQueue(
             final FairArrayBlockingQueueState fairArrayBlockingEmptyQueueState,
             final DataState dataState)
@@ -50,7 +50,7 @@ public class AddElementTo {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void UnfairArrayBlockingQueue(
             final UnfairArrayBlockingQueueState unfairArrayBlockingEmptyQueueState,
             final DataState dataState)
@@ -61,7 +61,7 @@ public class AddElementTo {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void LinkedBlockingQueue(
             final LinkedBlockingQueueState linkedBlockingEmptyQueueState,
             final DataState dataState)
@@ -72,7 +72,7 @@ public class AddElementTo {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void LastIndexLinkedBlockingQueue(
             final LastIndexLinkedBlockingQueueState lastIndexLinkedBlockingEmptyQueueState,
             final DataState dataState)
