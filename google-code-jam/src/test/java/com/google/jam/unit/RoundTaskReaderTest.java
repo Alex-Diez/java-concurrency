@@ -3,10 +3,10 @@ package com.google.jam.unit;
 import com.google.jam.RoundPathBuilder;
 import com.google.jam.RoundTaskReader;
 import com.google.jam.creators.RoundCreator;
-import com.google.jam.datastructures.LastIndexTaskLinkedQueue;
-
 import org.junit.Before;
 import org.junit.Test;
+
+import java.util.LinkedList;
 
 public class RoundTaskReaderTest {
 
@@ -23,7 +23,7 @@ public class RoundTaskReaderTest {
             throws Exception {
         roundTaskReader.applyCreator(
                 new RoundCreator.Builder()
-                        .setRoundFunction((list) -> new LastIndexTaskLinkedQueue<>())
+                        .setRoundFunction((list) -> new LinkedList<>())
                         .build()
         );
     }
