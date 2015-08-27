@@ -13,7 +13,7 @@ public class Base {
 
     @Benchmark
     @BenchmarkMode(Mode.AverageTime)
-    @OutputTimeUnit(TimeUnit.MILLISECONDS)
+    @OutputTimeUnit(TimeUnit.MICROSECONDS)
     public void lineBurnCPU(final Blackhole blackhole, final DataState dataState)
             throws Exception {
         Blackhole.consumeCPU(QueuesBenchmarks.CPU_TOKENS);
