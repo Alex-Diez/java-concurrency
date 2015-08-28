@@ -44,7 +44,6 @@
         -->
         <module>fairytale-philosophers</module>
         <module>google-code-jam</module>
-        <module>data-structures</module>
     </modules>
 
     <build>
