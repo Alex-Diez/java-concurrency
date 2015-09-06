@@ -43,7 +43,6 @@
         <module>sudoku-distributed</module> need to be redevelop
         -->
         <module>fairytale-philosophers</module>
-        <module>google-code-jam</module>
     </modules>
 
     <build>
