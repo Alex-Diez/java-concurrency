@@ -38,11 +38,8 @@
     </properties>
 
     <modules>
-        <!--
-        module>sudoku-standalone</module> need to be redevelop
-        <module>sudoku-distributed</module> need to be redevelop
-        -->
-        <module>fairytale-philosophers</module>
+        <module>sudoku-standalone</module>
+        <module>sudoku-distributed</module>
     </modules>
 
     <build>
